@@ -1,18 +1,32 @@
-const CACHE_NAME = 'myrip-v3';
+const CACHE_NAME = 'myccp-v4';
+const BASE = '/my.ccp';
 const ASSETS = [
-  './',
-  './index.html',
-  './pages/accounts.html',
-  './pages/settings.html',
-  './pages/about.html',
-  './pages/history.html',
-  './pages/privacy.html',
-  './css/main.css',
-  './js/app.js',
-  './js/i18n.js',
-  './manifest.json',
-  './icons/icon-192.png',
-  './icons/icon-512.png',
+  `${BASE}/`,
+  `${BASE}/index.html`,
+  `${BASE}/pages/accounts.html`,
+  `${BASE}/pages/cheque.html`,
+  `${BASE}/pages/fees.html`,
+  `${BASE}/pages/transfer.html`,
+  `${BASE}/pages/history.html`,
+  `${BASE}/pages/settings.html`,
+  `${BASE}/pages/about.html`,
+  `${BASE}/pages/privacy.html`,
+  `${BASE}/css/main.css`,
+  `${BASE}/js/app.js`,
+  `${BASE}/js/i18n.js`,
+  `${BASE}/js/cheque.js`,
+  `${BASE}/js/fees.js`,
+  `${BASE}/js/transfer.js`,
+  `${BASE}/manifest.json`,
+  `${BASE}/favicon.ico`,
+  `${BASE}/icons/icon-72.png`,
+  `${BASE}/icons/icon-96.png`,
+  `${BASE}/icons/icon-128.png`,
+  `${BASE}/icons/icon-144.png`,
+  `${BASE}/icons/icon-152.png`,
+  `${BASE}/icons/icon-192.png`,
+  `${BASE}/icons/icon-384.png`,
+  `${BASE}/icons/icon-512.png`,
 ];
 
 self.addEventListener('install', e => {
@@ -32,30 +46,43 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-  // Only handle GET requests
   if (e.request.method !== 'GET') return;
 
-  // Skip cross-origin requests (fonts, etc.) — let them go through normally
   const url = new URL(e.request.url);
-  if (url.origin !== self.location.origin) {
+
+  // Cache-first for same-origin assets
+  if (url.origin === self.location.origin) {
+    e.respondWith(
+      caches.match(e.request).then(cached => {
+        if (cached) return cached;
+        return fetch(e.request).then(res => {
+          if (res && res.status === 200 && res.type === 'basic') {
+            const clone = res.clone();
+            caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
+          }
+          return res;
+        }).catch(() => {
+          if (e.request.mode === 'navigate') {
+            return caches.match(`${BASE}/index.html`);
+          }
+        });
+      })
+    );
     return;
   }
 
-  e.respondWith(
-    caches.match(e.request).then(cached => {
-      if (cached) return cached;
-      return fetch(e.request).then(res => {
-        if (res && res.status === 200 && res.type === 'basic') {
-          const clone = res.clone();
-          caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
-        }
-        return res;
-      }).catch(() => {
-        // Offline fallback: return cached index.html for navigation
-        if (e.request.mode === 'navigate') {
-          return caches.match('./index.html');
-        }
-      });
-    })
-  );
+  // Cache Google Fonts cross-origin
+  if (url.hostname.includes('fonts.googleapis.com') || url.hostname.includes('fonts.gstatic.com')) {
+    e.respondWith(
+      caches.open(CACHE_NAME + '-fonts').then(fontCache =>
+        fontCache.match(e.request).then(cached => {
+          if (cached) return cached;
+          return fetch(e.request).then(res => {
+            fontCache.put(e.request, res.clone());
+            return res;
+          }).catch(() => cached);
+        })
+      )
+    );
+  }
 });
