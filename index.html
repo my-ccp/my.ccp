@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>My RiP</title>
+  <title>MY CCP</title>
   <meta name="description" content="تحويل CCP إلى RIP بسهولة"/>
   <meta name="theme-color" content="#1e3a8a"/>
   <link rel="manifest" href="manifest.json"/>
@@ -150,8 +150,8 @@
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <img src="icons/icon-192.png" alt="My RiP" class="sidebar-logo"/>
-    <div class="sidebar-app-name">My RiP</div>
+    <img src="icons/icon-192.png" alt="MY CCP" class="sidebar-logo"/>
+    <div class="sidebar-app-name">MY CCP</div>
     <div class="sidebar-version" data-i18n="free_version">النسخة المجانية</div>
   </div>
   <div class="sidebar-menu">
@@ -349,7 +349,7 @@
 
   function doShare() {
     if (!currentRIP) { showToast(t('fill_fields')); return; }
-    shareText(formatRIPDisplay(currentRIP), 'RIP - My RiP');
+    shareText(formatRIPDisplay(currentRIP), 'RIP - MY CCP');
   }
 
   function openSaveModal() {
@@ -380,10 +380,78 @@
     if (e.target === this) closeSaveModal();
   });
 
-  // Service Worker
+  // ═══════════════════════════════════════
+  // Service Worker Registration
+  // ═══════════════════════════════════════
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
+    navigator.serviceWorker.register('./sw.js').then(reg => {
+      // Check for updates every time the page loads
+      reg.update();
+    }).catch(() => {});
   }
+
+  // ═══════════════════════════════════════
+  // PWA Install Prompt (beforeinstallprompt)
+  // ═══════════════════════════════════════
+  let deferredPrompt = null;
+
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    showInstallBanner();
+  });
+
+  function showInstallBanner() {
+    // Don't show if already installed (standalone mode)
+    if (window.matchMedia('(display-mode: standalone)').matches) return;
+    // Don't show if dismissed recently (7 days)
+    const dismissed = localStorage.getItem('pwa-banner-dismissed');
+    if (dismissed && Date.now() - parseInt(dismissed) < 7 * 24 * 60 * 60 * 1000) return;
+
+    const banner = document.getElementById('installBanner');
+    if (banner) banner.style.display = 'flex';
+  }
+
+  function installPWA() {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(choice => {
+      if (choice.outcome === 'accepted') {
+        hideInstallBanner();
+      }
+      deferredPrompt = null;
+    });
+  }
+
+  function hideInstallBanner() {
+    const banner = document.getElementById('installBanner');
+    if (banner) banner.style.display = 'none';
+    localStorage.setItem('pwa-banner-dismissed', Date.now().toString());
+  }
+
+  // Hide banner when app is installed
+  window.addEventListener('appinstalled', () => {
+    hideInstallBanner();
+    deferredPrompt = null;
+  });
 </script>
+
+<!-- PWA Install Banner -->
+<div id="installBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;
+  background:linear-gradient(135deg,#1e3a8a,#1d4ed8);
+  color:#fff;padding:14px 16px;align-items:center;gap:12px;
+  box-shadow:0 -4px 20px rgba(0,0,0,0.4);border-top:1px solid rgba(255,255,255,0.1);">
+  <img src="icons/icon-72.png" width="40" height="40" style="border-radius:10px;flex-shrink:0;" alt="icon"/>
+  <div style="flex:1;min-width:0;">
+    <div style="font-weight:700;font-size:14px;" data-i18n="install_title">ثبّت التطبيق</div>
+    <div style="font-size:12px;opacity:0.85;" data-i18n="install_desc">استخدمه بدون إنترنت في أي وقت</div>
+  </div>
+  <button onclick="installPWA()" style="background:#fff;color:#1e3a8a;border:none;border-radius:8px;
+    padding:8px 14px;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap;font-family:inherit;"
+    data-i18n="install_btn">تثبيت</button>
+  <button onclick="hideInstallBanner()" style="background:transparent;border:none;color:rgba(255,255,255,0.7);
+    font-size:20px;cursor:pointer;padding:0 4px;line-height:1;" aria-label="إغلاق">×</button>
+</div>
+
 </body>
 </html>
