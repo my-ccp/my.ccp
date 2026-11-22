@@ -1,64 +1,50 @@
 {
-  "name": "My RiP",
-  "short_name": "My RiP",
-  "description": "تحويل CCP إلى RIP بسهولة",
-  "start_url": "./index.html",
-  "scope": "./",
+  "id": "/my.ccp/",
+  "name": "MY CCP",
+  "short_name": "MY CCP",
+  "description": "تحويل CCP إلى RIP بسهولة — تحويل، شيك، رسوم",
+  "start_url": "/my.ccp/index.html?source=pwa",
+  "scope": "/my.ccp/",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
   "background_color": "#0a0f1e",
   "theme_color": "#1e3a8a",
   "orientation": "portrait",
   "lang": "ar",
   "dir": "rtl",
+  "prefer_related_applications": false,
   "icons": [
-    {
-      "src": "icons/icon-72.png",
-      "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icons/icon-96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icons/icon-128.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icons/icon-144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icons/icon-152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "icons/icon-384.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
+    { "src": "/my.ccp/icons/icon-72.png",  "sizes": "72x72",   "type": "image/png", "purpose": "any" },
+    { "src": "/my.ccp/icons/icon-96.png",  "sizes": "96x96",   "type": "image/png", "purpose": "any" },
+    { "src": "/my.ccp/icons/icon-128.png", "sizes": "128x128", "type": "image/png", "purpose": "any" },
+    { "src": "/my.ccp/icons/icon-144.png", "sizes": "144x144", "type": "image/png", "purpose": "any" },
+    { "src": "/my.ccp/icons/icon-152.png", "sizes": "152x152", "type": "image/png", "purpose": "any" },
+    { "src": "/my.ccp/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/my.ccp/icons/icon-384.png", "sizes": "384x384", "type": "image/png", "purpose": "any" },
+    { "src": "/my.ccp/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
-  "categories": ["finance", "utilities"]
+  "categories": ["finance", "utilities"],
+  "shortcuts": [
+    {
+      "name": "تحويل CCP",
+      "short_name": "تحويل",
+      "description": "تحويل رقم CCP إلى RIP",
+      "url": "/my.ccp/index.html?shortcut=convert",
+      "icons": [{ "src": "/my.ccp/icons/icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "الشيكات",
+      "short_name": "شيك",
+      "description": "إنشاء شيك بريدي",
+      "url": "/my.ccp/pages/cheque.html?shortcut=cheque",
+      "icons": [{ "src": "/my.ccp/icons/icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "الرسوم",
+      "short_name": "رسوم",
+      "description": "حساب رسوم التحويل",
+      "url": "/my.ccp/pages/fees.html?shortcut=fees",
+      "icons": [{ "src": "/my.ccp/icons/icon-96.png", "sizes": "96x96" }]
+    }
+  ]
 }
