@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>MY CCP – الإعدادات</title>
+  <meta name="theme-color" content="#1e3a8a"/>
+  <link rel="manifest" href="../manifest.json"/>
+  <link rel="icon" type="image/x-icon" href="../favicon.ico"/>
+  <link rel="icon" type="image/png" href="../icons/icon-192.png"/>
+  <link rel="apple-touch-icon" href="../icons/icon-192.png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+</head>
+<body>
+<div id="app">
+
+  <!-- SUBPAGE HEADER -->
+  <header class="subpage-header">
+    <button class="back-btn" onclick="history.back()">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"/>
+        <polyline points="12 19 5 12 12 5"/>
+      </svg>
+    </button>
+    <div class="subpage-title" data-i18n="settings">الإعدادات</div>
+    <div style="width:42px;"></div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="main-content subpage-content">
+
+    <!-- Language -->
+    <div class="settings-section">
+      <div class="settings-title" data-i18n="language">اللغة</div>
+      <div class="settings-item">
+        <div class="settings-item-left">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <span class="settings-item-label" data-i18n="language">اللغة</span>
+        </div>
+        <div class="lang-buttons">
+          <!-- Arabic flag: Algeria -->
+          <button class="lang-btn-flag" data-lang="ar" onclick="confirmSetLang('ar')">
+            <span class="flag">🇩🇿</span>
+            <span>ع</span>
+          </button>
+          <!-- French flag: France -->
+          <button class="lang-btn-flag" data-lang="fr" onclick="confirmSetLang('fr')">
+            <span class="flag">🇫🇷</span>
+            <span>FR</span>
+          </button>
+          <!-- English flag: USA -->
+          <button class="lang-btn-flag" data-lang="en" onclick="confirmSetLang('en')">
+            <span class="flag">🇺🇸</span>
+            <span>EN</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Appearance -->
+    <div class="settings-section">
+      <div class="settings-title" data-i18n="dark_mode">المظهر</div>
+      <div class="settings-item">
+        <div class="settings-item-left">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <div>
+            <div class="settings-item-label" data-i18n="dark_mode">الوضع الليلي</div>
+            <div class="settings-item-sub" data-i18n="dark_mode_sub">تفعيل الثيم الداكن</div>
+          </div>
+        </div>
+        <button class="toggle" id="themeToggle" onclick="confirmToggleTheme()"></button>
+      </div>
+    </div>
+
+  </main>
+
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="../js/i18n.js"></script>
+<script src="../js/app.js"></script>
+<script>
+  function confirmSetLang(lang) {
+    if (lang === window.APP_LANG) return;
+    // Apply immediately — broadcasts to all open pages via BroadcastChannel
+    applyLang(lang, true);
+    updateLangBtns();
+  }
+
+  function confirmToggleTheme() {
+    // Apply immediately — broadcasts to all open pages via BroadcastChannel
+    toggleTheme();
+    updateThemeToggle();
+  }
+
+  function updateLangBtns() {
+    document.querySelectorAll('.lang-btn-flag').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-lang') === window.APP_LANG);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    updateThemeToggle();
+    updateLangBtns();
+  });
+</script>
+</body>
+</html>
