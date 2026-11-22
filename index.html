@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>My RiP</title>
+  <meta name="description" content="تحويل CCP إلى RIP بسهولة"/>
+  <meta name="theme-color" content="#1e3a8a"/>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/main.css"/>
+</head>
+<body>
+<div id="app">
+
+  <!-- HEADER (home page - has sidebar button) -->
+  <!-- AR: menu button on RIGHT (header-icons after title in RTL flow) -->
+  <!-- FR/EN: menu button on LEFT (CSS reorders via flexbox order) -->
+  <header class="header">
+    <div class="header-title" data-i18n="tool_ccp_rip">CCP → RIP</div>
+    <div class="header-icons">
+      <button class="header-btn" id="menuBtn" onclick="openSidebar()" aria-label="menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    <div class="animate-in" style="display:flex;flex-direction:column;gap:0;">
+
+      <!-- Step dots -->
+      <div class="step-dots" id="stepDots">
+        <div class="step-dot active" id="dot1"></div>
+        <div class="step-dot" id="dot2"></div>
+        <div class="step-dot" id="dot3"></div>
+        <div class="step-dot" id="dot4"></div>
+      </div>
+
+      <!-- Account Number -->
+      <div class="input-group" id="groupCCP" style="margin-top:16px;">
+        <span class="input-label" data-i18n="account_number">رقم الحساب</span>
+        <span class="input-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="5" width="20" height="14" rx="2"/>
+            <line x1="2" y1="10" x2="22" y2="10"/>
+          </svg>
+        </span>
+        <input type="tel" id="ccpInput" data-i18n-ph="account_number" placeholder="رقم الحساب الجاري" inputmode="numeric" maxlength="10" autocomplete="off"/>
+        <span class="digit-counter" id="digitCounter">0/10</span>
+        <span class="input-icon" id="ccpClearBtn" onclick="clearCCP()" style="cursor:pointer;display:none;color:var(--text2);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+          </svg>
+        </span>
+      </div>
+
+      <!-- CCP Key -->
+      <div class="input-group readonly">
+        <span class="input-label" data-i18n="ccp_key">مفتاح CCP</span>
+        <span class="input-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="7.5" cy="15.5" r="5.5"/>
+            <path d="M21 2l-9.6 9.6"/><path d="M15.5 7.5l3 3L22 7l-3-3"/>
+          </svg>
+        </span>
+        <input type="text" id="ccpKeyInput" data-i18n-ph="ccp_key" placeholder="مفتاح CCP" inputmode="numeric" readonly/>
+        <span class="input-icon" id="ccpKeyBadge" style="display:none;">
+          <span class="key-badge" id="ccpKeyVal"></span>
+        </span>
+      </div>
+
+      <!-- RIP Key -->
+      <div class="input-group readonly">
+        <span class="input-label" data-i18n="rip_key">مفتاح RIP</span>
+        <span class="input-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="7.5" cy="15.5" r="5.5"/>
+            <path d="M21 2l-9.6 9.6"/><path d="M15.5 7.5l3 3L22 7l-3-3"/>
+          </svg>
+        </span>
+        <input type="text" id="ripKeyInput" data-i18n-ph="rip_key" placeholder="مفتاح RIP" inputmode="numeric" readonly/>
+        <span class="input-icon" id="ripKeyBadge" style="display:none;">
+          <span class="key-badge" id="ripKeyVal"></span>
+        </span>
+      </div>
+
+      <!-- RIP Result -->
+      <div class="result-box" id="ripResultBox" onclick="copyRip()">
+        <span class="result-text" id="ripResult" data-i18n="rip_result">RIP: 007 99999 XXXXXXXXXX YY</span>
+        <span class="input-icon" style="margin-inline-start:8px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2"/>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+        </span>
+      </div>
+      <p class="copy-hint" id="copyHint" style="display:none;" data-i18n="tap_to_copy">اضغط لنسخ الريب</p>
+
+      <!-- Action Buttons -->
+      <div style="display:flex;gap:10px;margin-top:4px;">
+        <button class="btn btn-success" onclick="openSaveModal()" style="flex:1;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+            <polyline points="17 21 17 13 7 13 7 21"/>
+            <polyline points="7 3 7 8 15 8"/>
+          </svg>
+          <span data-i18n="save_account">حفظ الحساب</span>
+        </button>
+        <button class="btn btn-primary" id="shareBtn" onclick="doShare()" style="flex:0 0 56px;margin-bottom:0;" aria-label="share">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="navigateTo('index.html')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span data-i18n="home">الرئيسية</span>
+    </button>
+    <button class="nav-item" onclick="navigateTo('pages/accounts.html')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      <span data-i18n="accounts">الحسابات</span>
+    </button>
+    <button class="nav-item" onclick="navigateTo('pages/settings.html')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span data-i18n="settings">الإعدادات</span>
+    </button>
+  </nav>
+
+</div>
+
+<!-- SIDEBAR OVERLAY -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <img src="icons/icon-192.png" alt="My RiP" class="sidebar-logo"/>
+    <div class="sidebar-app-name">My RiP</div>
+    <div class="sidebar-version" data-i18n="free_version">النسخة المجانية</div>
+  </div>
+  <div class="sidebar-menu">
+    <div class="sidebar-section-title" data-i18n="tools">الأدوات</div>
+    <button class="sidebar-item active" onclick="navigateTo('index.html')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      <span data-i18n="tool_ccp_rip">CCP To RIP</span>
+    </button>
+    <button class="sidebar-item" onclick="navigateTo('pages/fees.html')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      <span data-i18n="tool_fees">حاسبة الرسوم</span>
+    </button>
+    <button class="sidebar-item" onclick="navigateTo('pages/transfer.html')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      <span data-i18n="tool_transfer">مدير الحوالات</span>
+    </button>
+    <button class="sidebar-item" onclick="navigateTo('pages/cheque.html')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span data-i18n="tool_cheque">ملء الصك البريدي</span>
+    </button>
+    <button class="sidebar-item" onclick="navigateTo('pages/history.html')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg>
+      <span data-i18n="sidebar_history">السجل</span>
+    </button>
+    <div class="sidebar-divider"></div>
+    <button class="sidebar-item" onclick="navigateTo('pages/settings.html')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span data-i18n="sidebar_settings">إعدادات التطبيق</span>
+    </button>
+    <button class="sidebar-item" onclick="navigateTo('pages/about.html')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span data-i18n="about">حول التطبيق</span>
+    </button>
+    <button class="sidebar-item" onclick="navigateTo('pages/privacy.html')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span data-i18n="privacy">سياسة الخصوصية</span>
+    </button>
+  </div>
+</aside>
+
+<!-- SAVE MODAL -->
+<div class="modal-overlay" id="saveModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" data-i18n="save_account">حفظ الحساب</div>
+    <div class="input-group">
+      <span class="input-label" data-i18n="name_label">الاسم</span>
+      <span class="input-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </span>
+      <input type="text" id="nameInput" data-i18n-ph="name_placeholder" placeholder="اللقب و الإسم"/>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeSaveModal()" style="flex:1;">
+        <span data-i18n="cancel">إلغاء</span>
+      </button>
+      <button class="btn btn-success" onclick="doSaveAccount()" style="flex:1;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        <span data-i18n="save_account">حفظ</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="js/i18n.js"></script>
+<script src="js/app.js"></script>
+<script>
+  // ===== HOME PAGE LOGIC =====
+  const ccpInput    = document.getElementById('ccpInput');
+  const ccpKeyInput = document.getElementById('ccpKeyInput');
+  const ripKeyInput = document.getElementById('ripKeyInput');
+  const ripResult   = document.getElementById('ripResult');
+  const digitCounter = document.getElementById('digitCounter');
+  const ccpClearBtn  = document.getElementById('ccpClearBtn');
+  const ccpKeyBadge  = document.getElementById('ccpKeyBadge');
+  const ripKeyBadge  = document.getElementById('ripKeyBadge');
+  const ccpKeyVal    = document.getElementById('ccpKeyVal');
+  const ripKeyVal    = document.getElementById('ripKeyVal');
+  const copyHint     = document.getElementById('copyHint');
+  const ripResultBox = document.getElementById('ripResultBox');
+
+  let currentRIP = '';
+  let currentCCPKey = '';
+  let currentRIPKey = '';
+
+  // ===== HISTORY HELPERS =====
+  function getHistoryArr() {
+    try { return JSON.parse(localStorage.getItem('ripHistory') || '[]'); } catch { return []; }
+  }
+  function addToHistory(entry) {
+    const h = getHistoryArr();
+    // Avoid duplicate consecutive
+    if (h.length > 0 && h[0].ccp === entry.ccp) return;
+    h.unshift(entry);
+    if (h.length > 100) h.pop();
+    localStorage.setItem('ripHistory', JSON.stringify(h));
+  }
+
+  // Auto-calculate on every keystroke
+  ccpInput.addEventListener('input', () => {
+    // Keep only digits, max 10
+    let val = ccpInput.value.replace(/\D/g, '').slice(0, 10);
+    ccpInput.value = val;
+
+    const len = val.length;
+    digitCounter.textContent = len + '/10';
+    digitCounter.classList.toggle('full', len === 10);
+    digitCounter.classList.toggle('warn', len > 0 && len < 10);
+
+    ccpClearBtn.style.display = len > 0 ? 'flex' : 'none';
+    updateStepDots(len);
+
+    if (len > 0) {
+      // Progressive: show partial calculation as digits are typed
+      const paddedVal = val.padEnd(10, '0');
+      const ck = calcCCPKey(paddedVal);
+      const rk = calcRIPKey(paddedVal);
+
+      // Show keys immediately as user types
+      ccpKeyInput.value = ck;
+      ripKeyInput.value = rk;
+      ccpKeyVal.textContent = ck;
+      ripKeyVal.textContent = rk;
+      ccpKeyBadge.style.display = 'flex';
+      ripKeyBadge.style.display = 'flex';
+
+      if (len === 10) {
+        // Full 10-digit number - show complete RIP
+        const rip = buildRIP(val, rk);
+        currentRIP = rip;
+        currentCCPKey = ck;
+        currentRIPKey = rk;
+        ripResult.textContent = 'RIP: ' + formatRIPDisplay(rip);
+        ripResult.classList.add('has-value');
+        ripResultBox.classList.add('has-rip');
+        copyHint.style.display = 'block';
+
+        // Save to history
+        addToHistory({
+          ccp: val,
+          ccpKey: ck,
+          ripKey: rk,
+          rip: rip,
+          date: new Date().toLocaleString('fr-DZ')
+        });
+      } else {
+        // Partial - show placeholder with live keys
+        currentRIP = '';
+        const partialDisplay = val + 'X'.repeat(10 - len);
+        const rip = buildRIP(paddedVal, rk);
+        ripResult.textContent = 'RIP: ' + formatRIPDisplay(rip);
+        ripResult.classList.add('has-value');
+        ripResultBox.classList.remove('has-rip');
+        copyHint.style.display = 'none';
+      }
+    } else {
+      ccpKeyBadge.style.display = 'none';
+      ripKeyBadge.style.display = 'none';
+      ccpKeyInput.value = '';
+      ripKeyInput.value = '';
+      currentRIP = '';
+      ripResult.textContent = t('rip_result');
+      ripResult.classList.remove('has-value');
+      ripResultBox.classList.remove('has-rip');
+      copyHint.style.display = 'none';
+    }
+  });
+
+  function updateStepDots(len) {
+    const dots = [
+      document.getElementById('dot1'),
+      document.getElementById('dot2'),
+      document.getElementById('dot3'),
+      document.getElementById('dot4'),
+    ];
+    const step = len === 0 ? 0 : len <= 3 ? 1 : len <= 6 ? 2 : len <= 9 ? 3 : 4;
+    dots.forEach((d, i) => d.classList.toggle('active', i < step));
+  }
+
+  function clearCCP() {
+    ccpInput.value = '';
+    ccpInput.dispatchEvent(new Event('input'));
+    ccpInput.focus();
+  }
+
+  function copyRip() {
+    if (currentRIP) {
+      copyText(currentRIP);
+      ripResultBox.style.transform = 'scale(0.97)';
+      setTimeout(() => ripResultBox.style.transform = '', 150);
+    }
+  }
+
+  function doShare() {
+    if (!currentRIP) { showToast(t('fill_fields')); return; }
+    shareText(formatRIPDisplay(currentRIP), 'RIP - My RiP');
+  }
+
+  function openSaveModal() {
+    if (!currentRIP) { showToast(t('fill_fields')); return; }
+    document.getElementById('saveModal').classList.add('open');
+    document.getElementById('nameInput').focus();
+  }
+
+  function closeSaveModal() {
+    document.getElementById('saveModal').classList.remove('open');
+  }
+
+  function doSaveAccount() {
+    const name = document.getElementById('nameInput').value.trim();
+    if (!name) { showToast(t('fill_fields')); return; }
+    const ccp = ccpInput.value;
+    const ck  = ccpKeyInput.value;
+    const rk  = ripKeyInput.value;
+    addAccount({ name, ccp, ccpKey: ck, ripKey: rk, rip: currentRIP });
+    showToast(t('saved'));
+    closeSaveModal();
+    ccpInput.value = '';
+    ccpInput.dispatchEvent(new Event('input'));
+    document.getElementById('nameInput').value = '';
+  }
+
+  document.getElementById('saveModal').addEventListener('click', function(e) {
+    if (e.target === this) closeSaveModal();
+  });
+
+  // Service Worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+</script>
+</body>
+</html>
