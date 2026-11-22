@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>MY CCP – السجل</title>
+  <meta name="theme-color" content="#1e3a8a"/>
+  <link rel="manifest" href="../manifest.json"/>
+  <link rel="icon" type="image/x-icon" href="../favicon.ico"/>
+  <link rel="icon" type="image/png" href="../icons/icon-192.png"/>
+  <link rel="apple-touch-icon" href="../icons/icon-192.png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+</head>
+<body>
+<div id="app">
+
+  <!-- SUBPAGE HEADER -->
+  <header class="subpage-header">
+    <button class="back-btn" onclick="history.back()">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"/>
+        <polyline points="12 19 5 12 12 5"/>
+      </svg>
+    </button>
+    <div class="subpage-title" data-i18n="history_title">سجل العمليات</div>
+    <button class="subpage-action-btn" id="histMenuBtn" onclick="openHistMenu(event)" style="display:none;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="5" r="1.2" fill="currentColor" stroke="none"/>
+        <circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/>
+        <circle cx="12" cy="19" r="1.2" fill="currentColor" stroke="none"/>
+      </svg>
+    </button>
+    <!-- Placeholder to keep title centered when button hidden -->
+    <div style="width:42px;"></div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="main-content subpage-content">
+    <!-- Selection bar -->
+    <div class="selection-bar" id="selectionBar">
+      <span id="selectionCount">0 <span data-i18n="selected_count">محدد</span></span>
+      <div class="selection-bar-actions">
+        <button class="selection-bar-btn" onclick="cancelSelection()" data-i18n="cancel_selection">إلغاء</button>
+        <button class="selection-bar-btn danger" onclick="deleteSelected()" data-i18n="delete_selected">حذف</button>
+      </div>
+    </div>
+    <div id="historyList"></div>
+  </main>
+
+</div>
+
+<!-- Header dropdown -->
+<div class="dropdown-menu" id="histDropdown" style="display:none;">
+  <button class="dropdown-item" onclick="startSelectAll(); closeHistMenu();">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><polyline points="9 12 11 14 15 10"/></svg>
+    <span data-i18n="select_all">تحديد الكل</span>
+  </button>
+  <div class="dropdown-divider"></div>
+  <button class="dropdown-item danger" onclick="confirmClearHistory(); closeHistMenu();">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+    <span data-i18n="history_clear">مسح السجل</span>
+  </button>
+</div>
+
+<!-- Per-item dropdown -->
+<div class="dropdown-menu" id="itemDropdown" style="display:none;">
+  <button class="dropdown-item" onclick="itemDdAction('copy')">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+    <span data-i18n="copy">نسخ الريب</span>
+  </button>
+  <button class="dropdown-item" onclick="itemDdAction('share')">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+    <span data-i18n="share">مشاركة</span>
+  </button>
+  <button class="dropdown-item" onclick="itemDdAction('select')">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><polyline points="9 12 11 14 15 10"/></svg>
+    <span data-i18n="select_all">تحديد</span>
+  </button>
+  <div class="dropdown-divider"></div>
+  <button class="dropdown-item danger" onclick="itemDdAction('delete')">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+    <span data-i18n="delete">حذف</span>
+  </button>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="../js/i18n.js"></script>
+<script src="../js/app.js"></script>
+<script>
+  // ===== HISTORY STORAGE =====
+  function getHistory() {
+    try { return JSON.parse(localStorage.getItem('ripHistory') || '[]'); } catch { return []; }
+  }
+  function saveHistory(h) { localStorage.setItem('ripHistory', JSON.stringify(h)); }
+  function clearHistory() { localStorage.removeItem('ripHistory'); }
+
+  let selectionMode = false;
+  let selectedIdxs = new Set();
+  let activeItemIdx = null;
+
+  function formatDate(dateStr) {
+    if (!dateStr) return '';
+    try {
+      const frMatch = dateStr.match(/(\d{2})\/(\d{2})\/(\d{4}),?\s*(\d{2}):(\d{2})/);
+      if (frMatch) {
+        return `${frMatch[1]}.${frMatch[2]}.${frMatch[3]} ${frMatch[4]}:${frMatch[5]}`;
+      }
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return dateStr;
+      const dd = String(d.getDate()).padStart(2,'0');
+      const mm = String(d.getMonth()+1).padStart(2,'0');
+      const yyyy = d.getFullYear();
+      const hh = String(d.getHours()).padStart(2,'0');
+      const min = String(d.getMinutes()).padStart(2,'0');
+      return `${dd}.${mm}.${yyyy} ${hh}:${min}`;
+    } catch { return dateStr; }
+  }
+
+  function formatRIP(rip) {
+    if (!rip || rip.length < 20) return rip;
+    return rip.slice(0,2)+' '+rip.slice(2,7)+' '+rip.slice(7,17)+' '+rip.slice(17,20);
+  }
+
+  function confirmClearHistory() {
+    showConfirmModal(t('confirm_clear_history'), t('confirm_clear_history_msg'), () => {
+      clearHistory();
+      renderHistory();
+      showToast(t('deleted'));
+    });
+  }
+
+  function renderHistory() {
+    const all = getHistory();
+    const list = document.getElementById('historyList');
+    const menuBtn = document.getElementById('histMenuBtn');
+
+    if (all.length === 0) {
+      menuBtn.style.display = 'none';
+      // Fix placeholder width
+      menuBtn.nextElementSibling && (menuBtn.nextElementSibling.style.display = 'none');
+      list.innerHTML = `
+        <div class="empty-state">
+          <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1 4 1 10 7 10"/>
+            <path d="M3.51 15a9 9 0 1 0 .49-4.95"/>
+          </svg>
+          <p class="empty-title" data-i18n="history_empty">${t('history_empty')}</p>
+          <p style="font-size:0.8rem;" data-i18n="history_empty_sub">${t('history_empty_sub')}</p>
+        </div>`;
+      return;
+    }
+
+    menuBtn.style.display = 'flex';
+
+    list.innerHTML = all.map((item, i) => {
+      const isSelected = selectedIdxs.has(i);
+      return `
+      <div class="account-card animate-in ${isSelected ? 'selected' : ''}" id="hcard-${i}" style="animation-delay:${i * 0.04}s">
+        <!-- Checkbox -->
+        <div class="account-checkbox ${selectionMode ? 'visible' : ''} ${isSelected ? 'checked' : ''}"
+             id="hchk-${i}" onclick="toggleSelect(${i})">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+
+        <!-- CCP row -->
+        <div class="account-row">
+          <span class="account-label">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            CCP
+          </span>
+          <span class="account-value" style="direction:ltr;unicode-bidi:bidi-override;">${item.ccp}</span>
+        </div>
+
+        <!-- Keys row -->
+        <div class="key-row">
+          <span class="account-label">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="M21 2l-9.6 9.6"/><path d="M15.5 7.5l3 3L22 7l-3-3"/></svg>
+            ${t('ccp_key_label')}
+          </span>
+          <span class="key-badge">${item.ccpKey}</span>
+          <span class="key-row-sep">|</span>
+          <span class="account-label">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="M21 2l-9.6 9.6"/><path d="M15.5 7.5l3 3L22 7l-3-3"/></svg>
+            ${t('rip_key_label')}
+          </span>
+          <span class="key-badge" style="color:#dc2626;border-color:rgba(220,38,38,0.25);background:rgba(220,38,38,0.08);">${item.ripKey}</span>
+        </div>
+
+        <!-- RIP chip -->
+        <div class="rip-chip" style="cursor:pointer;" onclick='copyText("${item.rip}")'>${formatRIP(item.rip)}</div>
+
+        <!-- Actions -->
+        <div class="account-actions">
+          <span class="account-date">${formatDate(item.date)}</span>
+          <button class="dots-btn" onclick="openItemMenu(event, ${i})" title="...">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="5" r="1.2" fill="currentColor" stroke="none"/>
+              <circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/>
+              <circle cx="12" cy="19" r="1.2" fill="currentColor" stroke="none"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    `}).join('');
+  }
+
+  // ===== POSITION DROPDOWN (smart: stays inside viewport) =====
+  function positionDropdown(menu, triggerRect) {
+    menu.style.display = 'block';
+    menu.style.left = '0px';
+    menu.style.top = '0px';
+    menu.style.right = 'auto';
+    menu.style.bottom = 'auto';
+
+    const menuW = menu.offsetWidth || 200;
+    const menuH = menu.offsetHeight || 160;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+
+    let left = triggerRect.right - menuW;
+    if (left < 8) left = 8;
+    if (left + menuW > vw - 8) left = vw - menuW - 8;
+
+    let top;
+    const spaceBelow = vh - triggerRect.bottom - 8;
+    if (spaceBelow >= menuH || spaceBelow >= 120) {
+      top = triggerRect.bottom + 4;
+    } else {
+      top = triggerRect.top - menuH - 4;
+      if (top < 8) top = 8;
+    }
+
+    menu.style.left = left + 'px';
+    menu.style.top = top + 'px';
+    menu.style.right = 'auto';
+    menu.style.bottom = 'auto';
+  }
+
+  // ===== HEADER MENU =====
+  function openHistMenu(e) {
+    e.stopPropagation();
+    closeItemMenu();
+    const menu = document.getElementById('histDropdown');
+    positionDropdown(menu, e.currentTarget.getBoundingClientRect());
+  }
+  function closeHistMenu() { document.getElementById('histDropdown').style.display = 'none'; }
+
+  // ===== ITEM MENU =====
+  function openItemMenu(e, idx) {
+    e.stopPropagation();
+    closeHistMenu();
+    activeItemIdx = idx;
+    const menu = document.getElementById('itemDropdown');
+    positionDropdown(menu, e.currentTarget.getBoundingClientRect());
+  }
+  function closeItemMenu() { document.getElementById('itemDropdown').style.display = 'none'; activeItemIdx = null; }
+
+  function itemDdAction(action) {
+    const idx = activeItemIdx;
+    closeItemMenu();
+    if (idx === null) return;
+    const all = getHistory();
+    const item = all[idx];
+    if (!item) return;
+    if (action === 'copy') copyText(item.rip);
+    else if (action === 'share') shareText(item.rip, 'RIP');
+    else if (action === 'delete') {
+      showConfirmModal(t('confirm_delete'), t('confirm_delete_msg'), () => {
+        all.splice(idx, 1);
+        saveHistory(all);
+        showToast(t('deleted'));
+        renderHistory();
+      });
+    }
+    else if (action === 'select') {
+      enterSelectionMode();
+      toggleSelect(idx);
+    }
+  }
+
+  // ===== SELECTION =====
+  function enterSelectionMode() {
+    selectionMode = true;
+    document.getElementById('selectionBar').classList.add('visible');
+    renderHistory();
+    updateSelectionBar();
+  }
+
+  function cancelSelection() {
+    selectionMode = false;
+    selectedIdxs.clear();
+    document.getElementById('selectionBar').classList.remove('visible');
+    renderHistory();
+  }
+
+  function startSelectAll() {
+    const all = getHistory();
+    enterSelectionMode();
+    all.forEach((_, i) => selectedIdxs.add(i));
+    renderHistory();
+    updateSelectionBar();
+  }
+
+  function toggleSelect(idx) {
+    if (!selectionMode) enterSelectionMode();
+    if (selectedIdxs.has(idx)) selectedIdxs.delete(idx);
+    else selectedIdxs.add(idx);
+    const card = document.getElementById('hcard-'+idx);
+    const chk = document.getElementById('hchk-'+idx);
+    if (card) card.classList.toggle('selected', selectedIdxs.has(idx));
+    if (chk) chk.classList.toggle('checked', selectedIdxs.has(idx));
+    updateSelectionBar();
+    if (selectedIdxs.size === 0) cancelSelection();
+  }
+
+  function updateSelectionBar() {
+    document.getElementById('selectionCount').innerHTML =
+      selectedIdxs.size + ' <span>' + t('selected_count') + '</span>';
+  }
+
+  function deleteSelected() {
+    if (selectedIdxs.size === 0) { showToast(t('no_selection')); return; }
+    showConfirmModal(t('confirm_delete_history_selected'), t('confirm_delete_history_selected_msg'), () => {
+      let all = getHistory().filter((_, i) => !selectedIdxs.has(i));
+      saveHistory(all);
+      cancelSelection();
+      showToast(t('deleted'));
+      renderHistory();
+    });
+  }
+
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('#histDropdown') && !e.target.closest('#histMenuBtn'))
+      closeHistMenu();
+    if (!e.target.closest('#itemDropdown') && !e.target.closest('.dots-btn'))
+      closeItemMenu();
+  });
+
+  renderHistory();
+</script>
+</body>
+</html>
