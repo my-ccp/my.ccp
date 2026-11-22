@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title data-i18n="cheque_page_title">الصك البريدي - MY CCP</title>
+  <meta name="theme-color" content="#1e3a8a"/>
+  <link rel="manifest" href="../manifest.json"/>
+  <link rel="apple-touch-icon" href="../icons/icon-192.png"/>
+  <link rel="icon" type="image/x-icon" href="../favicon.ico"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <style>
+    /* ===== CHEQUE PAGE ===== */
+    .page-tabs {
+      display: flex;
+      background: var(--surface2);
+      border-radius: 12px;
+      padding: 4px;
+      gap: 4px;
+      margin-bottom: 4px;
+    }
+    .ch-tab-btn {
+      flex: 1;
+      padding: 9px 4px;
+      border-radius: 9px;
+      border: none;
+      background: transparent;
+      color: var(--text2);
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .ch-tab-btn.active {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(37,99,235,0.25);
+    }
+
+    /* نموذج الصك */
+    .cheque-form-section {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    /* الأحرف اللحظية */
+    .words-live-box {
+      background: var(--surface2);
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .words-live-text {
+      flex: 1;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1.6;
+      direction: rtl;
+    }
+    .words-live-copy {
+      flex-shrink: 0;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      padding: 7px;
+      cursor: pointer;
+      color: var(--text2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .words-live-copy:active { transform: scale(0.9); }
+
+    /* معاينة الصك - نموذج بريد الجزائر */
+    .cheque-visual {
+      background: #f5f0d8;
+      border-radius: 10px;
+      border: 2px solid #c8b87a;
+      padding: 14px 16px;
+      direction: ltr;
+      position: relative;
+      overflow: hidden;
+      font-family: 'Cairo', sans-serif;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+    .cheque-visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(200,184,122,0.08) 10px,
+        rgba(200,184,122,0.08) 20px
+      );
+      pointer-events: none;
+    }
+
+    .cheque-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+    .cheque-logo-area {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 1px;
+    }
+    .cheque-logo-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #005da4;
+      direction: rtl;
+    }
+    .cheque-logo-sub {
+      font-size: 0.65rem;
+      color: #e8a000;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .cheque-num-area {
+      text-align: left;
+    }
+    .cheque-num-label {
+      font-size: 0.6rem;
+      color: #666;
+      direction: ltr;
+    }
+    .cheque-num-val {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #333;
+      direction: ltr;
+    }
+
+    .cheque-line {
+      display: flex;
+      align-items: flex-end;
+      margin-bottom: 8px;
+      gap: 6px;
+    }
+    .cheque-field-label {
+      font-size: 0.65rem;
+      color: #555;
+      white-space: nowrap;
+      direction: ltr;
+    }
+    .cheque-field-line {
+      flex: 1;
+      border-bottom: 1px solid #666;
+      min-width: 40px;
+      padding-bottom: 1px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #111;
+      direction: rtl;
+      text-align: right;
+      min-height: 18px;
+    }
+    .cheque-amount-box {
+      border: 1.5px solid #666;
+      border-radius: 3px;
+      padding: 2px 8px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #111;
+      min-width: 80px;
+      text-align: center;
+      direction: ltr;
+      background: rgba(255,255,255,0.4);
+    }
+    .cheque-da-label {
+      font-size: 0.65rem;
+      color: #555;
+      font-weight: 700;
+      direction: ltr;
+    }
+
+    .cheque-words-line {
+      border-bottom: 1px solid #666;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #111;
+      direction: rtl;
+      text-align: right;
+      padding: 2px 0 2px;
+      margin-bottom: 8px;
+      min-height: 20px;
+    }
+
+    .cheque-mid-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .cheque-left-box {
+      border: 1px solid #666;
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-size: 0.6rem;
+      color: #333;
+      direction: ltr;
+      max-width: 130px;
+      line-height: 1.4;
+      background: rgba(255,255,255,0.3);
+    }
+    .cheque-left-box .agency { font-weight: 700; }
+
+    .cheque-barcode-area {
+      text-align: center;
+      margin-top: 4px;
+    }
+    .cheque-barcode-num {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #333;
+      letter-spacing: 2px;
+      direction: ltr;
+    }
+    .cheque-warn {
+      font-size: 0.55rem;
+      color: #666;
+      text-align: center;
+      margin-top: 2px;
+      direction: ltr;
+    }
+    .cheque-series {
+      font-size: 0.6rem;
+      color: #333;
+      direction: ltr;
+    }
+
+    /* السجل */
+    .cheque-history-section {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+    .cheque-card {
+      background: var(--surface2);
+      border-radius: 14px;
+      border: 1.5px solid var(--border);
+      overflow: hidden;
+    }
+    .cc-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px 8px;
+    }
+    .cc-title { font-size: 0.85rem; font-weight: 700; color: var(--text1); }
+    .cc-amount { font-size: 1.1rem; font-weight: 800; color: var(--primary); direction: ltr; }
+    .cc-details {
+      padding: 0 14px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .cc-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      gap: 8px;
+    }
+    .cc-row span:first-child { color: var(--text2); font-weight: 600; white-space: nowrap; }
+    .cc-row.muted { opacity: 0.65; font-size: 0.75rem; }
+    .cc-words { font-size: 0.75rem; color: var(--primary); font-weight: 600; }
+    .cc-actions {
+      display: flex;
+      border-top: 1px solid var(--border);
+    }
+    .tc-btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      background: transparent;
+      color: var(--text2);
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.15s;
+    }
+    .tc-btn:first-child { border-inline-end: 1px solid var(--border); }
+    .tc-btn:active { background: var(--surface3, var(--surface)); }
+    .tc-btn.danger { color: #ef4444; }
+
+    /* empty state */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .empty-state p { font-size: 0.95rem; font-weight: 700; margin: 0; color: var(--text1); }
+    .empty-state span { font-size: 0.8rem; }
+
+    /* account select quick */
+    .account-select-quick {
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: var(--surface2);
+      color: var(--text2);
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.8rem;
+      cursor: pointer;
+      margin-bottom: 6px;
+    }
+    .account-fields-row {
+      display: flex;
+      gap: 8px;
+    }
+    .account-fields-row .input-group {
+      flex: 2;
+      margin-bottom: 0;
+    }
+    .account-fields-row .input-group.key-field {
+      flex: 1;
+    }
+
+    .history-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .clear-btn {
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1.5px solid #ef4444;
+      background: transparent;
+      color: #ef4444;
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* مودال معاينة الصك */
+    .cheque-modal-preview {
+      width: 100%;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-title" data-i18n="cheque_page_title">الصك البريدي</div>
+    <div class="header-icons">
+      <button class="header-btn" onclick="navigateTo('../index.html')" aria-label="back">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <button class="header-btn" id="menuBtn" onclick="openSidebar()" aria-label="menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    <div class="animate-in" style="display:flex;flex-direction:column;gap:10px;height:100%;">
+
+      <!-- التبويبات -->
+      <div class="page-tabs">
+        <button class="ch-tab-btn active" data-tab="form" onclick="switchChequeTab('form')">
+          🗒️ <span data-i18n="new_cheque_tab">صك جديد</span>
+        </button>
+        <button class="ch-tab-btn" data-tab="history" onclick="switchChequeTab('history')">
+          📋 <span data-i18n="history_tab">السجل</span>
+        </button>
+      </div>
+
+      <!-- ===== النموذج ===== -->
+      <div id="chequeFormSection" class="cheque-form-section">
+
+        <!-- المبلغ -->
+        <div class="input-group">
+          <span class="input-label" data-i18n="amount_dzd">المبلغ (دج)</span>
+          <span class="input-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </span>
+          <input type="tel" id="chequeAmount" data-i18n-ph="enter_amount_ph" placeholder="أدخل المبلغ بالدينار" inputmode="decimal" autocomplete="off"/>
+        </div>
+
+        <!-- بالأحرف (لحظي) -->
+        <div class="words-live-box">
+          <span class="words-live-text" id="wordsPreview">---</span>
+          <button class="words-live-copy" onclick="copyWordsPreview()">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          </button>
+        </div>
+
+        <!-- إدفعوا مقابل هذا الصك (لأمر) -->
+        <div class="input-group">
+          <span class="input-label" data-i18n="order_to_label">لأمر (المستفيد)</span>
+          <span class="input-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </span>
+          <input type="text" id="chequeOrderTo" placeholder="الاسم، شخصيا، لحامله" autocomplete="off"/>
+        </div>
+
+        <!-- المكان والتاريخ -->
+        <div style="display:flex;gap:8px;">
+          <div class="input-group" style="flex:1;margin-bottom:0;">
+            <span class="input-label" data-i18n="place_label">المكان</span>
+            <input type="text" id="chequePlace" data-i18n-ph="place_label" placeholder="المدينة" autocomplete="off"/>
+          </div>
+          <div class="input-group" style="flex:1;margin-bottom:0;">
+            <span class="input-label" data-i18n="date_label">التاريخ</span>
+            <input type="date" id="chequeDate" autocomplete="off"/>
+          </div>
+        </div>
+
+        <!-- الحساب (اختياري) -->
+        <div>
+          <span class="input-label" data-i18n="optional_account_label">الحساب البريدي (اختياري)</span>
+          <select class="account-select-quick" id="chequeAccountSelect" onchange="onSelectChequeAccount(this)">
+            <option value="" data-i18n="select_from_saved">-- اختر من المحفوظات --</option>
+          </select>
+          <div class="account-fields-row">
+            <div class="input-group" style="flex:2;margin-bottom:0;">
+              <span class="input-label" style="font-size:0.72rem;" data-i18n="account_number_label">رقم الحساب</span>
+              <input type="tel" id="chequeAccount" placeholder="0000000000" inputmode="numeric" maxlength="10" autocomplete="off"/>
+            </div>
+            <div class="input-group key-field" style="margin-bottom:0;">
+              <span class="input-label" style="font-size:0.72rem;" data-i18n="key_label">المفتاح</span>
+              <input type="tel" id="chequeKey" placeholder="00" inputmode="numeric" maxlength="2" autocomplete="off"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- أزرار الإجراء -->
+        <div style="display:flex;gap:10px;margin-top:4px;">
+          <button class="btn btn-outline" onclick="resetChequeForm()" style="flex:0 0 56px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg>
+          </button>
+          <button class="btn btn-primary" onclick="openChequePreview()" style="flex:1;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <span data-i18n="open_preview_btn">معاينة الصك</span>
+          </button>
+        </div>
+
+      </div>
+      <!-- نهاية النموذج -->
+
+      <!-- ===== السجل ===== -->
+      <div id="chequeHistorySection" class="cheque-history-section" style="display:none;">
+        <div class="history-topbar">
+          <span style="font-size:0.8rem;color:var(--text2);font-weight:600;" data-i18n="saved_cheques_label">الصكوك المحفوظة</span>
+          <button class="clear-btn" onclick="confirmClearCheques()"><span data-i18n="clear_all_btn">مسح الكل</span></button>
+        </div>
+        <div id="chequeHistoryList" style="display:flex;flex-direction:column;gap:10px;"></div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="nav-item" onclick="navigateTo('../index.html')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span data-i18n="home">الرئيسية</span>
+    </button>
+    <button class="nav-item" style="color:var(--primary);">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <span data-i18n="tool_cheque">الصكوك</span>
+    </button>
+    <button class="nav-item" onclick="navigateTo('../pages/settings.html')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span data-i18n="settings">الإعدادات</span>
+    </button>
+  </nav>
+</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <img src="../icons/icon-192.png" alt="MY CCP" class="sidebar-logo"/>
+    <div class="sidebar-app-name">MY CCP</div>
+    <div class="sidebar-version" data-i18n="free_version">النسخة المجانية</div>
+  </div>
+  <div class="sidebar-menu">
+    <div class="sidebar-section-title" data-i18n="tools">الأدوات</div>
+    <button class="sidebar-item" onclick="navigateTo('../index.html')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      <span data-i18n="tool_ccp_rip">CCP To RIP</span>
+    </button>
+    <button class="sidebar-item" onclick="navigateTo('fees.html')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      <span data-i18n="tool_fees">حاسبة الرسوم</span>
+    </button>
+    <button class="sidebar-item" onclick="navigateTo('transfer.html')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      <span data-i18n="tool_transfer">مدير الحوالات</span>
+    </button>
+    <button class="sidebar-item active" onclick="navigateTo('cheque.html')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span data-i18n="tool_cheque">ملء الصك البريدي</span>
+    </button>
+    <div class="sidebar-divider"></div>
+    <button class="sidebar-item" onclick="navigateTo('history.html')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg>
+      <span data-i18n="sidebar_history">السجل</span>
+    </button>
+    <div class="sidebar-divider"></div>
+    <button class="sidebar-item" onclick="navigateTo('settings.html')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span data-i18n="sidebar_settings">إعدادات التطبيق</span>
+    </button>
+    <button class="sidebar-item" onclick="navigateTo('about.html')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span data-i18n="about">حول التطبيق</span>
+    </button>
+    <button class="sidebar-item" onclick="navigateTo('privacy.html')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span data-i18n="privacy">سياسة الخصوصية</span>
+    </button>
+  </div>
+</aside>
+
+<!-- MODAL: معاينة الصك البريدي الكاملة -->
+<div class="modal-overlay" id="chequePreviewModal">
+  <div class="modal" style="max-height:85vh;overflow-y:auto;">
+    <div class="modal-handle"></div>
+    <div class="modal-title" data-i18n="cheque_preview_title">معاينة الصك البريدي</div>
+
+    <!-- الصك المرئي -->
+    <div class="cheque-visual cheque-modal-preview">
+      <!-- رأس الصك -->
+      <div class="cheque-header">
+        <div class="cheque-num-area">
+          <div class="cheque-num-label">Chèque n° :</div>
+          <div class="cheque-num-val"></div>
+        </div>
+        <div class="cheque-logo-area">
+          <div class="cheque-logo-title">بريد الجزائر</div>
+          <div class="cheque-logo-sub">ALGERIE POSTE</div>
+        </div>
+      </div>
+
+      <!-- السطر الأول: المبلغ -->
+      <div class="cheque-line" style="margin-bottom:6px;">
+        <div class="cheque-da-label">DA</div>
+        <div class="cheque-amount-box" id="prev_amount_box"></div>
+        <div class="cheque-da-label" style="direction:rtl;">دج</div>
+      </div>
+
+      <!-- سطر "إدفعوا مقابل هذا الصك" -->
+      <div class="cheque-line" style="margin-bottom:4px;">
+        <div class="cheque-field-label" style="direction:rtl;font-size:0.6rem;color:#555;">إدفعوا مقابل هذا الصك</div>
+      </div>
+
+      <!-- سطر المبلغ بالأحرف -->
+      <div class="cheque-words-line" id="prev_words">...</div>
+
+      <!-- سطر الأمر -->
+      <div class="cheque-line">
+        <div class="cheque-field-label">A l'ordre de</div>
+        <div class="cheque-field-line" id="prev_order"></div>
+      </div>
+
+      <!-- المنتصف -->
+      <div class="cheque-mid-row">
+        <div class="cheque-left-box">
+          <div class="agency">Agence : 99999</div>
+          <div>CNCP (Centre National des</div>
+          <div>Chèques Postaux)</div>
+          <div>1, Avenue du 1er Novembre</div>
+          <div>16407 Alger</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex:1;">
+          <div class="cheque-line" style="margin-bottom:0;width:100%;justify-content:flex-end;">
+            <div class="cheque-field-label">Le</div>
+            <div class="cheque-field-line" id="prev_date" style="max-width:100px;text-align:center;"></div>
+            <div class="cheque-field-label" style="direction:rtl;">في</div>
+          </div>
+          <div class="cheque-line" style="margin-bottom:0;width:100%;justify-content:flex-end;">
+            <div class="cheque-field-label" style="direction:rtl;">بـ</div>
+            <div class="cheque-field-line" id="prev_place" style="max-width:120px;text-align:center;"></div>
+          </div>
+          <div style="font-size:0.65rem;color:#555;text-align:left;direction:ltr;">
+            <span id="prev_amount" style="font-weight:700;"></span>
+          </div>
+          <div class="cheque-line" style="margin-bottom:0;width:100%;">
+            <div class="cheque-field-label" style="direction:rtl;">يوفى</div>
+            <div class="cheque-field-line" style="max-width:80px;text-align:center;direction:ltr;" id="prev_account"></div>
+            <div class="cheque-field-line" style="max-width:30px;text-align:center;direction:ltr;" id="prev_key"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- باركود / أرقام -->
+      <div class="cheque-barcode-area">
+        <div class="cheque-warn">PRIERE DE NE RIEN ECRIRE DANS LA ZONE BLANCHE</div>
+        <div class="cheque-barcode-num">0007999990000000000000</div>
+        <div style="display:flex;justify-content:flex-start;margin-top:4px;">
+          <div class="cheque-series">Série : AP</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeChequePreview()" style="flex:1;" data-i18n="cancel">إلغاء</button>
+      <button class="btn btn-success" onclick="saveChequeEntry()" style="flex:1;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        <span data-i18n="save_btn">حفظ</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: تأكيد حذف -->
+<div class="modal-overlay" id="chequeDeleteModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" data-i18n="delete_cheque_title">حذف الصك</div>
+    <p style="text-align:center;color:var(--text2);font-size:0.9rem;margin:0 0 16px;" data-i18n="delete_cheque_msg">هل أنت متأكد من حذف هذا الصك؟</p>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="cancelChequeDelete()" style="flex:1;" data-i18n="cancel">إلغاء</button>
+      <button class="btn" onclick="doDeleteCheque()" style="flex:1;background:#ef4444;color:#fff;" data-i18n="delete">حذف</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: مسح الكل -->
+<div class="modal-overlay" id="chequeClearModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" data-i18n="clear_cheques_title">مسح جميع الصكوك</div>
+    <p style="text-align:center;color:var(--text2);font-size:0.9rem;margin:0 0 16px;" data-i18n="clear_cheques_msg">هل تريد حذف جميع الصكوك المحفوظة؟</p>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="cancelClearCheques()" style="flex:1;" data-i18n="cancel">إلغاء</button>
+      <button class="btn" onclick="doClearCheques()" style="flex:1;background:#ef4444;color:#fff;" data-i18n="clear_all_btn">مسح الكل</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="../js/i18n.js"></script>
+<script src="../js/app.js"></script>
+<script src="../js/cheque.js"></script>
+</body>
+</html>
