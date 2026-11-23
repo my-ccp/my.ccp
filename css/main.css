@@ -73,11 +73,11 @@ input[type=number] { -moz-appearance: textfield; }
 #app {
   display: flex;
   flex-direction: column;
-  min-height: 100dvh;
+  height: 100dvh;
   max-width: 480px;
   margin: 0 auto;
   position: relative;
-  overflow-x: hidden;
+  overflow: hidden;
   background: var(--bg);
 }
 
@@ -122,7 +122,7 @@ input[type=number] { -moz-appearance: textfield; }
   flex: 1;
   padding: 20px 16px;
   overflow-y: auto;
-  padding-bottom: 100px;
+  padding-bottom: 24px;
 }
 
 /* ===== DIGIT COUNTER ===== */
@@ -349,15 +349,13 @@ body:not([data-lang="ar"]) .input-icon:last-child { margin-left: 10px; }
   display: flex;
   background: var(--nav-bg);
   border-top: 1px solid var(--border);
-  position: fixed;
+  position: sticky;
   bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
   width: 100%;
-  max-width: 480px;
   z-index: 100;
   padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
   gap: 4px;
+  flex-shrink: 0;
   box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
 }
 
@@ -626,7 +624,7 @@ body[data-lang="en"] .account-checkbox { right: auto; left: 12px; }
 
 /* ===== SIDEBAR ===== */
 .sidebar-overlay {
-  position: fixed;
+  position: absolute;
   inset: 0;
   background: rgba(0,0,0,0.6);
   z-index: 200;
@@ -639,7 +637,7 @@ body[data-lang="en"] .account-checkbox { right: auto; left: 12px; }
 
 /* Default (ar) — sidebar opens from RIGHT, menu button on RIGHT */
 .sidebar {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: auto;
   right: 0;
@@ -896,7 +894,7 @@ body:not([data-lang="ar"]) .info-section ul { padding-left: 16px; padding-right:
 
 /* ===== TOAST ===== */
 .toast {
-  position: fixed;
+  position: absolute;
   bottom: 90px;
   left: 50%; transform: translateX(-50%);
   background: linear-gradient(135deg, #1e3a8a, #2563eb);
@@ -911,7 +909,7 @@ body:not([data-lang="ar"]) .info-section ul { padding-left: 16px; padding-right:
   transition: opacity 0.3s, transform 0.3s;
   transform: translateX(-50%) translateY(10px);
   white-space: nowrap;
-  max-width: 90vw;
+  max-width: 90%;
   text-align: center;
   box-shadow: 0 8px 24px rgba(37,99,235,0.4);
 }
@@ -919,7 +917,7 @@ body:not([data-lang="ar"]) .info-section ul { padding-left: 16px; padding-right:
 
 /* ===== MODAL ===== */
 .modal-overlay {
-  position: fixed;
+  position: absolute;
   inset: 0;
   background: rgba(0,0,0,0.6);
   z-index: 300;
@@ -1112,6 +1110,14 @@ body[data-lang="ar"] .back-btn svg { transform: scaleX(-1); }
 .subpage-content {
   /* No bottom nav, so less padding */
   padding-bottom: 24px;
+  overflow-y: auto;
+}
+
+/* Subpages: app container should scroll, not clip */
+#app:has(.subpage-content) {
+  height: auto;
+  min-height: 100dvh;
+  overflow: visible;
 }
 
 /* ===== FLAG LANG BUTTONS ===== */
