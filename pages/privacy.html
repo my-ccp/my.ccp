@@ -13,75 +13,66 @@
   <link rel="stylesheet" href="../css/main.css"/>
   <style>
     /* Privacy page is ALWAYS dark regardless of app theme */
-    html, body, #app { background: #000 !important; color: #e8f0fe !important; }
-    .subpage-header { background: linear-gradient(135deg,#000,#0d1428) !important; border-bottom: 1px solid #1e2d4f; }
-    .privacy-section {
-      background: #0d1428;
-      border: 1px solid #1e2d4f;
-      border-radius: 14px;
-      padding: 18px;
-      margin-bottom: 14px;
+    html, body, #app { background: #000000 !important; color: #ffffff !important; }
+    .subpage-header { background: #000000 !important; border-bottom: 1px solid #111130; }
+    .subpage-title { color: #ffffff !important; font-size: 1.2rem !important; }
+    .back-btn { color: #ffffff !important; }
+    .privacy-block {
+      background: #0a0a18;
+      border: 1px solid #111130;
+      border-radius: 16px;
+      padding: 22px;
+      margin-bottom: 20px;
     }
-    .privacy-section h3 {
-      font-size: 1rem;
+    .privacy-block-title {
+      font-size: 1.1rem;
       color: #60a5fa;
-      margin-bottom: 10px;
+      margin-bottom: 14px;
       display: flex;
       align-items: center;
       gap: 8px;
-      font-weight: 700;
+      font-weight: 800;
     }
-    .privacy-section p, .privacy-section li {
-      font-size: 0.88rem;
-      color: #8ba0c0;
-      line-height: 1.9;
+    .privacy-text {
+      font-size: 1rem;
+      color: #ccddff;
+      line-height: 2;
+      white-space: pre-line;
     }
-    .privacy-section ul { padding-right: 16px; margin-top: 8px; }
-    body[data-lang="fr"] .privacy-section ul,
-    body[data-lang="en"] .privacy-section ul { padding-left: 16px; padding-right: 0; }
     .privacy-badge {
       display: inline-block;
       background: rgba(96,165,250,0.12);
       color: #60a5fa;
       border: 1px solid rgba(96,165,250,0.25);
       border-radius: 20px;
-      padding: 4px 12px;
-      font-size: 0.72rem;
+      padding: 6px 16px;
+      font-size: 0.85rem;
       font-weight: 700;
       letter-spacing: 0.5px;
-      margin-bottom: 16px;
-    }
-    .privacy-intro-box {
-      background: linear-gradient(135deg, #0d1428, #0a0f1e);
-      border: 1px solid #1e2d4f;
-      border-radius: 14px;
-      padding: 20px;
       margin-bottom: 20px;
-      text-align: center;
     }
-    .privacy-intro-box p { color: #7a90bb; font-size: 0.9rem; line-height: 1.8; }
     .privacy-contact {
-      background: linear-gradient(135deg, #1e3a8a22, #0d1428);
-      border: 1px solid #2563eb44;
-      border-radius: 14px;
-      padding: 18px;
+      background: #060614;
+      border: 1px solid #1e2d60;
+      border-radius: 16px;
+      padding: 20px;
       margin-bottom: 14px;
       text-align: center;
     }
-    .privacy-contact a { color: #60a5fa; font-weight: 700; text-decoration: underline; }
+    .privacy-contact a { color: #60a5fa; font-weight: 700; text-decoration: underline; font-size: 1rem; }
     .lang-tabs {
       display: flex;
-      gap: 6px;
-      margin-bottom: 20px;
+      gap: 8px;
+      margin-bottom: 24px;
       flex-wrap: wrap;
     }
     .lang-tab {
-      padding: 6px 14px;
+      padding: 8px 18px;
       border-radius: 20px;
-      font-size: 0.82rem;
+      font-size: 0.9rem;
       font-weight: 700;
-      border: 1.5px solid #1e2d4f;
-      background: #0d1428;
+      border: 2px solid #111130;
+      background: #0a0a18;
       color: #7a90bb;
       cursor: pointer;
       font-family: inherit;
@@ -89,7 +80,6 @@
     }
     .lang-tab.active { background: #2563eb; color: white; border-color: #2563eb; }
     .main-content { padding-bottom: 24px; }
-    /* scrollbar */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: #000; }
     ::-webkit-scrollbar-thumb { background: #1e2d4f; border-radius: 4px; }
@@ -119,144 +109,80 @@
     </div>
 
     <!-- AR -->
-    <div class="privacy-lang" id="pl_ar">
-      <div class="privacy-intro-box">
-        <div class="privacy-badge">سياسة الخصوصية · MY CCP</div>
-        <p>نحن في MY CCP نولي خصوصيتك أهمية قصوى. هذه السياسة توضح كيف نتعامل مع بياناتك بشفافية كاملة.</p>
-      </div>
+    <div class="privacy-lang" id="pl_ar" dir="rtl">
+      <div class="privacy-badge">سياسة الخصوصية · MY CCP</div>
 
-      <div class="privacy-section">
-        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/></svg>تخزين محلي فقط</h3>
-        <p>جميع بياناتك (أرقام الحسابات والأسماء والسجلات) تُحفظ حصرياً في ذاكرة متصفحك (localStorage) على جهازك. لا تُرسَل أي بيانات إلى خوادمنا أو أي طرف ثالث.</p>
-      </div>
+      <div class="privacy-block">
+        <div class="privacy-block-title">📱 MY CCP — سياسة الخصوصية</div>
+        <div class="privacy-text">نحن في MY CCP نولي خصوصيتك أهمية قصوى. هذه السياسة توضح كيف نتعامل مع بياناتك بشفافية كاملة.
 
-      <div class="privacy-section">
-        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>لا نجمع بياناتك الشخصية</h3>
-        <p>لا يقوم التطبيق بجمع أو إرسال أو تخزين أي بيانات شخصية على الإنترنت. جميع العمليات الحسابية تتم محلياً على جهازك.</p>
-        <ul>
-          <li>لا يوجد حساب مستخدم أو تسجيل دخول</li>
-          <li>لا نراقب سلوك المستخدمين</li>
-          <li>لا نستخدم أدوات تتبع أو تحليلات</li>
-        </ul>
-      </div>
+جميع بياناتك — أرقام الحسابات، الأسماء، والسجلات — تُحفظ حصرياً في ذاكرة متصفحك (localStorage) على جهازك الشخصي. لا تُرسَل أي بيانات إلى خوادمنا أو أي طرف ثالث في أي وقت.
 
-      <div class="privacy-section">
-        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>حق الحذف والتحكم</h3>
-        <p>لديك سيطرة كاملة على بياناتك:</p>
-        <ul>
-          <li>حذف حسابات مفردة أو جميعها من صفحة "الحسابات"</li>
-          <li>مسح سجل العمليات من صفحة "السجل"</li>
-          <li>مسح جميع البيانات عبر إعدادات المتصفح ← بيانات الموقع</li>
-        </ul>
-      </div>
+لا يقوم التطبيق بجمع أو إرسال أو تخزين أي بيانات شخصية على الإنترنت. جميع العمليات الحسابية تتم محلياً على جهازك بالكامل. لا يوجد حساب مستخدم أو تسجيل دخول، ولا نراقب سلوك المستخدمين، ولا نستخدم أدوات تتبع أو تحليلات من أي نوع.
 
-      <div class="privacy-section">
-        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>الإعلانات</h3>
-        <p>النسخة المجانية قد تعرض إعلانات من طرف ثالث. هذه الإعلانات تخضع لسياسات الخصوصية الخاصة بمزوديها. النسخة الاحترافية خالية من الإعلانات.</p>
-      </div>
+لديك سيطرة كاملة على بياناتك في أي وقت: يمكنك حذف حسابات مفردة أو جميعها من صفحة "الحسابات"، ومسح سجل العمليات من صفحة "السجل"، ومسح جميع البيانات عبر إعدادات التطبيق أو إعدادات المتصفح.
 
-      <div class="privacy-section">
-        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>إخلاء المسؤولية</h3>
-        <p>تطبيق MY CCP غير تابع لبريد الجزائر أو أي جهة حكومية. الخدمات المقدمة هي أدوات مساعدة فقط. تحقق دائماً من صحة البيانات قبل إجراء أي معاملة مالية.</p>
-      </div>
+تطبيق MY CCP غير تابع لبريد الجزائر أو أي جهة حكومية. الخدمات المقدمة هي أدوات مساعدة فقط. تحقق دائماً من صحة البيانات قبل إجراء أي معاملة مالية.
 
-      <div class="privacy-section">
-        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>تعديلات على السياسة</h3>
-        <p>قد نقوم بتحديث هذه السياسة من وقت لآخر. التغييرات الجوهرية سيتم الإعلان عنها داخل التطبيق.</p>
+قد نقوم بتحديث هذه السياسة من وقت لآخر. التغييرات الجوهرية سيتم الإعلان عنها داخل التطبيق.</div>
       </div>
 
       <div class="privacy-contact">
-        <div style="font-size:0.85rem;color:#7a90bb;margin-bottom:8px;font-weight:600;">للاستفسارات المتعلقة بالخصوصية:</div>
+        <div style="font-size:0.95rem;color:#7a90bb;margin-bottom:10px;font-weight:700;">للاستفسارات المتعلقة بالخصوصية:</div>
         <a href="mailto:myccp.app@gmail.com">myccp.app@gmail.com</a>
-        <div style="font-size:0.72rem;color:#4a5a7a;margin-top:6px;">آخر تحديث: نوفمبر 2026</div>
+        <div style="font-size:0.8rem;color:#4a5a7a;margin-top:8px;">آخر تحديث: نوفمبر 2026</div>
       </div>
     </div>
 
     <!-- FR -->
-    <div class="privacy-lang" id="pl_fr" style="display:none;">
-      <div class="privacy-intro-box">
-        <div class="privacy-badge">Politique de Confidentialité · MY CCP</div>
-        <p>Chez MY CCP, votre vie privée est notre priorité. Cette politique explique de façon transparente comment nous traitons vos données.</p>
-      </div>
+    <div class="privacy-lang" id="pl_fr" dir="ltr" style="display:none;">
+      <div class="privacy-badge">Politique de Confidentialité · MY CCP</div>
 
-      <div class="privacy-section">
-        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/></svg>Stockage local uniquement</h3>
-        <p>Toutes vos données (numéros de compte, noms, historique) sont enregistrées exclusivement dans la mémoire locale de votre navigateur (localStorage). Aucune donnée n'est envoyée à nos serveurs ou à des tiers.</p>
-      </div>
+      <div class="privacy-block">
+        <div class="privacy-block-title">📱 MY CCP — Politique de Confidentialité</div>
+        <div class="privacy-text">Chez MY CCP, votre vie privée est notre priorité absolue. Cette politique explique de façon transparente comment nous traitons vos données.
 
-      <div class="privacy-section">
-        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Aucune collecte de données personnelles</h3>
-        <p>L'application ne collecte, n'envoie et ne stocke aucune donnée personnelle sur Internet. Tous les calculs s'effectuent localement sur votre appareil.</p>
-        <ul>
-          <li>Pas de compte utilisateur ni de connexion</li>
-          <li>Aucune surveillance du comportement des utilisateurs</li>
-          <li>Aucun outil de suivi ou d'analyse</li>
-        </ul>
-      </div>
+Toutes vos données — numéros de compte, noms et historique — sont enregistrées exclusivement dans la mémoire locale de votre navigateur (localStorage) sur votre appareil personnel. Aucune donnée n'est jamais envoyée à nos serveurs ou à des tiers, à aucun moment.
 
-      <div class="privacy-section">
-        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>Droit de suppression</h3>
-        <p>Vous contrôlez totalement vos données :</p>
-        <ul>
-          <li>Supprimer des comptes individuels ou tous depuis "Comptes"</li>
-          <li>Effacer l'historique depuis "Historique"</li>
-          <li>Supprimer toutes les données via les paramètres du navigateur</li>
-        </ul>
-      </div>
+L'application ne collecte, n'envoie et ne stocke aucune donnée personnelle sur Internet. Tous les calculs s'effectuent entièrement en local sur votre appareil. Il n'existe pas de compte utilisateur ni de connexion requise, nous ne surveillons pas le comportement des utilisateurs et nous n'utilisons aucun outil de suivi ou d'analyse.
 
-      <div class="privacy-section">
-        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>Avertissement</h3>
-        <p>MY CCP n'est pas affilié à Algérie Poste ou à toute entité gouvernementale. Vérifiez toujours les données avant toute transaction financière.</p>
+Vous contrôlez totalement vos données à tout moment : vous pouvez supprimer des comptes individuels ou tous les comptes depuis la page "Comptes", effacer l'historique depuis la page "Historique", et supprimer toutes les données via les paramètres de l'application ou du navigateur.
+
+MY CCP n'est pas affilié à Algérie Poste ou à toute entité gouvernementale. Les services fournis sont uniquement des outils d'assistance. Vérifiez toujours l'exactitude des données avant toute transaction financière.
+
+Nous pouvons mettre à jour cette politique de temps à autre. Les changements importants seront annoncés dans l'application.</div>
       </div>
 
       <div class="privacy-contact">
-        <div style="font-size:0.85rem;color:#7a90bb;margin-bottom:8px;font-weight:600;">Contact confidentialité :</div>
+        <div style="font-size:0.95rem;color:#7a90bb;margin-bottom:10px;font-weight:700;">Contact confidentialité :</div>
         <a href="mailto:myccp.app@gmail.com">myccp.app@gmail.com</a>
-        <div style="font-size:0.72rem;color:#4a5a7a;margin-top:6px;">Dernière mise à jour : Novembre 2026</div>
+        <div style="font-size:0.8rem;color:#4a5a7a;margin-top:8px;">Dernière mise à jour : Novembre 2026</div>
       </div>
     </div>
 
     <!-- EN -->
-    <div class="privacy-lang" id="pl_en" style="display:none;">
-      <div class="privacy-intro-box">
-        <div class="privacy-badge">Privacy Policy · MY CCP</div>
-        <p>At MY CCP, your privacy matters. This policy explains transparently how we handle your data.</p>
-      </div>
+    <div class="privacy-lang" id="pl_en" dir="ltr" style="display:none;">
+      <div class="privacy-badge">Privacy Policy · MY CCP</div>
 
-      <div class="privacy-section">
-        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/></svg>Local Storage Only</h3>
-        <p>All your data (account numbers, names, history) is stored exclusively in your browser's local storage on your device. No data is ever sent to our servers or any third party.</p>
-      </div>
+      <div class="privacy-block">
+        <div class="privacy-block-title">📱 MY CCP — Privacy Policy</div>
+        <div class="privacy-text">At MY CCP, your privacy is our top priority. This policy explains transparently how we handle your data.
 
-      <div class="privacy-section">
-        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>No Personal Data Collection</h3>
-        <p>The app does not collect, transmit or store any personal data online. All calculations happen locally on your device.</p>
-        <ul>
-          <li>No user account or login required</li>
-          <li>No user behaviour tracking</li>
-          <li>No analytics or tracking tools</li>
-        </ul>
-      </div>
+All your data — account numbers, names, and history — is stored exclusively in your browser's local storage (localStorage) on your personal device. No data is ever sent to our servers or any third party, at any time.
 
-      <div class="privacy-section">
-        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>Right to Delete</h3>
-        <p>You have full control over your data:</p>
-        <ul>
-          <li>Delete individual or all accounts from the Accounts page</li>
-          <li>Clear operation history from the History page</li>
-          <li>Remove all data via browser settings → Site data</li>
-        </ul>
-      </div>
+The app does not collect, transmit or store any personal data online. All calculations happen entirely locally on your device. There is no user account or login required, we do not monitor user behaviour, and we do not use any tracking or analytics tools of any kind.
 
-      <div class="privacy-section">
-        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>Disclaimer</h3>
-        <p>MY CCP is not affiliated with Algérie Poste or any government body. Always verify your data before any financial transaction.</p>
+You have full control over your data at any time: you can delete individual or all accounts from the Accounts page, clear the operation history from the History page, and remove all data via the app settings or browser settings.
+
+MY CCP is not affiliated with Algérie Poste or any government body. The services provided are assistance tools only. Always verify the accuracy of your data before any financial transaction.
+
+We may update this policy from time to time. Significant changes will be announced within the app.</div>
       </div>
 
       <div class="privacy-contact">
-        <div style="font-size:0.85rem;color:#7a90bb;margin-bottom:8px;font-weight:600;">Privacy inquiries:</div>
+        <div style="font-size:0.95rem;color:#7a90bb;margin-bottom:10px;font-weight:700;">Privacy inquiries:</div>
         <a href="mailto:myccp.app@gmail.com">myccp.app@gmail.com</a>
-        <div style="font-size:0.72rem;color:#4a5a7a;margin-top:6px;">Last updated: November 2026</div>
+        <div style="font-size:0.8rem;color:#4a5a7a;margin-top:8px;">Last updated: November 2026</div>
       </div>
     </div>
 
@@ -268,9 +194,8 @@
 <script src="../js/i18n.js"></script>
 <script src="../js/app.js"></script>
 <script>
-  // Set active lang tab based on app language
-  const appLang = localStorage.getItem('lang') || 'ar';
-  setPrivacyLang(appLang, document.querySelector('.lang-tab'));
+  // Privacy page always defaults to English regardless of app language
+  setPrivacyLang('en', null);
 
   function setPrivacyLang(lang, btn) {
     document.querySelectorAll('.privacy-lang').forEach(el => el.style.display = 'none');
