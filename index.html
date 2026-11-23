@@ -49,7 +49,7 @@
             <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>
           </svg>
         </span>
-        <input type="tel" id="ccpInput" data-i18n-ph="account_number" placeholder="رقم الحساب الجاري" inputmode="numeric" maxlength="10" autocomplete="off"/>
+        <input type="tel" id="ccpInput" inputmode="numeric" maxlength="10" autocomplete="off"/>
         <span class="digit-counter" id="digitCounter">0/10</span>
         <!-- Paste button -->
         <span class="input-icon" id="pasteAccBtn" onclick="pasteAccountNumber()" style="cursor:pointer;" title="لصق رقم الحساب">
@@ -74,7 +74,7 @@
             <circle cx="7.5" cy="15.5" r="5.5"/><path d="M21 2l-9.6 9.6"/><path d="M15.5 7.5l3 3L22 7l-3-3"/>
           </svg>
         </span>
-        <input type="text" id="ccpKeyInput" data-i18n-ph="ccp_key" placeholder="مفتاح CCP" inputmode="numeric" readonly/>
+        <input type="text" id="ccpKeyInput" inputmode="numeric" readonly/>
         <span class="input-icon" id="ccpKeyBadge" style="display:none;">
           <span class="key-badge" id="ccpKeyVal"></span>
         </span>
@@ -88,7 +88,7 @@
             <circle cx="7.5" cy="15.5" r="5.5"/><path d="M21 2l-9.6 9.6"/><path d="M15.5 7.5l3 3L22 7l-3-3"/>
           </svg>
         </span>
-        <input type="text" id="ripKeyInput" data-i18n-ph="rip_key" placeholder="مفتاح RIP" inputmode="numeric" readonly/>
+        <input type="text" id="ripKeyInput" inputmode="numeric" readonly/>
         <span class="input-icon" id="ripKeyBadge" style="display:none;">
           <span class="key-badge" id="ripKeyVal"></span>
         </span>
@@ -247,6 +247,8 @@
     try { return JSON.parse(localStorage.getItem('ripHistory') || '[]'); } catch { return []; }
   }
   function addToHistory(entry) {
+    // Check if user has disabled history saving
+    if (localStorage.getItem('allowHistory') === 'false') return;
     const h = getHistoryArr();
     if (h.length > 0 && h[0].ccp === entry.ccp) return;
     h.unshift(entry);
