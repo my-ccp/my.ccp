@@ -114,15 +114,14 @@ input[type=number] { -moz-appearance: textfield; }
 .header-logo {
   width: 54px;
   height: 54px;
-  border-radius: 50%;
   flex: 1;
   object-fit: cover;
   object-position: center;
   display: block;
   margin-inline-start: auto;
-  /* Zoom in to crop out the white square padding, showing only the circular logo */
+  /* Scale up to crop white padding, then clip to circle */
   transform: scale(1.35);
-  overflow: hidden;
+  clip-path: circle(37% at 50% 50%);
 }
 
 .header-btn {
