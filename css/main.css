@@ -1221,8 +1221,9 @@ body:has(.subpage-content) {
 /* ===== DESKTOP: ALL PAGES CENTERED LIKE MOBILE ===== */
 @media (min-width: 481px) {
   html, body {
-    overflow: auto;
+    overflow: hidden;
     background: #0a0f1e;
+    height: 100%;
   }
   [data-theme="dark"] body { background: #050810; }
 
@@ -1237,13 +1238,34 @@ body:has(.subpage-content) {
     background: linear-gradient(135deg, #050810 0%, #0f1a3e 50%, #080d20 100%);
   }
 
-  /* Subpages: wrap in centered column like index */
+  /* Main page: perfectly contained, no scroll outside the app column */
+  body:not(:has(.subpage-content)) #app-wrapper {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 100dvh;
+    overflow: hidden;
+    box-shadow: 0 0 60px rgba(37,99,235,0.2);
+  }
+
+  /* Subpages: allow scroll, centered column */
+  body:has(.subpage-content) {
+    overflow-y: auto;
+  }
+  body:has(.subpage-content) #app-wrapper {
+    max-width: 480px;
+    width: 100%;
+    margin: 0 auto;
+    height: auto;
+    min-height: 100dvh;
+    box-shadow: 0 0 60px rgba(37,99,235,0.2);
+  }
   body:has(.subpage-content) #app {
     max-width: 480px;
     width: 100%;
     margin: 0 auto;
     min-height: 100dvh;
-    box-shadow: 0 0 60px rgba(37,99,235,0.2);
   }
 
   /* Subpage header sticky within centered column */
