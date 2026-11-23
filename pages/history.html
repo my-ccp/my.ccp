@@ -24,19 +24,27 @@
       </svg>
     </button>
     <div class="subpage-title" data-i18n="history_title">سجل العمليات</div>
-    <button class="subpage-action-btn" id="histMenuBtn" onclick="openHistMenu(event)" style="display:none;">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="5" r="1.2" fill="currentColor" stroke="none"/>
-        <circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/>
-        <circle cx="12" cy="19" r="1.2" fill="currentColor" stroke="none"/>
-      </svg>
-    </button>
-    <!-- Placeholder to keep title centered when button hidden -->
-    <div style="width:42px;"></div>
+    <div style="display:flex;gap:6px;align-items:center;">
+      <button class="subpage-action-btn" id="histSearchBtn" onclick="toggleHistSearch()" style="display:none;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <button class="subpage-action-btn" id="histMenuBtn" onclick="openHistMenu(event)" style="display:none;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="5" r="1.2" fill="currentColor" stroke="none"/>
+          <circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/>
+          <circle cx="12" cy="19" r="1.2" fill="currentColor" stroke="none"/>
+        </svg>
+      </button>
+    </div>
   </header>
 
   <!-- MAIN -->
   <main class="main-content subpage-content">
+    <!-- Search bar -->
+    <div id="histSearchBar" class="search-bar" style="display:none;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="histSearchInput" placeholder="بحث..." oninput="renderHistory()"/>
+    </div>
     <!-- Selection bar -->
     <div class="selection-bar" id="selectionBar">
       <span id="selectionCount">0 <span data-i18n="selected_count">محدد</span></span>
@@ -138,8 +146,7 @@
 
     if (all.length === 0) {
       menuBtn.style.display = 'none';
-      // Fix placeholder width
-      menuBtn.nextElementSibling && (menuBtn.nextElementSibling.style.display = 'none');
+      document.getElementById('histSearchBtn').style.display = 'none';
       list.innerHTML = `
         <div class="empty-state">
           <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -153,8 +160,16 @@
     }
 
     menuBtn.style.display = 'flex';
+    document.getElementById('histSearchBtn').style.display = 'flex';
 
-    list.innerHTML = all.map((item, i) => {
+    const q = (document.getElementById('histSearchInput')?.value || '').toLowerCase().trim();
+    const filtered = q ? all.filter(item =>
+      (item.ccp||'').toLowerCase().includes(q) ||
+      (item.rip||'').toLowerCase().includes(q) ||
+      (item.name||'').toLowerCase().includes(q)
+    ) : all;
+
+    list.innerHTML = filtered.map((item, i) => {
       const isSelected = selectedIdxs.has(i);
       return `
       <div class="account-card animate-in ${isSelected ? 'selected' : ''}" id="hcard-${i}" style="animation-delay:${i * 0.04}s">
@@ -337,6 +352,19 @@
     if (!e.target.closest('#itemDropdown') && !e.target.closest('.dots-btn'))
       closeItemMenu();
   });
+
+  function toggleHistSearch() {
+    const bar = document.getElementById('histSearchBar');
+    const inp = document.getElementById('histSearchInput');
+    if (bar.style.display === 'none') {
+      bar.style.display = 'flex';
+      inp.focus();
+    } else {
+      bar.style.display = 'none';
+      inp.value = '';
+      renderHistory();
+    }
+  }
 
   renderHistory();
 </script>
