@@ -111,18 +111,7 @@ input[type=number] { -moz-appearance: textfield; }
 }
 
 /* Logo in header instead of text */
-.header-logo {
-  width: 54px;
-  height: 54px;
-  flex: 1;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-  margin-inline-start: auto;
-  /* Scale up to crop white padding, then clip to circle */
-  transform: scale(1.35);
-  clip-path: circle(37% at 50% 50%);
-}
+.header-logo { display: none; }
 
 .header-btn {
   width: 42px; height: 42px;
