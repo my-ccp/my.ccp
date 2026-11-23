@@ -48,12 +48,11 @@
 
 /* ===== RESET ===== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 16px; height: 100%; }
+html, body { font-size: 16px; height: 100%; overflow: hidden; }
 body {
   font-family: 'Cairo', 'Segoe UI', system-ui, sans-serif;
   background: var(--bg);
   color: var(--text);
-  min-height: 100%;
   transition: background var(--transition), color var(--transition);
   direction: rtl;
   -webkit-font-smoothing: antialiased;
@@ -70,12 +69,21 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin
 input[type=number] { -moz-appearance: textfield; }
 
 /* ===== LAYOUT ===== */
+/* wrapper centers & clips everything — sidebar included */
+#app-wrapper {
+  position: relative;
+  max-width: 480px;
+  width: 100%;
+  margin: 0 auto;
+  height: 100dvh;
+  overflow: hidden;
+}
+
 #app {
   display: flex;
   flex-direction: column;
   height: 100dvh;
-  max-width: 480px;
-  margin: 0 auto;
+  width: 100%;
   position: relative;
   overflow: hidden;
   background: var(--bg);
@@ -100,6 +108,19 @@ input[type=number] { -moz-appearance: textfield; }
   flex: 1;
   text-align: center;
   letter-spacing: 0.3px;
+}
+
+/* Logo in header instead of text */
+.header-logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  flex: 1;
+  object-fit: contain;
+  display: block;
+  /* center it like the title was */
+  margin-inline-start: auto;
+  /* will be visually centered by the flex row with the button on one side */
 }
 
 .header-btn {
@@ -141,68 +162,73 @@ input[type=number] { -moz-appearance: textfield; }
 .digit-counter.full { color: var(--accent); }
 .digit-counter.warn { color: #f59e0b; }
 
-/* ===== INPUT GROUP ===== */
+/* ===== INPUT GROUP — styled like reference app ===== */
 .input-group {
   display: flex;
   align-items: center;
   background: var(--input-bg);
   border-radius: var(--radius);
-  border: 2px solid var(--input-border);
-  padding: 0 14px;
-  height: 60px;
-  margin-bottom: 20px;
-  transition: border var(--transition), box-shadow var(--transition), transform var(--transition);
+  border: 1.5px solid var(--input-border);
+  padding: 0 16px;
+  height: 64px;
+  margin-bottom: 16px;
+  transition: border var(--transition), box-shadow var(--transition);
   position: relative;
-  box-shadow: var(--shadow-card);
+  box-shadow: none;
 }
 .input-group:focus-within {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(37,99,235,0.12), var(--shadow-card);
-  transform: translateY(-1px);
+  box-shadow: 0 0 0 2px rgba(37,99,235,0.15);
 }
 
 .input-group.readonly {
   background: var(--bg2);
-  border-style: dashed;
-  opacity: 0.85;
+  border: 1.5px dashed var(--input-border);
+  opacity: 1;
 }
 
 .input-group input {
   flex: 1;
   background: transparent;
   color: var(--text);
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 600;
   text-align: center;
+  letter-spacing: 0.5px;
 }
 .input-group input::placeholder {
   color: var(--text2);
-  font-weight: 400;
-  font-size: 0.9rem;
+  font-weight: 500;
+  font-size: 0.95rem;
 }
 
+/* Floating label — matches reference UI */
 .input-label {
   position: absolute;
-  top: -10px;
-  right: 14px;
-  font-size: 0.72rem;
+  top: -11px;
+  right: 12px;
+  font-size: 0.75rem;
   font-weight: 700;
   color: var(--accent);
   background: var(--input-bg);
   padding: 0 6px;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
+  letter-spacing: 0.3px;
   border-radius: 4px;
+  pointer-events: none;
 }
 
 body[data-lang="fr"] .input-label,
 body[data-lang="en"] .input-label {
   right: auto;
-  left: 14px;
+  left: 12px;
 }
 
-.input-group.readonly .input-label { color: var(--text2); }
+.input-group.readonly .input-label {
+  color: var(--text2);
+  background: var(--bg2);
+}
 
+/* Icons */
 .input-icon {
   color: var(--text2);
   flex-shrink: 0;
@@ -213,9 +239,9 @@ body[data-lang="en"] .input-label {
 .input-group:focus-within .input-icon { color: var(--accent); }
 
 body[data-lang="ar"] .input-icon:first-child { margin-left: 10px; }
-body[data-lang="ar"] .input-icon:last-child { margin-right: 10px; }
+body[data-lang="ar"] .input-icon:last-child  { margin-right: 10px; }
 body:not([data-lang="ar"]) .input-icon:first-child { margin-right: 10px; }
-body:not([data-lang="ar"]) .input-icon:last-child { margin-left: 10px; }
+body:not([data-lang="ar"]) .input-icon:last-child  { margin-left: 10px; }
 
 /* ===== RESULT BOX ===== */
 .result-box {
@@ -623,6 +649,7 @@ body[data-lang="en"] .account-checkbox { right: auto; left: 12px; }
 .dropdown-divider { height: 1px; background: var(--border); margin: 4px 0; }
 
 /* ===== SIDEBAR ===== */
+/* overlay & sidebar are now inside #app-wrapper, not #app */
 .sidebar-overlay {
   position: absolute;
   inset: 0;
@@ -635,7 +662,7 @@ body[data-lang="en"] .account-checkbox { right: auto; left: 12px; }
 }
 .sidebar-overlay.open { opacity: 1; pointer-events: all; }
 
-/* Default (ar) — sidebar opens from RIGHT, menu button on RIGHT */
+/* Default (ar) — sidebar opens from RIGHT */
 .sidebar {
   position: absolute;
   top: 0;
@@ -654,7 +681,7 @@ body[data-lang="en"] .account-checkbox { right: auto; left: 12px; }
 }
 .sidebar.open { transform: translateX(0); }
 
-/* LTR (fr, en) — sidebar opens from LEFT, menu button on LEFT */
+/* LTR (fr, en) — sidebar opens from LEFT */
 body[data-lang="fr"] .sidebar,
 body[data-lang="en"] .sidebar {
   right: auto;
@@ -1113,7 +1140,17 @@ body[data-lang="ar"] .back-btn svg { transform: scaleX(-1); }
   overflow-y: auto;
 }
 
-/* Subpages: app container should scroll, not clip */
+/* Subpages: allow body/html to scroll */
+html:has(.subpage-content),
+body:has(.subpage-content) {
+  overflow: auto;
+}
+#app-wrapper:has(.subpage-content) {
+  height: auto;
+  min-height: 100dvh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
 #app:has(.subpage-content) {
   height: auto;
   min-height: 100dvh;
