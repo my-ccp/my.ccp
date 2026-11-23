@@ -4,9 +4,7 @@ const ASSETS = [
   `${BASE}/`,
   `${BASE}/index.html`,
   `${BASE}/pages/accounts.html`,
-  `${BASE}/pages/cheque.html`,
-  `${BASE}/pages/fees.html`,
-  `${BASE}/pages/transfer.html`,
+
   `${BASE}/pages/history.html`,
   `${BASE}/pages/settings.html`,
   `${BASE}/pages/about.html`,
@@ -14,9 +12,7 @@ const ASSETS = [
   `${BASE}/css/main.css`,
   `${BASE}/js/app.js`,
   `${BASE}/js/i18n.js`,
-  `${BASE}/js/cheque.js`,
-  `${BASE}/js/fees.js`,
-  `${BASE}/js/transfer.js`,
+
   `${BASE}/manifest.json`,
   `${BASE}/favicon.ico`,
   `${BASE}/icons/icon-72.png`,
