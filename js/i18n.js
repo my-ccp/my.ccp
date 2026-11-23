@@ -195,6 +195,20 @@ const TRANSLATIONS = {
     coming_soon: "قريباً على Google Play!",
     pro_version: "النسخة الاحترافية",
     pro_coming_soon: "ستكون متاحة قريباً!",
+    // About page
+    important_notice_title: "ملاحظة مهمة",
+    important_notice_text: "هذا التطبيق ليس تابعا لبريد الجزائر أو أي كيان حكومي رسمي، الحسابات والخدمات المقدمة هي لأغراض إرشادية فقط، يرجى التحقق من أي معلومات من المصادر الرسمية قبل استخدامها.",
+    official_sources: "المصادر الرسمية الموصى بها:",
+    official_site_label: "الموقع الرسمي لبريد الجزائر",
+    developer_credit: "تم التطوير بواسطة Ahmedcrypto",
+    // Settings page
+    allow_history: "السماح بحفظ سجل العمليات",
+    allow_history_desc: "حفظ نتائج التحويل في السجل",
+    clear_data: "مسح بيانات التطبيق",
+    clear_data_desc: "حذف جميع البيانات المحفوظة",
+    confirm_clear_data: "مسح البيانات",
+    confirm_clear_data_msg: "هل أنت متأكد من مسح جميع بيانات التطبيق؟ لا يمكن التراجع عن هذا الإجراء.",
+    data_cleared: "تم مسح جميع البيانات!",
   },
   fr: {
     app_name: "MY CCP",
@@ -392,6 +406,20 @@ const TRANSLATIONS = {
     coming_soon: "Bientôt sur Google Play!",
     pro_version: "Version Professionnelle",
     pro_coming_soon: "Disponible bientôt!",
+    // About page
+    important_notice_title: "Avis Important",
+    important_notice_text: "Cette application n'est pas affiliée à Algérie Poste ou à toute entité gouvernementale officielle. Les calculs et services fournis sont à titre indicatif uniquement. Veuillez vérifier toute information auprès des sources officielles avant utilisation.",
+    official_sources: "Sources officielles recommandées :",
+    official_site_label: "Site officiel d'Algérie Poste",
+    developer_credit: "Développé par Ahmedcrypto",
+    // Settings page
+    allow_history: "Autoriser l'historique des opérations",
+    allow_history_desc: "Enregistrer les résultats de conversion",
+    clear_data: "Effacer les données de l'application",
+    clear_data_desc: "Supprimer toutes les données enregistrées",
+    confirm_clear_data: "Effacer les données",
+    confirm_clear_data_msg: "Êtes-vous sûr de vouloir effacer toutes les données? Cette action est irréversible.",
+    data_cleared: "Toutes les données ont été effacées!",
   },
   en: {
     app_name: "MY CCP",
@@ -589,6 +617,20 @@ const TRANSLATIONS = {
     coming_soon: "Coming soon on Google Play!",
     pro_version: "Professional Version",
     pro_coming_soon: "Coming soon!",
+    // About page
+    important_notice_title: "Important Notice",
+    important_notice_text: "This app is not affiliated with Algérie Poste or any official government entity. The calculations and services provided are for guidance purposes only. Please verify any information from official sources before use.",
+    official_sources: "Recommended official sources:",
+    official_site_label: "Official Algérie Poste website",
+    developer_credit: "Developed by Ahmedcrypto",
+    // Settings page
+    allow_history: "Allow operation history",
+    allow_history_desc: "Save conversion results to history",
+    clear_data: "Clear app data",
+    clear_data_desc: "Delete all saved data",
+    confirm_clear_data: "Clear Data",
+    confirm_clear_data_msg: "Are you sure you want to clear all app data? This action cannot be undone.",
+    data_cleared: "All data has been cleared!",
   }
 };
 
