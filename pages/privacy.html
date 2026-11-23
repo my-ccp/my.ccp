@@ -4,63 +4,320 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>MY CCP – سياسة الخصوصية</title>
-  <meta name="theme-color" content="#1e3a8a"/>
+  <meta name="theme-color" content="#000000"/>
   <link rel="manifest" href="../manifest.json"/>
   <link rel="icon" type="image/x-icon" href="../favicon.ico"/>
   <link rel="icon" type="image/png" href="../icons/icon-192.png"/>
   <link rel="apple-touch-icon" href="../icons/icon-192.png"/>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="../css/main.css"/>
+  <style>
+    /* Privacy page is ALWAYS dark regardless of app theme */
+    html, body, #app { background: #000 !important; color: #e8f0fe !important; }
+    .subpage-header { background: linear-gradient(135deg,#000,#0d1428) !important; border-bottom: 1px solid #1e2d4f; }
+    .privacy-section {
+      background: #0d1428;
+      border: 1px solid #1e2d4f;
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+    .privacy-section h3 {
+      font-size: 1rem;
+      color: #60a5fa;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+    }
+    .privacy-section p, .privacy-section li {
+      font-size: 0.88rem;
+      color: #8ba0c0;
+      line-height: 1.9;
+    }
+    .privacy-section ul { padding-right: 16px; margin-top: 8px; }
+    body[data-lang="fr"] .privacy-section ul,
+    body[data-lang="en"] .privacy-section ul { padding-left: 16px; padding-right: 0; }
+    .privacy-badge {
+      display: inline-block;
+      background: rgba(96,165,250,0.12);
+      color: #60a5fa;
+      border: 1px solid rgba(96,165,250,0.25);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+    .privacy-intro-box {
+      background: linear-gradient(135deg, #0d1428, #0a0f1e);
+      border: 1px solid #1e2d4f;
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .privacy-intro-box p { color: #7a90bb; font-size: 0.9rem; line-height: 1.8; }
+    .privacy-contact {
+      background: linear-gradient(135deg, #1e3a8a22, #0d1428);
+      border: 1px solid #2563eb44;
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 14px;
+      text-align: center;
+    }
+    .privacy-contact a { color: #60a5fa; font-weight: 700; text-decoration: underline; }
+    .lang-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .lang-tab {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      border: 1.5px solid #1e2d4f;
+      background: #0d1428;
+      color: #7a90bb;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+    .lang-tab.active { background: #2563eb; color: white; border-color: #2563eb; }
+    .main-content { padding-bottom: 24px; }
+    /* scrollbar */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: #000; }
+    ::-webkit-scrollbar-thumb { background: #1e2d4f; border-radius: 4px; }
+  </style>
 </head>
 <body>
 <div id="app">
 
-  <!-- SUBPAGE HEADER -->
   <header class="subpage-header">
     <button class="back-btn" onclick="history.back()">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="19" y1="12" x2="5" y2="12"/>
-        <polyline points="12 19 5 12 12 5"/>
+        <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
       </svg>
     </button>
     <div class="subpage-title" data-i18n="privacy">سياسة الخصوصية</div>
     <div style="width:42px;"></div>
   </header>
 
-  <main class="main-content subpage-content">
-    <div class="info-section">
-      <p data-i18n="privacy_intro">نحن نحترم خصوصيتك تمامًا. إليك ما تحتاج معرفته:</p>
+  <main class="main-content subpage-content" style="padding:16px;">
+
+    <!-- Language tabs -->
+    <div class="lang-tabs">
+      <button class="lang-tab" onclick="setPrivacyLang('ar',this)">العربية</button>
+      <button class="lang-tab" onclick="setPrivacyLang('fr',this)">Français</button>
+      <button class="lang-tab" onclick="setPrivacyLang('en',this)">English</button>
     </div>
 
-    <div class="info-section">
-      <h3>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-        <span data-i18n="privacy_local">تخزين محلي فقط</span>
-      </h3>
-      <p data-i18n="privacy_local_desc">جميع بياناتك (أرقام الحسابات والأسماء) تُحفظ محليًا في متصفحك فقط ولا تُرسل إلى أي خادم.</p>
+    <!-- AR -->
+    <div class="privacy-lang" id="pl_ar">
+      <div class="privacy-intro-box">
+        <div class="privacy-badge">سياسة الخصوصية · MY CCP</div>
+        <p>نحن في MY CCP نولي خصوصيتك أهمية قصوى. هذه السياسة توضح كيف نتعامل مع بياناتك بشفافية كاملة.</p>
+      </div>
+
+      <div class="privacy-section">
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/></svg>تخزين محلي فقط</h3>
+        <p>جميع بياناتك (أرقام الحسابات والأسماء والسجلات) تُحفظ حصرياً في ذاكرة متصفحك (localStorage) على جهازك. لا تُرسَل أي بيانات إلى خوادمنا أو أي طرف ثالث.</p>
+      </div>
+
+      <div class="privacy-section">
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>لا نجمع بياناتك الشخصية</h3>
+        <p>لا يقوم التطبيق بجمع أو إرسال أو تخزين أي بيانات شخصية على الإنترنت. جميع العمليات الحسابية تتم محلياً على جهازك.</p>
+        <ul>
+          <li>لا يوجد حساب مستخدم أو تسجيل دخول</li>
+          <li>لا نراقب سلوك المستخدمين</li>
+          <li>لا نستخدم أدوات تتبع أو تحليلات</li>
+        </ul>
+      </div>
+
+      <div class="privacy-section">
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>خاصية مسح الشيك بالذكاء الاصطناعي</h3>
+        <p>عند استخدام ميزة مسح الشيك البريدي:</p>
+        <ul>
+          <li>صورة الشيك تُرسَل مباشرة إلى مزود الذكاء الاصطناعي الذي تختاره (Claude, OpenAI, Gemini)</li>
+          <li>مفتاح API الخاص بك يُخزَّن محلياً على جهازك فقط</li>
+          <li>نحن لا نرى أو نخزن الصور أو مفاتيح API</li>
+          <li>يخضع استخدام الصور لسياسة خصوصية مزود الذكاء الاصطناعي المختار</li>
+        </ul>
+      </div>
+
+      <div class="privacy-section">
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>حق الحذف والتحكم</h3>
+        <p>لديك سيطرة كاملة على بياناتك:</p>
+        <ul>
+          <li>حذف حسابات مفردة أو جميعها من صفحة "الحسابات"</li>
+          <li>مسح سجل العمليات من صفحة "السجل"</li>
+          <li>مسح جميع البيانات عبر إعدادات المتصفح ← بيانات الموقع</li>
+        </ul>
+      </div>
+
+      <div class="privacy-section">
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>الإعلانات</h3>
+        <p>النسخة المجانية قد تعرض إعلانات من طرف ثالث. هذه الإعلانات تخضع لسياسات الخصوصية الخاصة بمزوديها. النسخة الاحترافية خالية من الإعلانات.</p>
+      </div>
+
+      <div class="privacy-section">
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>إخلاء المسؤولية</h3>
+        <p>تطبيق MY CCP غير تابع لبريد الجزائر أو أي جهة حكومية. الخدمات المقدمة هي أدوات مساعدة فقط. تحقق دائماً من صحة البيانات قبل إجراء أي معاملة مالية.</p>
+      </div>
+
+      <div class="privacy-section">
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>تعديلات على السياسة</h3>
+        <p>قد نقوم بتحديث هذه السياسة من وقت لآخر. التغييرات الجوهرية سيتم الإعلان عنها داخل التطبيق.</p>
+      </div>
+
+      <div class="privacy-contact">
+        <div style="font-size:0.85rem;color:#7a90bb;margin-bottom:8px;font-weight:600;">للاستفسارات المتعلقة بالخصوصية:</div>
+        <a href="mailto:myccp.app@gmail.com">myccp.app@gmail.com</a>
+        <div style="font-size:0.72rem;color:#4a5a7a;margin-top:6px;">آخر تحديث: نوفمبر 2026</div>
+      </div>
     </div>
 
-    <div class="info-section">
-      <h3>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        <span data-i18n="privacy_no_data">لا نجمع بياناتك</span>
-      </h3>
-      <p data-i18n="privacy_no_data_desc">لا يقوم التطبيق بجمع أو تخزين أي بيانات شخصية على الإنترنت.</p>
+    <!-- FR -->
+    <div class="privacy-lang" id="pl_fr" style="display:none;">
+      <div class="privacy-intro-box">
+        <div class="privacy-badge">Politique de Confidentialité · MY CCP</div>
+        <p>Chez MY CCP, votre vie privée est notre priorité. Cette politique explique de façon transparente comment nous traitons vos données.</p>
+      </div>
+
+      <div class="privacy-section">
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/></svg>Stockage local uniquement</h3>
+        <p>Toutes vos données (numéros de compte, noms, historique) sont enregistrées exclusivement dans la mémoire locale de votre navigateur (localStorage). Aucune donnée n'est envoyée à nos serveurs ou à des tiers.</p>
+      </div>
+
+      <div class="privacy-section">
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Aucune collecte de données personnelles</h3>
+        <p>L'application ne collecte, n'envoie et ne stocke aucune donnée personnelle sur Internet. Tous les calculs s'effectuent localement sur votre appareil.</p>
+        <ul>
+          <li>Pas de compte utilisateur ni de connexion</li>
+          <li>Aucune surveillance du comportement des utilisateurs</li>
+          <li>Aucun outil de suivi ou d'analyse</li>
+        </ul>
+      </div>
+
+      <div class="privacy-section">
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>Scan de chèque par IA</h3>
+        <p>Lors de l'utilisation du scan de chèque postal :</p>
+        <ul>
+          <li>L'image est envoyée directement au fournisseur IA choisi (Claude, OpenAI, Gemini)</li>
+          <li>Votre clé API est stockée uniquement en local sur votre appareil</li>
+          <li>Nous ne voyons ni ne stockons les images ou les clés API</li>
+          <li>L'utilisation des images est soumise à la politique du fournisseur IA sélectionné</li>
+        </ul>
+      </div>
+
+      <div class="privacy-section">
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>Droit de suppression</h3>
+        <p>Vous contrôlez totalement vos données :</p>
+        <ul>
+          <li>Supprimer des comptes individuels ou tous depuis "Comptes"</li>
+          <li>Effacer l'historique depuis "Historique"</li>
+          <li>Supprimer toutes les données via les paramètres du navigateur</li>
+        </ul>
+      </div>
+
+      <div class="privacy-section">
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>Avertissement</h3>
+        <p>MY CCP n'est pas affilié à Algérie Poste ou à toute entité gouvernementale. Vérifiez toujours les données avant toute transaction financière.</p>
+      </div>
+
+      <div class="privacy-contact">
+        <div style="font-size:0.85rem;color:#7a90bb;margin-bottom:8px;font-weight:600;">Contact confidentialité :</div>
+        <a href="mailto:myccp.app@gmail.com">myccp.app@gmail.com</a>
+        <div style="font-size:0.72rem;color:#4a5a7a;margin-top:6px;">Dernière mise à jour : Novembre 2026</div>
+      </div>
     </div>
 
-    <div class="info-section">
-      <h3>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
-        <span data-i18n="privacy_delete">حق الحذف</span>
-      </h3>
-      <p data-i18n="privacy_delete_desc">يمكنك حذف جميع بياناتك في أي وقت من خلال التطبيق أو مسح بيانات المتصفح.</p>
+    <!-- EN -->
+    <div class="privacy-lang" id="pl_en" style="display:none;">
+      <div class="privacy-intro-box">
+        <div class="privacy-badge">Privacy Policy · MY CCP</div>
+        <p>At MY CCP, your privacy matters. This policy explains transparently how we handle your data.</p>
+      </div>
+
+      <div class="privacy-section">
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/></svg>Local Storage Only</h3>
+        <p>All your data (account numbers, names, history) is stored exclusively in your browser's local storage on your device. No data is ever sent to our servers or any third party.</p>
+      </div>
+
+      <div class="privacy-section">
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>No Personal Data Collection</h3>
+        <p>The app does not collect, transmit or store any personal data online. All calculations happen locally on your device.</p>
+        <ul>
+          <li>No user account or login required</li>
+          <li>No user behaviour tracking</li>
+          <li>No analytics or tracking tools</li>
+        </ul>
+      </div>
+
+      <div class="privacy-section">
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>Cheque Scanning via AI</h3>
+        <p>When using the postal cheque scan feature:</p>
+        <ul>
+          <li>The cheque image is sent directly to your chosen AI provider (Claude, OpenAI, Gemini)</li>
+          <li>Your API key is stored locally on your device only</li>
+          <li>We never see or store images or API keys</li>
+          <li>Image processing is governed by the chosen AI provider's privacy policy</li>
+        </ul>
+      </div>
+
+      <div class="privacy-section">
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>Right to Delete</h3>
+        <p>You have full control over your data:</p>
+        <ul>
+          <li>Delete individual or all accounts from the Accounts page</li>
+          <li>Clear operation history from the History page</li>
+          <li>Remove all data via browser settings → Site data</li>
+        </ul>
+      </div>
+
+      <div class="privacy-section">
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>Disclaimer</h3>
+        <p>MY CCP is not affiliated with Algérie Poste or any government body. Always verify your data before any financial transaction.</p>
+      </div>
+
+      <div class="privacy-contact">
+        <div style="font-size:0.85rem;color:#7a90bb;margin-bottom:8px;font-weight:600;">Privacy inquiries:</div>
+        <a href="mailto:myccp.app@gmail.com">myccp.app@gmail.com</a>
+        <div style="font-size:0.72rem;color:#4a5a7a;margin-top:6px;">Last updated: November 2026</div>
+      </div>
     </div>
+
   </main>
-
 </div>
 
-<div id="toast" class="toast"></div>
+<div id="toast" class="toast" style="bottom:20px;"></div>
 <script src="../js/i18n.js"></script>
 <script src="../js/app.js"></script>
+<script>
+  // Set active lang tab based on app language
+  const appLang = localStorage.getItem('lang') || 'ar';
+  setPrivacyLang(appLang, document.querySelector('.lang-tab'));
+
+  function setPrivacyLang(lang, btn) {
+    document.querySelectorAll('.privacy-lang').forEach(el => el.style.display = 'none');
+    document.querySelectorAll('.lang-tab').forEach(b => b.classList.remove('active'));
+    const target = document.getElementById('pl_' + lang);
+    if (target) target.style.display = 'block';
+    if (btn) btn.classList.add('active');
+    else {
+      // find the matching tab
+      document.querySelectorAll('.lang-tab').forEach(b => {
+        if (b.getAttribute('onclick').includes("'" + lang + "'")) b.classList.add('active');
+      });
+    }
+    // Set direction
+    document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+  }
+</script>
 </body>
 </html>
