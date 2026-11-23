@@ -194,6 +194,8 @@ const TRANSLATIONS = {
     share_app_text: "تطبيق MY CCP - حوّل رقم حسابك البريدي CCP إلى RIP بسهولة!\nhttps://myccp.app",
     contact_us: "اتصل بنا",
     coming_soon: "قريباً على Google Play!",
+    pro_version: "النسخة الاحترافية",
+    pro_coming_soon: "👑 ستكون متاحة قريباً!",
   },
   fr: {
     app_name: "MY CCP",
@@ -390,6 +392,8 @@ const TRANSLATIONS = {
     share_app_text: "Application MY CCP - Convertissez facilement votre CCP en RIP!\nhttps://myccp.app",
     contact_us: "Nous contacter",
     coming_soon: "Bientôt sur Google Play!",
+    pro_version: "Version Professionnelle",
+    pro_coming_soon: "👑 Disponible bientôt!",
   },
   en: {
     app_name: "MY CCP",
@@ -586,6 +590,8 @@ const TRANSLATIONS = {
     share_app_text: "MY CCP App - Convert your CCP to RIP easily!\nhttps://myccp.app",
     contact_us: "Contact Us",
     coming_soon: "Coming soon on Google Play!",
+    pro_version: "Professional Version",
+    pro_coming_soon: "👑 Coming soon!",
   }
 };
 
