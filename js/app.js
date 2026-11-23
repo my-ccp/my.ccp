@@ -1,6 +1,6 @@
 // ===== STATE =====
 window.APP_LANG = localStorage.getItem('lang') || 'ar';
-window.APP_THEME = localStorage.getItem('theme') || 'dark';
+window.APP_THEME = localStorage.getItem('theme') || 'light';
 
 // ===== BROADCAST CHANNEL (sync across tabs/pages without reload) =====
 const appChannel = new BroadcastChannel('myrip_app_channel');
