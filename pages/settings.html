@@ -84,7 +84,48 @@
       </div>
     </div>
 
+    <!-- Data & Privacy -->
+    <div class="settings-section">
+      <div class="settings-title" data-i18n="clear_data_desc">البيانات والخصوصية</div>
+
+      <!-- Allow History Toggle -->
+      <div class="settings-item">
+        <div class="settings-item-left">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+          <div>
+            <div class="settings-item-label" data-i18n="allow_history">السماح بحفظ سجل العمليات</div>
+            <div class="settings-item-sub" data-i18n="allow_history_desc">حفظ نتائج التحويل في السجل</div>
+          </div>
+        </div>
+        <button class="toggle on" id="historyToggle" onclick="toggleAllowHistory()"></button>
+      </div>
+
+      <!-- Clear Data Button -->
+      <div class="settings-item">
+        <div class="settings-item-left">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+          <div>
+            <div class="settings-item-label" data-i18n="clear_data">مسح بيانات التطبيق</div>
+            <div class="settings-item-sub" data-i18n="clear_data_desc">حذف جميع البيانات المحفوظة</div>
+          </div>
+        </div>
+        <button class="btn-outline-sm" onclick="confirmClearData()" data-i18n="clear_data">مسح</button>
+      </div>
+    </div>
+
   </main>
+
+  <!-- Clear Data Confirm Modal -->
+  <div class="modal-overlay" id="clearDataModal" style="display:none;">
+    <div class="modal">
+      <div class="modal-title" data-i18n="confirm_clear_data">مسح البيانات</div>
+      <div class="modal-msg" data-i18n="confirm_clear_data_msg">هل أنت متأكد من مسح جميع بيانات التطبيق؟</div>
+      <div class="modal-actions">
+        <button class="modal-btn cancel" onclick="closeClearDataModal()" data-i18n="cancel">إلغاء</button>
+        <button class="modal-btn confirm" onclick="executeClearData()" data-i18n="confirm">تأكيد</button>
+      </div>
+    </div>
+  </div>
 
 </div>
 
@@ -161,6 +202,41 @@
     }
   }
 
+  // ---- Allow History Toggle ----
+  function toggleAllowHistory() {
+    const current = localStorage.getItem('allowHistory') !== 'false';
+    const newVal = !current;
+    localStorage.setItem('allowHistory', newVal ? 'true' : 'false');
+    updateHistoryToggle();
+  }
+
+  function updateHistoryToggle() {
+    const btn = document.getElementById('historyToggle');
+    if (!btn) return;
+    const enabled = localStorage.getItem('allowHistory') !== 'false';
+    btn.classList.toggle('on', enabled);
+  }
+
+  // ---- Clear Data ----
+  function confirmClearData() {
+    document.getElementById('clearDataModal').style.display = 'flex';
+  }
+
+  function closeClearDataModal() {
+    document.getElementById('clearDataModal').style.display = 'none';
+  }
+
+  function executeClearData() {
+    // Clear all localStorage
+    localStorage.clear();
+    closeClearDataModal();
+    // Re-apply defaults so app doesn't break
+    localStorage.setItem('allowHistory', 'true');
+    showToast(t('data_cleared'));
+    // Reload after short delay
+    setTimeout(() => location.reload(), 1200);
+  }
+
   // Close dropdown on outside click
   document.addEventListener('click', e => {
     const wrapper = document.querySelector('.lang-select-wrapper');
@@ -174,6 +250,7 @@
     updateThemeToggle();
     updateLangDisplay();
     updateThemeLabel();
+    updateHistoryToggle();
   });
 </script>
 </body>
