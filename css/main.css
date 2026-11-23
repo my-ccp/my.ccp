@@ -133,7 +133,7 @@ input[type=number] { -moz-appearance: textfield; }
   flex: 1;
   padding: 20px 16px;
   overflow-y: auto;
-  padding-bottom: 24px;
+  padding-bottom: calc(70px + env(safe-area-inset-bottom));
 }
 
 /* ===== DIGIT COUNTER ===== */
@@ -365,10 +365,13 @@ body:not([data-lang="ar"]) .input-icon:last-child  { margin-left: 10px; }
   display: flex;
   background: var(--nav-bg);
   border-top: 1px solid var(--border);
-  position: sticky;
+  position: fixed;
   bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
   width: 100%;
-  z-index: 100;
+  max-width: 480px;
+  z-index: 200;
   padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
   gap: 4px;
   flex-shrink: 0;
