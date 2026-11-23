@@ -16,10 +16,11 @@
   <link rel="stylesheet" href="css/main.css"/>
 </head>
 <body>
+<div id="app-wrapper">
 <div id="app">
 
   <header class="header">
-    <div class="header-title">MY CCP</div>
+    <img src="icons/icon-192.png" alt="MY CCP" class="header-logo"/>
     <div class="header-icons">
       <button class="header-btn" id="menuBtn" onclick="openSidebar()" aria-label="menu">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -43,14 +44,9 @@
       <!-- Account Number -->
       <div class="input-group" id="groupCCP" style="margin-top:16px;">
         <span class="input-label" data-i18n="account_number">رقم الحساب الجاري</span>
-        <!-- Left icon: scan cheque -->
-        <span class="input-icon" id="scanChequeBtn" onclick="openChequeScanner()" style="cursor:pointer;" title="مسح الشيك البريدي">
+        <span class="input-icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="6" width="20" height="14" rx="2"/>
-            <path d="M6 6V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2"/>
-            <line x1="2" y1="12" x2="22" y2="12"/>
-            <line x1="6" y1="16" x2="8" y2="16"/>
-            <line x1="10" y1="16" x2="14" y2="16"/>
+            <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
           </svg>
         </span>
         <input type="tel" id="ccpInput" data-i18n-ph="account_number" placeholder="رقم الحساب الجاري" inputmode="numeric" maxlength="10" autocomplete="off"/>
@@ -133,9 +129,8 @@
     </button>
   </nav>
 
-</div>
-
-<!-- SIDEBAR OVERLAY -->
+</div><!-- end #app -->
+<!-- SIDEBAR OVERLAY — inside wrapper so it stays within the 480px column -->
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
@@ -189,6 +184,8 @@
   </div>
 </aside>
 
+</div><!-- end #app-wrapper -->
+
 <!-- SAVE MODAL -->
 <div class="modal-overlay" id="saveModal">
   <div class="modal">
@@ -213,99 +210,10 @@
   </div>
 </div>
 
-<!-- CHEQUE SCANNER MODAL -->
-<div class="modal-overlay" id="chequeScanModal">
-  <div class="modal" style="padding:0;border-radius:var(--radius) var(--radius) 0 0;overflow:hidden;">
-    <div style="background:var(--header-bg);padding:16px 20px;display:flex;align-items:center;gap:12px;">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="2" y="6" width="20" height="14" rx="2"/><path d="M6 6V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2"/>
-        <line x1="2" y1="12" x2="22" y2="12"/>
-      </svg>
-      <span style="color:white;font-weight:800;font-size:1rem;flex:1;" data-i18n="scan_cheque">مسح الشيك البريدي</span>
-      <button onclick="closeChequeScanner()" style="background:rgba(255,255,255,0.2);border:none;color:white;width:36px;height:36px;border-radius:10px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;">×</button>
-    </div>
-
-    <!-- Cheque visual template -->
-    <div style="padding:20px;background:var(--bg);">
-      <div style="background:#fffef5;border:2px solid #d4b483;border-radius:12px;padding:16px;position:relative;box-shadow:0 4px 20px rgba(0,0,0,0.15);">
-        <!-- Cheque header -->
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
-          <div style="font-size:0.65rem;color:#666;font-weight:700;direction:ltr;">ALGÉRIE POSTE</div>
-          <div style="font-size:0.65rem;color:#666;text-align:right;">بريد الجزائر</div>
-        </div>
-        <!-- Amount box -->
-        <div style="border:1.5px solid #ccc;border-radius:6px;padding:8px 12px;margin-bottom:12px;text-align:center;background:#fff;">
-          <div style="font-size:0.6rem;color:#999;margin-bottom:4px;direction:ltr;">MONTANT / المبلغ</div>
-          <div style="font-size:1.1rem;font-weight:800;color:#333;letter-spacing:2px;min-height:24px;direction:ltr;">_ _ _ _ _ _ _ _</div>
-        </div>
-        <!-- MICR Line -->
-        <div style="border-top:1.5px dashed #ccc;padding-top:10px;margin-top:4px;">
-          <div style="font-size:0.58rem;color:#999;margin-bottom:4px;">MICR / خط المسح المغناطيسي</div>
-          <div id="micrLineDisplay" style="font-family:monospace;font-size:0.85rem;color:#222;letter-spacing:3px;direction:ltr;background:#f5f5f5;padding:6px 10px;border-radius:6px;min-height:28px;word-break:break-all;"></div>
-        </div>
-      </div>
-
-      <!-- Upload area -->
-      <div id="chequeUploadArea" onclick="document.getElementById('chequeImageInput').click()"
-        style="border:2.5px dashed var(--accent);border-radius:12px;padding:28px 16px;text-align:center;cursor:pointer;margin-top:16px;background:rgba(37,99,235,0.04);transition:all 0.2s;">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" style="margin-bottom:10px;opacity:0.8;">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
-        </svg>
-        <div style="font-weight:700;color:var(--accent);font-size:0.95rem;" data-i18n="upload_cheque">ارفع صورة الشيك</div>
-        <div style="font-size:0.78rem;color:var(--text2);margin-top:4px;" data-i18n="upload_cheque_sub">JPG, PNG - يتم تحليلها بالذكاء الاصطناعي</div>
-      </div>
-      <input type="file" id="chequeImageInput" accept="image/*" capture="environment" style="display:none;" onchange="handleChequeImage(event)"/>
-
-      <!-- Preview + result -->
-      <div id="chequePreviewArea" style="display:none;margin-top:12px;">
-        <img id="chequePreviewImg" style="width:100%;border-radius:10px;max-height:160px;object-fit:cover;border:2px solid var(--border);" alt="cheque preview"/>
-        <div id="scanStatusBox" style="margin-top:10px;padding:12px;border-radius:10px;background:var(--bg2);display:flex;align-items:center;gap:10px;">
-          <div id="scanSpinner" style="width:20px;height:20px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;flex-shrink:0;"></div>
-          <span id="scanStatusText" style="font-size:0.88rem;color:var(--text2);" data-i18n="analyzing">جاري التحليل بالذكاء الاصطناعي...</span>
-        </div>
-      </div>
-
-      <!-- AI Provider selector -->
-      <div style="margin-top:14px;">
-        <div style="font-size:0.72rem;color:var(--text2);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px;font-weight:700;" data-i18n="ai_provider">مزود الذكاء الاصطناعي</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <button class="ai-provider-btn active" data-provider="claude" onclick="selectAIProvider(this,'claude')">Claude AI</button>
-          <button class="ai-provider-btn" data-provider="openai" onclick="selectAIProvider(this,'openai')">OpenAI GPT-4</button>
-          <button class="ai-provider-btn" data-provider="gemini" onclick="selectAIProvider(this,'gemini')">Google Gemini</button>
-        </div>
-        <!-- API Key input -->
-        <div style="margin-top:10px;position:relative;">
-          <input type="password" id="aiApiKeyInput" placeholder="API Key (اختياري - يُحفظ محلياً)" 
-            style="width:100%;background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:10px;padding:10px 14px;color:var(--text);font-size:0.85rem;font-family:inherit;direction:ltr;"/>
-          <div style="font-size:0.68rem;color:var(--text2);margin-top:4px;" data-i18n="api_key_note">مفتاح API يُخزَّن محلياً فقط على جهازك ولا يُرسَل لأي خادم آخر</div>
-        </div>
-      </div>
-    </div>
-
-    <div style="padding:0 20px 20px;display:flex;gap:10px;">
-      <button class="btn btn-outline" onclick="closeChequeScanner()" style="flex:1;" data-i18n="cancel">إلغاء</button>
-      <button class="btn btn-primary" onclick="doScanCheque()" style="flex:1;" id="scanBtn">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="7" y1="12" x2="17" y2="12"/></svg>
-        <span data-i18n="scan_now">مسح الآن</span>
-      </button>
-    </div>
-  </div>
-</div>
 
 <div id="toast" class="toast"></div>
 
 <style>
-@keyframes spin { to { transform: rotate(360deg); } }
-.ai-provider-btn {
-  padding:6px 14px;border-radius:20px;font-size:0.82rem;font-weight:700;
-  border:2px solid var(--border);background:var(--input-bg);color:var(--text);
-  cursor:pointer;transition:all 0.2s;font-family:inherit;
-}
-.ai-provider-btn.active {
-  background:var(--accent);color:white;border-color:var(--accent);
-  box-shadow:0 4px 12px rgba(37,99,235,0.3);
-}
 /* Bottom nav with only 2 items - evenly spaced */
 .bottom-nav .nav-item { flex:1; max-width:50%; }
 </style>
@@ -313,82 +221,6 @@
 <script src="js/i18n.js"></script>
 <script src="js/app.js"></script>
 <script>
-  // ===== AI CONFIG (flexible multi-provider) =====
-  const AI_PROVIDERS = {
-    claude: {
-      name: 'Claude AI',
-      endpoint: 'https://api.anthropic.com/v1/messages',
-      model: 'claude-sonnet-4-6',
-      buildRequest: (base64, apiKey) => ({
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-6', max_tokens: 300,
-          messages: [{ role: 'user', content: [
-            { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: base64 } },
-            { type: 'text', text: 'This is an Algerian postal cheque (CCP). Extract ONLY the 10-digit CCP account number. Return JSON only: {"ccp":"XXXXXXXXXX"} or {"error":"not found"}' }
-          ]}]
-        })
-      }),
-      parseResponse: (data) => {
-        const text = data.content?.[0]?.text || '';
-        const match = text.match(/\{[^}]+\}/);
-        return match ? JSON.parse(match[0]) : { error: 'parse error' };
-      }
-    },
-    openai: {
-      name: 'OpenAI GPT-4',
-      endpoint: 'https://api.openai.com/v1/chat/completions',
-      buildRequest: (base64, apiKey) => ({
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-        body: JSON.stringify({
-          model: 'gpt-4o', max_tokens: 300,
-          messages: [{ role: 'user', content: [
-            { type: 'image_url', image_url: { url: `data:image/jpeg;base64,${base64}` } },
-            { type: 'text', text: 'Algerian postal cheque. Extract the 10-digit CCP account number. Return JSON only: {"ccp":"XXXXXXXXXX"} or {"error":"not found"}' }
-          ]}]
-        })
-      }),
-      parseResponse: (data) => {
-        const text = data.choices?.[0]?.message?.content || '';
-        const match = text.match(/\{[^}]+\}/);
-        return match ? JSON.parse(match[0]) : { error: 'parse error' };
-      }
-    },
-    gemini: {
-      name: 'Google Gemini',
-      endpoint: (apiKey) => `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-      buildRequest: (base64, apiKey) => ({
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [
-            { inline_data: { mime_type: 'image/jpeg', data: base64 } },
-            { text: 'Algerian postal cheque. Extract the 10-digit CCP account number. Return JSON only: {"ccp":"XXXXXXXXXX"} or {"error":"not found"}' }
-          ]}]
-        })
-      }),
-      parseResponse: (data) => {
-        const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-        const match = text.match(/\{[^}]+\}/);
-        return match ? JSON.parse(match[0]) : { error: 'parse error' };
-      }
-    }
-  };
-
-  let selectedProvider = 'claude';
-  let chequeImageBase64 = null;
-
-  function selectAIProvider(btn, provider) {
-    document.querySelectorAll('.ai-provider-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    selectedProvider = provider;
-    // Load saved API key for this provider
-    const saved = localStorage.getItem('ai_key_' + provider) || '';
-    document.getElementById('aiApiKeyInput').value = saved;
-  }
-
   // ===== HOME PAGE LOGIC =====
   const ccpInput    = document.getElementById('ccpInput');
   const ccpKeyInput = document.getElementById('ccpKeyInput');
@@ -522,89 +354,6 @@
     window.location.href = 'mailto:myccp.app@gmail.com?subject=استفسار - MY CCP';
   }
 
-  // ===== CHEQUE SCANNER =====
-  function openChequeScanner() {
-    document.getElementById('chequeScanModal').classList.add('open');
-    // Load saved API key
-    const saved = localStorage.getItem('ai_key_' + selectedProvider) || '';
-    document.getElementById('aiApiKeyInput').value = saved;
-    // Reset state
-    chequeImageBase64 = null;
-    document.getElementById('chequePreviewArea').style.display = 'none';
-    document.getElementById('chequeUploadArea').style.display = 'block';
-    document.getElementById('micrLineDisplay').textContent = '';
-  }
-
-  function closeChequeScanner() {
-    document.getElementById('chequeScanModal').classList.remove('open');
-  }
-
-  document.getElementById('chequeScanModal').addEventListener('click', function(e) { if(e.target===this) closeChequeScanner(); });
-
-  function handleChequeImage(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const dataUrl = e.target.result;
-      chequeImageBase64 = dataUrl.split(',')[1];
-      document.getElementById('chequePreviewImg').src = dataUrl;
-      document.getElementById('chequePreviewArea').style.display = 'block';
-      document.getElementById('chequeUploadArea').style.display = 'none';
-      document.getElementById('scanStatusBox').style.display = 'flex';
-      document.getElementById('scanSpinner').style.display = 'block';
-      document.getElementById('scanStatusText').textContent = t('analyzing') || 'جاري التحليل...';
-    };
-    reader.readAsDataURL(file);
-  }
-
-  async function doScanCheque() {
-    if (!chequeImageBase64) {
-      showToast(t('upload_cheque') || 'ارفع صورة الشيك أولاً');
-      return;
-    }
-
-    // Save API key
-    const apiKey = document.getElementById('aiApiKeyInput').value.trim();
-    if (apiKey) localStorage.setItem('ai_key_' + selectedProvider, apiKey);
-
-    const provider = AI_PROVIDERS[selectedProvider];
-    if (!provider) { showToast('مزود غير معروف'); return; }
-
-    const scanBtn = document.getElementById('scanBtn');
-    scanBtn.disabled = true;
-    document.getElementById('chequePreviewArea').style.display = 'block';
-    document.getElementById('scanStatusBox').style.display = 'flex';
-    document.getElementById('scanSpinner').style.display = 'block';
-    document.getElementById('scanStatusText').textContent = t('analyzing') || 'جاري التحليل بالذكاء الاصطناعي...';
-
-    try {
-      let endpoint = typeof provider.endpoint === 'function' ? provider.endpoint(apiKey) : provider.endpoint;
-      const reqOptions = provider.buildRequest(chequeImageBase64, apiKey);
-      const response = await fetch(endpoint, reqOptions);
-      const data = await response.json();
-      const result = provider.parseResponse(data);
-
-      if (result.ccp && /^\d{10}$/.test(result.ccp)) {
-        // Success! Fill the CCP input
-        ccpInput.value = result.ccp;
-        ccpInput.dispatchEvent(new Event('input'));
-        document.getElementById('micrLineDisplay').textContent = result.ccp;
-        document.getElementById('scanStatusText').textContent = '✅ ' + (t('scan_success') || 'تم استخراج الحساب بنجاح!');
-        document.getElementById('scanSpinner').style.display = 'none';
-        setTimeout(() => { closeChequeScanner(); showToast(t('scan_success') || 'تم استخراج رقم الحساب!'); }, 1200);
-      } else {
-        document.getElementById('scanStatusText').textContent = '❌ ' + (t('scan_failed') || 'تعذّر استخراج الرقم، حاول مرة أخرى');
-        document.getElementById('scanSpinner').style.display = 'none';
-      }
-    } catch(err) {
-      document.getElementById('scanStatusText').textContent = '❌ ' + (err.message || t('scan_failed') || 'خطأ في الاتصال');
-      document.getElementById('scanSpinner').style.display = 'none';
-    } finally {
-      scanBtn.disabled = false;
-    }
-  }
-
   // ===== PWA =====
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').then(reg => reg.update()).catch(() => {});
@@ -632,7 +381,7 @@
 </script>
 
 <!-- PWA Install Banner -->
-<div id="installBanner" style="display:none;position:absolute;bottom:0;left:0;right:0;z-index:9999;
+<div id="installBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;
   background:linear-gradient(135deg,#1e3a8a,#1d4ed8);
   color:#fff;padding:14px 16px;align-items:center;gap:12px;
   box-shadow:0 -4px 20px rgba(0,0,0,0.4);border-top:1px solid rgba(255,255,255,0.1);">
