@@ -146,16 +146,6 @@
     <div class="sidebar-version" data-i18n="free_version">النسخة المجانية</div>
   </div>
   <div class="sidebar-menu">
-    <!-- Pro Version -->
-    <button class="sidebar-item sidebar-pro-item" onclick="showProComingSoon()">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M2 20h20v2H2z"/>
-        <path d="M2 20L5 10l5 5 4-8 4 8 5-5 3 10H2z"/>
-      </svg>
-      <span data-i18n="pro_version">النسخة الاحترافية</span>
-      <span class="pro-badge">قريباً</span>
-    </button>
-    <div class="sidebar-divider"></div>
     <div class="sidebar-section-title" data-i18n="tools">الأدوات</div>
     <button class="sidebar-item active" onclick="navigateTo('index.html')">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
@@ -382,11 +372,6 @@
   function contactUs() {
     closeSidebar();
     window.location.href = 'mailto:myccp.app@gmail.com?subject=استفسار - MY CCP';
-  }
-
-  function showProComingSoon() {
-    closeSidebar();
-    showToast(t('pro_coming_soon') || 'ستكون متاحة قريباً!');
   }
 
   // ===== PWA =====
