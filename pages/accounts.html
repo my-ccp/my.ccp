@@ -83,24 +83,24 @@
 
 <!-- Per-card dropdown -->
 <div class="dropdown-menu" id="cardDropdown" style="display:none;">
-  <button class="dropdown-item" id="ddCopy" onclick="ddAction('copy')">
+  <button class="dropdown-item" id="ddCopy" onclick="ddAction('copy',event)">
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
     <span data-i18n="copy">نسخ الريب</span>
   </button>
-  <button class="dropdown-item" id="ddShare" onclick="ddAction('share')">
+  <button class="dropdown-item" id="ddShare" onclick="ddAction('share',event)">
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
     <span data-i18n="share">مشاركة</span>
   </button>
-  <button class="dropdown-item" id="ddEdit" onclick="ddAction('edit')">
+  <button class="dropdown-item" id="ddEdit" onclick="ddAction('edit',event)">
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
     <span data-i18n="edit">تعديل الاسم</span>
   </button>
-  <button class="dropdown-item" id="ddSelect" onclick="ddAction('select')">
+  <button class="dropdown-item" id="ddSelect" onclick="ddAction('select',event)">
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><polyline points="9 12 11 14 15 10"/></svg>
     <span data-i18n="select_all">تحديد</span>
   </button>
   <div class="dropdown-divider"></div>
-  <button class="dropdown-item danger" id="ddDelete" onclick="ddAction('delete')">
+  <button class="dropdown-item danger" id="ddDelete" onclick="ddAction('delete',event)">
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
     <span data-i18n="delete">حذف</span>
   </button>
@@ -336,9 +336,10 @@
     activeCardId = null;
   }
 
-  function ddAction(action) {
-    closeCardMenu();
+  function ddAction(action, e) {
+    if (e) e.stopPropagation();
     const id = activeCardId;
+    closeCardMenu();
     if (!id) return;
     const acc = getAccounts().find(a => a.id == id);
     if (!acc) return;
