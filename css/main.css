@@ -1252,20 +1252,25 @@ body:has(.subpage-content) {
   /* Subpages: allow scroll, centered column */
   body:has(.subpage-content) {
     overflow-y: auto;
+    height: auto;
   }
   body:has(.subpage-content) #app-wrapper {
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none;
     max-width: 480px;
     width: 100%;
     margin: 0 auto;
     height: auto;
     min-height: 100dvh;
+    overflow: visible;
     box-shadow: 0 0 60px rgba(37,99,235,0.2);
   }
   body:has(.subpage-content) #app {
-    max-width: 480px;
-    width: 100%;
-    margin: 0 auto;
+    height: auto;
     min-height: 100dvh;
+    overflow: visible;
   }
 
   /* Subpage header sticky within centered column */
