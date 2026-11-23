@@ -46,11 +46,18 @@
         <span class="input-label" data-i18n="account_number">رقم الحساب الجاري</span>
         <span class="input-icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>
           </svg>
         </span>
         <input type="tel" id="ccpInput" data-i18n-ph="account_number" placeholder="رقم الحساب الجاري" inputmode="numeric" maxlength="10" autocomplete="off"/>
         <span class="digit-counter" id="digitCounter">0/10</span>
+        <!-- Paste button -->
+        <span class="input-icon" id="pasteAccBtn" onclick="pasteAccountNumber()" style="cursor:pointer;" title="لصق رقم الحساب">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+          </svg>
+        </span>
         <!-- Right icon: copy account number -->
         <span class="input-icon" id="copyAccBtn" onclick="copyAccountNumber()" style="cursor:pointer;display:none;" title="نسخ رقم الحساب">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -124,7 +131,7 @@
       <span data-i18n="home">الرئيسية</span>
     </button>
     <button class="nav-item" onclick="navigateTo('pages/accounts.html')">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="6" height="6" rx="1"/><rect x="3" y="13" width="6" height="6" rx="1"/><line x1="13" y1="7" x2="21" y2="7"/><line x1="13" y1="11" x2="21" y2="11"/><line x1="13" y1="15" x2="21" y2="15"/><line x1="13" y1="19" x2="21" y2="19"/></svg>
       <span data-i18n="accounts">الحسابات</span>
     </button>
   </nav>
@@ -302,6 +309,19 @@
   function copyAccountNumber() {
     const val = ccpInput.value;
     if (val) { copyText(val); }
+  }
+
+  async function pasteAccountNumber() {
+    try {
+      const text = await navigator.clipboard.readText();
+      const digits = text.replace(/\D/g, '').slice(0, 10);
+      if (digits) {
+        ccpInput.value = digits;
+        ccpInput.dispatchEvent(new Event('input'));
+      }
+    } catch {
+      showToast('تعذّر الوصول إلى الحافظة');
+    }
   }
 
   function copyRip() {
