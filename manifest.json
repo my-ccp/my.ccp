@@ -2,7 +2,7 @@
   "id": "/my.ccp/",
   "name": "MY CCP",
   "short_name": "MY CCP",
-  "description": "تحويل CCP إلى RIP بسهولة — تحويل، شيك، رسوم",
+  "description": "تحويل CCP إلى RIP بسهولة",
   "start_url": "/my.ccp/index.html?source=pwa",
   "scope": "/my.ccp/",
   "display": "standalone",
@@ -33,17 +33,17 @@
       "icons": [{ "src": "/my.ccp/icons/icon-96.png", "sizes": "96x96" }]
     },
     {
-      "name": "الشيكات",
-      "short_name": "شيك",
-      "description": "إنشاء شيك بريدي",
-      "url": "/my.ccp/pages/cheque.html?shortcut=cheque",
+      "name": "سياسة الخصوصية",
+      "short_name": "الخصوصية",
+      "description": "سياسة خصوصية التطبيق",
+      "url": "/my.ccp/pages/privacy.html",
       "icons": [{ "src": "/my.ccp/icons/icon-96.png", "sizes": "96x96" }]
     },
     {
-      "name": "الرسوم",
-      "short_name": "رسوم",
-      "description": "حساب رسوم التحويل",
-      "url": "/my.ccp/pages/fees.html?shortcut=fees",
+      "name": "حول التطبيق",
+      "short_name": "حول",
+      "description": "معلومات حول تطبيق MY CCP",
+      "url": "/my.ccp/pages/about.html",
       "icons": [{ "src": "/my.ccp/icons/icon-96.png", "sizes": "96x96" }]
     }
   ]
