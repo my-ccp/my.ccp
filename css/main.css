@@ -1137,13 +1137,11 @@ body:has(.subpage-content) {
 }
 #app-wrapper:has(.subpage-content) {
   height: auto;
-  min-height: 100dvh;
   overflow-y: auto;
   overflow-x: hidden;
 }
 #app:has(.subpage-content) {
   height: auto;
-  min-height: 100dvh;
   overflow: visible;
 }
 
@@ -1193,18 +1191,17 @@ body:has(.subpage-content) {
 .sidebar-pro-item {
   background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(217,119,6,0.05));
   border-inline-start: 3px solid #f59e0b;
-  color: #d97706 !important;
+  color: var(--text) !important;
 }
 .sidebar-pro-item:hover {
   background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(217,119,6,0.1)) !important;
-  color: #b45309 !important;
-  padding-left: 20px !important;
+  color: var(--text) !important;
 }
 [data-theme="dark"] .sidebar-pro-item {
   background: linear-gradient(135deg, rgba(245,158,11,0.12), rgba(217,119,6,0.06));
-  color: #fbbf24 !important;
+  color: var(--text) !important;
 }
-.sidebar-pro-item svg path { fill: #f59e0b; stroke: #d97706; }
+.sidebar-pro-item svg { stroke: var(--text); }
 
 .pro-badge {
   margin-inline-start: auto;
