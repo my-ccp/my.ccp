@@ -220,56 +220,61 @@
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
 
-        <!-- Name row -->
-        <div class="account-row" style="margin-bottom:8px;">
-          <span class="account-label">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            ${t('name_label')}
-          </span>
-          <span class="account-value">${a.name}</span>
+        <!-- Card Top: chip icon + name -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <!-- EMV chip icon -->
+            <svg width="34" height="26" viewBox="0 0 34 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="1" y="1" width="32" height="24" rx="4" fill="#d4af37" stroke="#b8960a" stroke-width="1"/>
+              <line x1="12" y1="1" x2="12" y2="25" stroke="#b8960a" stroke-width="1"/>
+              <line x1="22" y1="1" x2="22" y2="25" stroke="#b8960a" stroke-width="1"/>
+              <line x1="1" y1="9" x2="33" y2="9" stroke="#b8960a" stroke-width="1"/>
+              <line x1="1" y1="17" x2="33" y2="17" stroke="#b8960a" stroke-width="1"/>
+              <rect x="12" y="9" width="10" height="8" rx="1" fill="#c9a227" stroke="#b8960a" stroke-width="0.5"/>
+            </svg>
+            <span style="font-size:1.2rem;font-weight:800;color:#ffffff;letter-spacing:0.5px;">${a.name}</span>
+          </div>
+          <!-- BARIDI logo area -->
+          <div style="display:flex;align-items:center;gap:4px;opacity:0.85;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          </div>
         </div>
 
-        <!-- CCP row -->
-        <div class="account-row">
-          <span class="account-label">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-            CCP
-          </span>
-          <span class="account-value" style="direction:ltr;unicode-bidi:bidi-override;">${a.ccp}</span>
+        <!-- CCP Number - large display -->
+        <div style="margin-bottom:14px;">
+          <div style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-bottom:5px;letter-spacing:1.5px;text-transform:uppercase;">CCP</div>
+          <div style="font-size:1.5rem;font-weight:800;color:#ffffff;direction:ltr;unicode-bidi:bidi-override;letter-spacing:3px;">${a.ccp}</div>
         </div>
 
         <!-- Keys row -->
-        <div class="key-row">
-          <span class="account-label">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="M21 2l-9.6 9.6"/><path d="M15.5 7.5l3 3L22 7l-3-3"/></svg>
-            ${t('ccp_key_label')}
-          </span>
-          <span class="key-badge">${a.ccpKey}</span>
-          <span class="key-row-sep">|</span>
-          <span class="account-label">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="M21 2l-9.6 9.6"/><path d="M15.5 7.5l3 3L22 7l-3-3"/></svg>
-            ${t('rip_key_label')}
-          </span>
-          <span class="key-badge" style="color:#dc2626;border-color:rgba(220,38,38,0.25);background:rgba(220,38,38,0.08);">${a.ripKey}</span>
+        <div class="key-row" style="margin-bottom:12px;">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="M21 2l-9.6 9.6"/><path d="M15.5 7.5l3 3L22 7l-3-3"/></svg>
+            <span style="font-size:0.88rem;color:rgba(255,255,255,0.7);">${t('ccp_key_label')}</span>
+            <span class="key-badge">${a.ccpKey}</span>
+          </div>
+          <span class="key-row-sep" style="color:rgba(255,255,255,0.3);">|</span>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="M21 2l-9.6 9.6"/><path d="M15.5 7.5l3 3L22 7l-3-3"/></svg>
+            <span style="font-size:0.88rem;color:rgba(255,255,255,0.7);">${t('rip_key_label')}</span>
+            <span class="key-badge" style="background:rgba(255,180,0,0.2);color:#ffd966;border-color:rgba(255,180,0,0.3);">${a.ripKey}</span>
+          </div>
         </div>
 
-        <!-- RIP row -->
-        <div class="account-row" style="align-items:flex-start;">
-          <span class="account-label" style="margin-top:2px;">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>
-            ${t('rip_label')}
-          </span>
-          <span class="rip-value" style="direction:ltr;unicode-bidi:bidi-override;">${ripFormatted(a.rip)}</span>
+        <!-- RIP number - highlighted -->
+        <div style="background:rgba(0,0,0,0.25);border-radius:12px;padding:10px 14px;margin-bottom:12px;">
+          <div style="font-size:0.85rem;color:rgba(255,255,255,0.6);margin-bottom:4px;letter-spacing:1.5px;">RIP</div>
+          <div class="rip-value" style="font-size:1.3rem;font-weight:800;color:#93c5fd;direction:ltr;unicode-bidi:bidi-override;letter-spacing:2px;">${ripFormatted(a.rip)}</div>
         </div>
 
         <!-- Actions -->
         <div class="account-actions">
           <span class="account-date">${formatDate(a.date)}</span>
           <button class="dots-btn" onclick="openCardMenu(event, ${a.id})" title="...">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="5" r="1.2" fill="currentColor" stroke="none"/>
-              <circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/>
-              <circle cx="12" cy="19" r="1.2" fill="currentColor" stroke="none"/>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="5" r="1.2" fill="rgba(255,255,255,0.8)" stroke="none"/>
+              <circle cx="12" cy="12" r="1.2" fill="rgba(255,255,255,0.8)" stroke="none"/>
+              <circle cx="12" cy="19" r="1.2" fill="rgba(255,255,255,0.8)" stroke="none"/>
             </svg>
           </button>
         </div>
