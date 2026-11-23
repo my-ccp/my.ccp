@@ -1187,33 +1187,7 @@ body:has(.subpage-content) {
 }
 .result-box.has-rip { animation: pulse-ring 1.5s ease; }
 
-/* ===== PRO SIDEBAR ITEM ===== */
-.sidebar-pro-item {
-  background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(217,119,6,0.05));
-  border-inline-start: 3px solid #f59e0b;
-  color: var(--text) !important;
-}
-.sidebar-pro-item:hover {
-  background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(217,119,6,0.1)) !important;
-  color: var(--text) !important;
-}
-[data-theme="dark"] .sidebar-pro-item {
-  background: linear-gradient(135deg, rgba(245,158,11,0.12), rgba(217,119,6,0.06));
-  color: var(--text) !important;
-}
-.sidebar-pro-item svg { stroke: var(--text); }
 
-.pro-badge {
-  margin-inline-start: auto;
-  font-size: 0.65rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  color: white;
-  padding: 2px 8px;
-  border-radius: 10px;
-  letter-spacing: 0.5px;
-  flex-shrink: 0;
-}
 
 /* ===== DESKTOP: ALL PAGES CENTERED LIKE MOBILE ===== */
 @media (min-width: 481px) {
@@ -1249,7 +1223,8 @@ body:has(.subpage-content) {
   /* Subpages: allow scroll, centered column */
   body:has(.subpage-content) {
     overflow-y: auto;
-    height: auto;
+    height: 100%;
+    min-height: 100dvh;
   }
   body:has(.subpage-content) #app-wrapper {
     position: relative;
@@ -1268,6 +1243,11 @@ body:has(.subpage-content) {
     height: auto;
     min-height: 100dvh;
     overflow: visible;
+    display: flex;
+    flex-direction: column;
+  }
+  body:has(.subpage-content) .main-content.subpage-content {
+    flex: 1;
   }
 
   /* Subpage header sticky within centered column */
