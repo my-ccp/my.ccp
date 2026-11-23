@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="../css/main.css"/>
 </head>
 <body>
+<div id="app-wrapper">
 <div id="app">
 
   <!-- SUBPAGE HEADER -->
@@ -38,22 +39,33 @@
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
           <span class="settings-item-label" data-i18n="language">اللغة</span>
         </div>
-        <div class="lang-buttons">
-          <!-- Arabic flag: Algeria -->
-          <button class="lang-btn-flag" data-lang="ar" onclick="confirmSetLang('ar')">
-            <span class="flag">🇩🇿</span>
-            <span>ع</span>
+        <div class="lang-select-wrapper">
+          <button class="lang-select-btn" id="langSelectBtn" onclick="toggleLangDropdown()">
+            <span class="lang-select-left">
+              <span class="flag" id="selectedFlag">🇩🇿</span>
+              <span id="selectedLangName">العربية</span>
+            </span>
+            <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
           </button>
-          <!-- French flag: France -->
-          <button class="lang-btn-flag" data-lang="fr" onclick="confirmSetLang('fr')">
-            <span class="flag">🇫🇷</span>
-            <span>FR</span>
-          </button>
-          <!-- English flag: USA -->
-          <button class="lang-btn-flag" data-lang="en" onclick="confirmSetLang('en')">
-            <span class="flag">🇺🇸</span>
-            <span>EN</span>
-          </button>
+          <div class="lang-dropdown" id="langDropdown">
+            <button class="lang-dropdown-item" data-lang="ar" onclick="selectLang('ar')">
+              <span class="flag">🇩🇿</span>
+              <span>العربية</span>
+              <svg class="check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </button>
+            <button class="lang-dropdown-item" data-lang="fr" onclick="selectLang('fr')">
+              <span class="flag">🇫🇷</span>
+              <span>Français</span>
+              <svg class="check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </button>
+            <button class="lang-dropdown-item" data-lang="en" onclick="selectLang('en')">
+              <span class="flag">🇺🇸</span>
+              <span>English</span>
+              <svg class="check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -63,10 +75,9 @@
       <div class="settings-title" data-i18n="dark_mode">المظهر</div>
       <div class="settings-item">
         <div class="settings-item-left">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg id="themeIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
           <div>
-            <div class="settings-item-label" data-i18n="dark_mode">الوضع الليلي</div>
-            <div class="settings-item-sub" data-i18n="dark_mode_sub">تفعيل الثيم الداكن</div>
+            <div class="settings-item-label" id="themeModeLabel" data-i18n="dark_mode">الوضع الليلي</div>
           </div>
         </div>
         <button class="toggle" id="themeToggle" onclick="confirmToggleTheme()"></button>
@@ -77,33 +88,92 @@
 
 </div>
 
+</div><!-- end #app-wrapper -->
 <div id="toast" class="toast"></div>
 
 <script src="../js/i18n.js"></script>
 <script src="../js/app.js"></script>
 <script>
-  function confirmSetLang(lang) {
+  const LANG_META = {
+    ar: { flag: '🇩🇿', name: 'العربية' },
+    fr: { flag: '🇫🇷', name: 'Français' },
+    en: { flag: '🇺🇸', name: 'English' }
+  };
+
+  function toggleLangDropdown() {
+    const btn = document.getElementById('langSelectBtn');
+    const dd  = document.getElementById('langDropdown');
+    const open = dd.classList.toggle('open');
+    btn.classList.toggle('open', open);
+  }
+
+  function selectLang(lang) {
+    // Close dropdown
+    document.getElementById('langDropdown').classList.remove('open');
+    document.getElementById('langSelectBtn').classList.remove('open');
+
     if (lang === window.APP_LANG) return;
-    // Apply immediately — broadcasts to all open pages via BroadcastChannel
     applyLang(lang, true);
-    updateLangBtns();
+    updateLangDisplay();
   }
 
-  function confirmToggleTheme() {
-    // Apply immediately — broadcasts to all open pages via BroadcastChannel
-    toggleTheme();
-    updateThemeToggle();
-  }
-
-  function updateLangBtns() {
-    document.querySelectorAll('.lang-btn-flag').forEach(btn => {
-      btn.classList.toggle('active', btn.getAttribute('data-lang') === window.APP_LANG);
+  function updateLangDisplay() {
+    const lang = window.APP_LANG || 'ar';
+    const meta = LANG_META[lang] || LANG_META['ar'];
+    document.getElementById('selectedFlag').textContent = meta.flag;
+    document.getElementById('selectedLangName').textContent = meta.name;
+    // Mark active item
+    document.querySelectorAll('.lang-dropdown-item').forEach(item => {
+      item.classList.toggle('active', item.getAttribute('data-lang') === lang);
     });
   }
 
+  function confirmToggleTheme() {
+    toggleTheme();
+    updateThemeToggle();
+    updateThemeLabel();
+  }
+
+  function updateThemeLabel() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const label = document.getElementById('themeModeLabel');
+    if (!label) return;
+    const lang = window.APP_LANG || 'ar';
+    const labels = {
+      ar: { dark: 'الوضع الداكن',  light: 'الوضع الفاتح' },
+      fr: { dark: 'Mode Sombre',    light: 'Mode Clair' },
+      en: { dark: 'Dark Mode',      light: 'Light Mode' }
+    };
+    const set = labels[lang] || labels['ar'];
+    // Show the opposite — what the toggle will switch TO
+    label.textContent = isDark ? set.light : set.dark;
+    label.removeAttribute('data-i18n');
+
+    // Switch icon: dark now → show sun (will switch to light); light now → show moon
+    const icon = document.getElementById('themeIcon');
+    if (!icon) return;
+    if (isDark) {
+      // Show sun icon
+      icon.innerHTML = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+    } else {
+      // Show moon icon
+      icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+    }
+  }
+
+  // Close dropdown on outside click
+  document.addEventListener('click', e => {
+    const wrapper = document.querySelector('.lang-select-wrapper');
+    if (wrapper && !wrapper.contains(e.target)) {
+      document.getElementById('langDropdown').classList.remove('open');
+      document.getElementById('langSelectBtn').classList.remove('open');
+    }
+  });
+
   document.addEventListener('DOMContentLoaded', () => {
     updateThemeToggle();
-    updateLangBtns();
+    updateLangDisplay();
+    updateThemeLabel();
   });
 </script>
 </body>
