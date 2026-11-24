@@ -92,15 +92,15 @@
             </svg>
             <div class="settings-item-label" data-i18n="font_size">حجم الخط</div>
           </div>
-          <span id="fontScaleLabel" style="font-size:0.9rem;font-weight:700;color:var(--accent);min-width:36px;text-align:center;">100%</span>
+          <span id="fontScaleLabel" style="font-size:0.9rem;font-weight:700;color:var(--accent);min-width:36px;text-align:center;">90%</span>
         </div>
         <div style="display:flex;align-items:center;gap:10px;padding:0 2px;">
-          <span style="font-size:0.75rem;color:var(--text2);font-weight:700;">أ</span>
+          <span id="fontSizeSampleSmall" style="font-size:0.75rem;color:var(--text2);font-weight:700;">أ</span>
           <input type="range" id="fontScaleSlider"
-            min="0.75" max="1.4" step="0.05" value="1"
+            min="0.75" max="1.4" step="0.05" value="0.9"
             style="flex:1;accent-color:var(--accent);height:4px;cursor:pointer;"
             oninput="onFontScaleChange(this.value)"/>
-          <span style="font-size:1.1rem;color:var(--text2);font-weight:700;">أ</span>
+          <span id="fontSizeSampleLarge" style="font-size:1.1rem;color:var(--text2);font-weight:700;">أ</span>
         </div>
       </div>
     </div>
@@ -123,7 +123,7 @@
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
           <div class="settings-item-label" data-i18n="clear_data">مسح بيانات التطبيق</div>
         </div>
-        <button class="btn-outline-sm" onclick="confirmClearData()">مسح</button>
+        <button class="btn-outline-sm" id="clearDataBtn" onclick="confirmClearData()" data-i18n="clear_data_btn">مسح</button>
       </div>
     </div>
 
@@ -170,6 +170,7 @@
     if (lang === window.APP_LANG) return;
     applyLang(lang, true);
     updateLangDisplay();
+    updateFontSizeSamples();
   }
 
   function updateLangDisplay() {
@@ -274,14 +275,32 @@
     if (label)  label.textContent = Math.round(scale * 100) + '%';
   }
 
+  function updateFontSizeSamples() {
+    const lang = window.APP_LANG || 'ar';
+    const sample = (lang === 'ar') ? 'أ' : 'A';
+    const small = document.getElementById('fontSizeSampleSmall');
+    const large = document.getElementById('fontSizeSampleLarge');
+    if (small) small.textContent = sample;
+    if (large) large.textContent = sample;
+    // Also translate clear button
+    const clearBtn = document.getElementById('clearDataBtn');
+    if (clearBtn) clearBtn.textContent = t('clear_data_btn');
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     updateThemeToggle();
     updateLangDisplay();
     updateThemeLabel();
     updateHistoryToggle();
-    // Init font scale slider
-    const scale = parseFloat(localStorage.getItem('fontScale') || '1');
+    // Init font scale slider — default 0.9 (90%)
+    const stored = localStorage.getItem('fontScale');
+    const scale = stored ? parseFloat(stored) : 0.9;
+    if (!stored) {
+      localStorage.setItem('fontScale', '0.9');
+      applyFontScale(0.9, false);
+    }
     updateFontScaleUI(scale);
+    updateFontSizeSamples();
   });
 </script>
 </body>
