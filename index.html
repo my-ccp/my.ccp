@@ -104,7 +104,6 @@
           </svg>
         </span>
       </div>
-      <p class="copy-hint" id="copyHint" style="display:none;" data-i18n="tap_to_copy">اضغط لنسخ الريب</p>
 
       <!-- Action Buttons -->
       <div style="display:flex;gap:10px;margin-top:4px;">
@@ -239,7 +238,6 @@
   const ripKeyBadge  = document.getElementById('ripKeyBadge');
   const ccpKeyVal    = null; // removed
   const ripKeyVal    = null; // removed
-  const copyHint     = document.getElementById('copyHint');
   const ripResultBox = document.getElementById('ripResultBox');
 
   let currentRIP = '';
@@ -279,7 +277,6 @@
         ripResult.textContent = 'RIP: ' + formatRIPDisplay(rip);
         ripResult.classList.add('has-value');
         ripResultBox.classList.add('has-rip');
-        copyHint.style.display = 'block';
         addToHistory({ ccp: val, ccpKey: ck, ripKey: rk, rip: rip, date: new Date().toLocaleString('fr-DZ') });
       } else {
         currentRIP = '';
@@ -287,7 +284,6 @@
         ripResult.textContent = 'RIP: ' + formatRIPDisplay(rip);
         ripResult.classList.add('has-value');
         ripResultBox.classList.remove('has-rip');
-        copyHint.style.display = 'none';
       }
     } else {
       // badges removed
@@ -296,7 +292,6 @@
       ripResult.textContent = t('rip_result');
       ripResult.classList.remove('has-value');
       ripResultBox.classList.remove('has-rip');
-      copyHint.style.display = 'none';
       copyAccBtn.style.display = 'none';
     }
   });
@@ -348,6 +343,13 @@
   function doSaveAccount() {
     const name = document.getElementById('nameInput').value.trim();
     if (!name) { showToast(t('fill_fields')); return; }
+    // Check for duplicate RIP
+    const existing = getAccounts();
+    const isDuplicate = existing.some(a => a.rip === currentRIP);
+    if (isDuplicate) {
+      showToast(t('rip_already_saved'));
+      return;
+    }
     const ccp = ccpInput.value;
     addAccount({ name, ccp, ccpKey: ccpKeyInput.value, ripKey: ripKeyInput.value, rip: currentRIP });
     showToast(t('saved'));
