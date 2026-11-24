@@ -48,7 +48,8 @@
 
 /* ===== RESET ===== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { font-size: 20px; height: 100%; overflow: hidden; }
+html, body { font-size: calc(16px * var(--font-scale, 1)); height: 100%; overflow: hidden; }
+html { --font-scale: 1; }
 body {
   font-family: 'Cairo', 'Segoe UI', system-ui, sans-serif;
   background: var(--bg);
@@ -160,8 +161,8 @@ input[type=number] { -moz-appearance: textfield; }
   border-radius: var(--radius);
   border: 3px solid var(--input-border);
   padding: 0 16px;
-  height: 80px;
-  margin-bottom: 20px;
+  height: 68px;
+  margin-bottom: 16px;
   transition: border var(--transition), box-shadow var(--transition);
   position: relative;
   box-shadow: none;
@@ -182,7 +183,7 @@ input[type=number] { -moz-appearance: textfield; }
   flex: 1;
   background: transparent;
   color: var(--text);
-  font-size: 1.35rem;
+  font-size: 1.1rem;
   font-weight: 800;
   text-align: center;
   letter-spacing: 1px;
@@ -266,10 +267,10 @@ body:not([data-lang="ar"]) .input-icon:last-child  { margin-left: 10px; }
 
 .result-box .result-text {
   flex: 1;
-  font-size: 1.25rem;
+  font-size: 1rem;
   color: var(--text2);
   text-align: center;
-  letter-spacing: 1.5px;
+  letter-spacing: 1px;
   font-weight: 700;
   word-break: break-all;
   font-family: 'Cairo', monospace;
@@ -280,8 +281,8 @@ body:not([data-lang="ar"]) .input-icon:last-child  { margin-left: 10px; }
 .result-box .result-text.has-value {
   color: var(--accent);
   font-weight: 800;
-  font-size: 1.3rem;
-  letter-spacing: 2.5px;
+  font-size: 1.1rem;
+  letter-spacing: 2px;
 }
 
 .copy-hint {
