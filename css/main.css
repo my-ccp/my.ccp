@@ -961,7 +961,7 @@ body:not([data-lang="ar"]) .info-section ul { padding-left: 16px; padding-right:
 
 /* ===== MODAL ===== */
 .modal-overlay {
-  position: absolute;
+  position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.6);
   z-index: 300;
