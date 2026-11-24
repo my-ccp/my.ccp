@@ -236,42 +236,17 @@ body:not([data-lang="ar"]) .input-icon:last-child  { margin-left: 10px; }
 
 /* ===== RESULT BOX ===== */
 .result-box {
-  background: var(--result-bg);
-  border-radius: var(--radius);
-  border: 2px solid var(--result-border);
-  padding: 16px 14px;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  min-height: 64px;
-  cursor: pointer;
+  /* Styled as a normal readonly input field */
+  margin-bottom: 0;
   transition: all var(--transition);
-  box-shadow: 0 4px 16px rgba(37,99,235,0.1);
-  position: relative;
-  overflow: hidden;
 }
-
-.result-box::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, transparent 60%, rgba(37,99,235,0.05));
-  pointer-events: none;
-}
-
-.result-box:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(37,99,235,0.18);
-}
-.result-box:active { transform: translateY(0); }
 
 .result-box .result-text {
   flex: 1;
   font-size: 1rem;
   color: var(--text2);
-  text-align: center;
   letter-spacing: 1px;
-  font-weight: 700;
+  font-weight: 500;
   word-break: break-all;
   font-family: 'Cairo', monospace;
   /* RIP numbers always flow left-to-right regardless of page language */
@@ -279,9 +254,9 @@ body:not([data-lang="ar"]) .input-icon:last-child  { margin-left: 10px; }
   unicode-bidi: bidi-override;
 }
 .result-box .result-text.has-value {
-  color: var(--accent);
-  font-weight: 800;
-  font-size: 1.1rem;
+  color: var(--text);
+  font-weight: 700;
+  font-size: 1rem;
   letter-spacing: 2px;
 }
 
@@ -1256,12 +1231,15 @@ body:has(.subpage-content) {
 }
 .animate-in { animation: fadeInUp 0.4s ease both; }
 
-@keyframes pulse-ring {
-  0% { box-shadow: 0 0 0 0 rgba(37,99,235,0.4); }
-  70% { box-shadow: 0 0 0 10px rgba(37,99,235,0); }
-  100% { box-shadow: 0 0 0 0 rgba(37,99,235,0); }
+@keyframes rip-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(37,99,235,0.35), var(--shadow-input); border-color: var(--accent); }
+  50%  { box-shadow: 0 0 0 6px rgba(37,99,235,0.12), var(--shadow-input); border-color: var(--accent); }
+  100% { box-shadow: 0 0 0 0 rgba(37,99,235,0), var(--shadow-input); border-color: var(--accent); }
 }
-.result-box.has-rip { animation: pulse-ring 1.5s ease; }
+.result-box.has-rip {
+  animation: rip-pulse 1.2s ease-out;
+  border-color: var(--accent);
+}
 
 
 
