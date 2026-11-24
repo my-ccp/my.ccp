@@ -23,7 +23,9 @@ appChannel.onmessage = (e) => {
 
 // ===== FONT SCALE =====
 (function() {
-  const scale = parseFloat(localStorage.getItem('fontScale') || '1');
+  const stored = localStorage.getItem('fontScale');
+  const scale = stored ? parseFloat(stored) : 0.9;
+  if (!stored) localStorage.setItem('fontScale', '0.9');
   document.documentElement.style.setProperty('--font-scale', scale);
 })();
 
@@ -41,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
   applyTheme(window.APP_THEME, false);
   applyLang(window.APP_LANG, false);
   // Re-apply font scale after DOM ready (in case CSS var was late)
-  const scale = parseFloat(localStorage.getItem('fontScale') || '1');
+  const scale = parseFloat(localStorage.getItem('fontScale') || '0.9');
   document.documentElement.style.setProperty('--font-scale', scale);
 });
 
