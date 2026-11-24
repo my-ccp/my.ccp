@@ -108,8 +108,15 @@
       <!-- RIP Result -->
       <div class="input-group readonly result-box" id="ripResultBox" onclick="copyRip()" style="cursor:pointer;">
         <span class="input-icon">
+          <!-- RIP / postal bank icon -->
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            <rect x="2" y="6" width="20" height="14" rx="2"/>
+            <path d="M6 6V5a2 2 0 0 1 4 0v1"/>
+            <path d="M14 6V5a2 2 0 0 1 4 0v1"/>
+            <line x1="2" y1="11" x2="22" y2="11"/>
+            <line x1="7" y1="15" x2="7" y2="17"/>
+            <line x1="12" y1="15" x2="12" y2="17"/>
+            <line x1="17" y1="15" x2="17" y2="17"/>
           </svg>
         </span>
         <span class="result-text" id="ripResult" data-i18n="rip_result" style="text-align:start;">RIP: 007 99999 XXXXXXXXXX YY</span>
@@ -456,7 +463,7 @@
           <rect x="3" y="14" width="7" height="7" rx="1"/>
           <path d="M14 14h2v2h-2z"/><path d="M18 14h3"/><path d="M14 18h2"/><path d="M18 18h3"/><path d="M14 21v-3"/><path d="M21 18v3"/>
         </svg>
-        <span style="color:#fff;font-weight:700;font-size:1rem;">مسح QR Code</span>
+        <span style="color:#fff;font-weight:700;font-size:1rem;" data-i18n="qr_scan_title">مسح QR Code</span>
       </div>
       <button onclick="closeQRScanner()" style="background:rgba(255,255,255,0.2);border:none;border-radius:8px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;font-size:18px;">×</button>
     </div>
@@ -712,6 +719,7 @@ window.addEventListener('load', () => {
         s.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
         s.onload = resolve; s.onerror = reject;
         document.head.appendChild(s);
+        setTimeout(() => reject(new Error('preload timeout')), 10000);
       });
     } catch (e) { /* silent — will retry on use */ }
   }, 3000); // load 3s after page ready, non-blocking
@@ -774,21 +782,37 @@ async function captureOCRFrame() {
 }
 
 async function runTesseractOCR(canvas) {
+  const statusEl = document.getElementById('ocrStatus');
+
   if (typeof Tesseract === 'undefined') {
-    document.getElementById('ocrStatus').textContent = '⏳ جارٍ تحميل محرك OCR...';
-    await new Promise((resolve, reject) => {
-      const s = document.createElement('script');
-      s.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
-      s.onload = resolve; s.onerror = reject;
-      document.head.appendChild(s);
-    });
+    statusEl.textContent = '⏳ جارٍ تحميل محرك OCR...';
+    try {
+      await new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
+        s.onload = resolve;
+        s.onerror = reject;
+        document.head.appendChild(s);
+        // Timeout after 8 seconds to avoid hanging forever
+        setTimeout(() => reject(new Error('timeout')), 8000);
+      });
+    } catch (loadErr) {
+      statusEl.textContent = '⚠️ تعذّر تحميل محرك OCR — تحقق من الاتصال بالإنترنت';
+      // Show result area with empty fields so user can enter manually
+      document.getElementById('ocrFieldCCP').textContent = '—';
+      document.getElementById('ocrFieldCCPKey').textContent = '—';
+      document.getElementById('ocrFieldRIP').textContent = '—';
+      document.getElementById('ocrFieldRIPKey').textContent = '—';
+      document.getElementById('ocrResultArea').style.display = 'block';
+      document.getElementById('ocrApplyBtn').style.display = 'none';
+      return;
+    }
   }
 
-  document.getElementById('ocrStatus').textContent = '⏳ جارٍ قراءة الشيك...';
+  statusEl.textContent = '⏳ جارٍ قراءة الشيك...';
 
   try {
     // Enhance image: grayscale + strong contrast threshold (black/white)
-    // Smaller canvas = faster OCR
     const enh = document.createElement('canvas');
     enh.width = canvas.width; enh.height = canvas.height;
     const ec = enh.getContext('2d');
@@ -797,21 +821,28 @@ async function runTesseractOCR(canvas) {
     const d = id.data;
     for (let i = 0; i < d.length; i += 4) {
       const g = 0.299*d[i] + 0.587*d[i+1] + 0.114*d[i+2];
-      // Hard threshold: dark pixels → black, light → white (better for digits)
       const e = g < 140 ? 0 : 255;
       d[i] = d[i+1] = d[i+2] = e;
     }
     ec.putImageData(id, 0, 0);
 
-    // Use only 'eng' (digits only) — much faster than 'ara+eng'
-    const result = await Tesseract.recognize(enh, 'eng', {
+    // Wrap Tesseract.recognize in a timeout to avoid hanging indefinitely
+    const ocrPromise = Tesseract.recognize(enh, 'eng', {
       tessedit_char_whitelist: '0123456789',
       tessedit_pageseg_mode: '6',
     });
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('OCR timeout')), 30000)
+    );
 
+    const result = await Promise.race([ocrPromise, timeoutPromise]);
     parseOCRChequeText(result.data.text);
   } catch (err) {
-    document.getElementById('ocrStatus').textContent = '⚠️ خطأ في القراءة — حاول مجدداً';
+    if (err.message === 'OCR timeout') {
+      statusEl.textContent = '⚠️ استغرق التحليل وقتاً طويلاً — حاول مجدداً';
+    } else {
+      statusEl.textContent = '⚠️ خطأ في القراءة — حاول مجدداً';
+    }
   }
 }
 
