@@ -194,7 +194,7 @@
     if (!acc) return;
     const newFav = !acc.favorite;
     updateAccount(id, { favorite: newFav });
-    showToast(newFav ? '⭐ أُضيف إلى المفضلة' : 'تمت الإزالة من المفضلة');
+    showToast(newFav ? t('add_to_fav') : t('remove_from_fav'));
     renderAccounts();
   }
 
@@ -241,11 +241,12 @@
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
 
-        <!-- Card Top: chip icon + name -->
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-          <div style="display:flex;align-items:center;gap:8px;">
+        <!-- Card Top: chip + name | CCP number side by side -->
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;gap:8px;">
+          <!-- Left: chip + name -->
+          <div style="display:flex;align-items:center;gap:8px;min-width:0;flex:1;">
             <!-- EMV chip icon -->
-            <svg width="28" height="21" viewBox="0 0 34 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="28" height="21" viewBox="0 0 34 26" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
               <rect x="1" y="1" width="32" height="24" rx="4" fill="#d4af37" stroke="#b8960a" stroke-width="1"/>
               <line x1="12" y1="1" x2="12" y2="25" stroke="#b8960a" stroke-width="1"/>
               <line x1="22" y1="1" x2="22" y2="25" stroke="#b8960a" stroke-width="1"/>
@@ -253,18 +254,13 @@
               <line x1="1" y1="17" x2="33" y2="17" stroke="#b8960a" stroke-width="1"/>
               <rect x="12" y="9" width="10" height="8" rx="1" fill="#c9a227" stroke="#b8960a" stroke-width="0.5"/>
             </svg>
-            <span style="font-size:1.05rem;font-weight:800;color:#ffffff;letter-spacing:0.5px;padding-inline-end:28px;">${a.name}</span>
+            <span style="font-size:1rem;font-weight:800;color:#ffffff;letter-spacing:0.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${a.name}</span>
           </div>
-          <!-- BARIDI logo area -->
-          <div style="display:flex;align-items:center;gap:4px;opacity:0.85;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          <!-- Right: CCP number -->
+          <div style="text-align:end;flex-shrink:0;">
+            <div style="font-size:0.65rem;color:rgba(255,255,255,0.65);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px;">CCP</div>
+            <div style="font-size:1.1rem;font-weight:800;color:#ffffff;direction:ltr;unicode-bidi:bidi-override;letter-spacing:1.5px;">${a.ccp}</div>
           </div>
-        </div>
-
-        <!-- CCP Number - large display -->
-        <div style="margin-bottom:8px;">
-          <div style="font-size:0.75rem;color:rgba(255,255,255,0.65);margin-bottom:3px;letter-spacing:1.5px;text-transform:uppercase;">CCP</div>
-          <div style="font-size:1.25rem;font-weight:800;color:#ffffff;direction:ltr;unicode-bidi:bidi-override;letter-spacing:2px;">${a.ccp}</div>
         </div>
 
         <!-- Keys row -->
@@ -370,7 +366,7 @@
     // Update fav label
     const acc = getAccounts().find(a => a.id == id);
     if (acc) {
-      document.getElementById('ddFavLabel').textContent = acc.favorite ? 'إزالة من المفضلة' : 'إضافة للمفضلة';
+      document.getElementById('ddFavLabel').textContent = acc.favorite ? t('remove_from_fav') : t('add_to_fav');
       const ddFavSvg = document.querySelector('#ddFav svg');
       if (ddFavSvg) {
         ddFavSvg.setAttribute('fill', acc.favorite ? '#f59e0b' : 'none');
@@ -400,7 +396,7 @@
     else if (action === 'fav') {
       const newFav = !acc.favorite;
       updateAccount(acc.id, { favorite: newFav });
-      showToast(newFav ? '⭐ أُضيف إلى المفضلة' : 'تمت الإزالة من المفضلة');
+      showToast(newFav ? t('add_to_fav') : t('remove_from_fav'));
       renderAccounts();
     }
     else if (action === 'select') {
