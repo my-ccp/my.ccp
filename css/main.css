@@ -433,11 +433,11 @@ body:not([data-lang="ar"]) .input-icon:last-child  { margin-left: 10px; }
 
 .account-card {
   background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 45%, #1d4ed8 70%, #0f2d6b 100%);
-  border-radius: 20px;
+  border-radius: 16px;
   border: none;
-  padding: 20px 20px 14px;
-  margin-bottom: 16px;
-  box-shadow: 0 8px 32px rgba(37,99,235,0.35);
+  padding: 13px 16px 10px;
+  margin-bottom: 12px;
+  box-shadow: 0 6px 24px rgba(37,99,235,0.35);
   transition: all var(--transition);
   position: relative;
   overflow: hidden;
@@ -562,14 +562,14 @@ body[data-lang="en"] .account-checkbox { right: auto; left: 12px; }
   display: flex;
   gap: 8px;
   align-items: center;
-  margin-top: 12px;
-  padding-top: 10px;
+  margin-top: 6px;
+  padding-top: 6px;
   border-top: 1px solid rgba(255,255,255,0.15);
 }
 
 .account-date {
   flex: 1;
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   color: rgba(255,255,255,0.55);
   text-align: end;
 }
@@ -591,8 +591,8 @@ body[data-lang="en"] .account-checkbox { right: auto; left: 12px; }
 
 /* ===== 3-DOT MENU ===== */
 .dots-btn {
-  width: 36px; height: 36px;
-  border-radius: 10px;
+  width: 30px; height: 30px;
+  border-radius: 8px;
   background: rgba(255,255,255,0.12);
   color: rgba(255,255,255,0.8);
   display: flex; align-items: center; justify-content: center;
