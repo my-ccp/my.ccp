@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>MY CCP – الأسئلة الشائعة</title>
+  <meta name="theme-color" content="#1e3a8a"/>
+  <link rel="manifest" href="../manifest.json"/>
+  <link rel="icon" type="image/x-icon" href="../favicon.ico"/>
+  <link rel="icon" type="image/png" href="../icons/icon-192.png"/>
+  <link rel="apple-touch-icon" href="../icons/icon-192.png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <style>
+    .faq-search-bar {
+      display: flex;
+      align-items: center;
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 10px 14px;
+      gap: 10px;
+      margin-bottom: 20px;
+      transition: border-color 0.2s;
+    }
+    .faq-search-bar:focus-within { border-color: var(--accent); }
+    .faq-search-bar svg { color: var(--text2); flex-shrink: 0; }
+    .faq-search-input {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      font-family: inherit;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+    .faq-search-input::placeholder { color: var(--text2); }
+
+    .faq-category-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+    .faq-category-tabs::-webkit-scrollbar { display: none; }
+    .faq-tab {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 20px;
+      border: 1.5px solid var(--border);
+      background: var(--card);
+      color: var(--text2);
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .faq-tab.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .faq-category-title {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--accent);
+      margin: 20px 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .faq-category-title:first-of-type { margin-top: 0; }
+
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 10px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .faq-item.open { border-color: var(--accent); }
+    .faq-question {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      cursor: pointer;
+      gap: 12px;
+      user-select: none;
+    }
+    .faq-q-text {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      flex: 1;
+      line-height: 1.5;
+    }
+    .faq-chevron {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      color: var(--accent);
+      transition: transform 0.2s;
+    }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); }
+    .faq-answer {
+      display: none;
+      padding: 0 16px 16px;
+      font-size: 0.9rem;
+      color: var(--text2);
+      line-height: 1.8;
+      border-top: 1px solid var(--border);
+    }
+    .faq-item.open .faq-answer { display: block; }
+    .faq-answer p { margin: 0 0 10px; }
+    .faq-answer p:last-child { margin-bottom: 0; }
+    .faq-answer strong { color: var(--text); font-weight: 700; }
+    .faq-answer a { color: var(--accent); font-weight: 700; }
+    .faq-answer ul {
+      padding-inline-start: 20px;
+      margin: 8px 0;
+    }
+    .faq-answer ul li { margin-bottom: 4px; }
+    .faq-answer .answer-badge {
+      display: inline-block;
+      background: rgba(37,99,235,0.1);
+      color: var(--accent);
+      border-radius: 8px;
+      padding: 2px 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .faq-no-results {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text2);
+      display: none;
+    }
+    .faq-no-results svg { margin-bottom: 12px; }
+    .faq-no-results p { font-size: 0.95rem; }
+
+    .faq-contact-cta {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-top: 24px;
+      margin-bottom: 24px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .faq-contact-cta .cta-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: rgba(37,99,235,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .faq-contact-cta .cta-title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+    .faq-contact-cta .cta-sub {
+      font-size: 0.85rem;
+      color: var(--text2);
+    }
+  </style>
+</head>
+<body>
+<div id="app-wrapper">
+<div id="app">
+
+  <!-- SUBPAGE HEADER -->
+  <header class="subpage-header">
+    <button class="back-btn" onclick="history.back()">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"/>
+        <polyline points="12 19 5 12 12 5"/>
+      </svg>
+    </button>
+    <div class="subpage-title" data-i18n="faq">الأسئلة الشائعة</div>
+    <div style="width:42px;"></div>
+  </header>
+
+  <main class="main-content subpage-content" style="padding:16px;">
+
+    <!-- Search -->
+    <div class="faq-search-bar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="faq-search-input" type="search" id="faqSearchInput" placeholder="ابحث في الأسئلة..." data-i18n-placeholder="faq_search_placeholder" oninput="filterFaq(this.value)"/>
+    </div>
+
+    <!-- Category Tabs -->
+    <div class="faq-category-tabs" id="faqTabs">
+      <button class="faq-tab active" data-cat="all" onclick="filterCategory('all',this)" data-i18n="faq_all">الكل</button>
+      <button class="faq-tab" data-cat="general" onclick="filterCategory('general',this)" data-i18n="faq_cat_general">عام</button>
+      <button class="faq-tab" data-cat="ccp_rip" onclick="filterCategory('ccp_rip',this)" data-i18n="faq_cat_ccp_rip">CCP & RIP</button>
+      <button class="faq-tab" data-cat="accounts" onclick="filterCategory('accounts',this)" data-i18n="faq_cat_accounts">الحسابات</button>
+      <button class="faq-tab" data-cat="privacy" onclick="filterCategory('privacy',this)" data-i18n="faq_cat_privacy">الخصوصية</button>
+    </div>
+
+    <!-- FAQ Items Container -->
+    <div id="faqContainer">
+
+      <!-- === GENERAL === -->
+      <div class="faq-category-label" data-cat="general">
+        <div class="faq-category-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span data-i18n="faq_cat_general">عام</span>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="general" data-q="ما هو تطبيق my ccp">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text" data-i18n="faq_q1">ما هو تطبيق MY CCP؟</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer">
+          <p data-i18n="faq_a1">MY CCP هو تطبيق جزائري مجاني متخصص في إدارة حسابات بريد الجزائر (CCP). يتيح لك تحويل أرقام الحسابات البريدية CCP إلى أرقام RIP، حفظ حساباتك، تتبع العمليات، حساب الرسوم البنكية، وإنشاء وإدارة الحوالات البريدية.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="general" data-q="هل التطبيق مجاني">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text" data-i18n="faq_q2">هل التطبيق مجاني بالكامل؟</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer">
+          <p data-i18n="faq_a2">نعم، التطبيق مجاني بالكامل. لا توجد رسوم اشتراك، لا إعلانات، ولا مشتريات داخل التطبيق. جميع الخدمات المتاحة مجانية للجميع.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="general" data-q="هل يحتاج التطبيق إلى إنترنت">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text" data-i18n="faq_q3">هل يحتاج التطبيق إلى اتصال بالإنترنت؟</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer">
+          <p data-i18n="faq_a3">لا. التطبيق يعمل بالكامل بدون إنترنت. جميع العمليات الحسابية والبيانات تُعالج محلياً على جهازك. الاتصال بالإنترنت مطلوب فقط عند تحميل التطبيق لأول مرة.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="general" data-q="هل التطبيق رسمي تابع لبريد الجزائر">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text" data-i18n="faq_q4">هل التطبيق رسمي وتابع لبريد الجزائر؟</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer">
+          <p data-i18n="faq_a4">لا. MY CCP هو تطبيق مستقل من تطوير مجتمعي وليس تابعاً لبريد الجزائر أو أي جهة حكومية. الخدمات المقدمة هي أدوات مساعدة لأغراض إرشادية فقط. يرجى التحقق دائماً من المعلومات على الموقع الرسمي: <a href="https://www.poste.dz" target="_blank">www.poste.dz</a></p>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="general" data-q="ما اللغات المدعومة في التطبيق">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text" data-i18n="faq_q5">ما اللغات المدعومة في التطبيق؟</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer">
+          <p data-i18n="faq_a5">يدعم التطبيق ثلاث لغات: العربية 🇩🇿، الفرنسية 🇫🇷، والإنجليزية 🇺🇸. يمكن تغيير اللغة في أي وقت من إعدادات التطبيق.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="general" data-q="كيف أثبت التطبيق على هاتفي">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text" data-i18n="faq_q6">كيف أثبّت التطبيق على هاتفي؟</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer">
+          <p data-i18n="faq_a6">التطبيق هو تطبيق ويب تقدمي (PWA) ويمكن تثبيته مباشرة من المتصفح دون الحاجة لمتجر التطبيقات. على Android: افتح التطبيق في Chrome ثم اضغط على "إضافة إلى الشاشة الرئيسية". على iPhone/Safari: اضغط على زر المشاركة ثم "إضافة إلى الشاشة الرئيسية".</p>
+        </div>
+      </div>
+
+      <!-- === CCP & RIP === -->
+      <div class="faq-category-label" data-cat="ccp_rip">
+        <div class="faq-category-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          <span data-i18n="faq_cat_ccp_rip">CCP & RIP</span>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="ccp_rip" data-q="ما الفرق بين CCP و RIP">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text" data-i18n="faq_q7">ما الفرق بين CCP وRIP؟</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer">
+          <p><strong>CCP (الحساب الجاري البريدي):</strong> <span data-i18n="faq_a7_ccp">هو رقم حسابك في بريد الجزائر، ويتكون من 10 أرقام + مفتاح من 2 رقم.</span></p>
+          <p><strong>RIP (كشف الهوية البريدية / Relevé d'Identité Postal):</strong> <span data-i18n="faq_a7_rip">هو التنسيق الدولي الموحد الذي يُستخدم في التحويلات البنكية، ويبدأ بـ 007 99999 ويتضمن رقم الحساب ومفتاح RIP من رقمين.</span></p>
+          <p data-i18n="faq_a7_use">يُستخدم RIP في العمليات المصرفية، التحويلات، واستلام الرواتب والمدفوعات.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="ccp_rip" data-q="كيف أحول CCP إلى RIP">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text" data-i18n="faq_q8">كيف أحوّل رقم CCP إلى RIP؟</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer">
+          <p data-i18n="faq_a8_steps">من الصفحة الرئيسية:</p>
+          <ul>
+            <li data-i18n="faq_a8_s1">أدخل رقم حسابك الجاري (10 أرقام)</li>
+            <li data-i18n="faq_a8_s2">أدخل مفتاح CCP (رقم من 1 إلى 97)</li>
+            <li data-i18n="faq_a8_s3">سيظهر رقم RIP فوراً مع إمكانية النسخ والمشاركة</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="ccp_rip" data-q="أين أجد مفتاح CCP">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text" data-i18n="faq_q9">أين أجد مفتاح CCP؟</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer">
+          <p data-i18n="faq_a9">مفتاح CCP هو رقم من 1 إلى 97 ويمكن إيجاده في: دفتر الشيكات البريدي (الغلاف أو أسفل الشيكات)، البطاقة البنكية، كشف الحساب الورقي، أو تطبيق Baridimob الرسمي.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="ccp_rip" data-q="هل يمكنني نسخ ومشاركة RIP">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text" data-i18n="faq_q10">هل يمكنني نسخ ومشاركة رقم RIP؟</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer">
+          <p data-i18n="faq_a10">نعم. بعد حساب RIP، تظهر أزرار النسخ والمشاركة مباشرة. كما يمكنك حفظ الحساب لاستخدامه لاحقاً أو مشاركته عبر تطبيقات المراسلة.</p>
+        </div>
+      </div>
+
+      <!-- === ACCOUNTS === -->
+      <div class="faq-category-label" data-cat="accounts">
+        <div class="faq-category-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="6" height="6" rx="1"/><rect x="3" y="13" width="6" height="6" rx="1"/><line x1="13" y1="7" x2="21" y2="7"/><line x1="13" y1="11" x2="21" y2="11"/><line x1="13" y1="15" x2="21" y2="15"/><line x1="13" y1="19" x2="21" y2="19"/></svg>
+          <span data-i18n="faq_cat_accounts">الحسابات</span>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="accounts" data-q="كيف أحفظ حسابي">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text" data-i18n="faq_q11">كيف أحفظ حسابي في التطبيق؟</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer">
+          <p data-i18n="faq_a11">بعد إدخال رقم الحساب ومفتاح CCP في الصفحة الرئيسية، أدخل الاسم ثم اضغط "حفظ الحساب". سيُحفظ الحساب في صفحة "الحسابات" ويمكن الوصول إليه في أي وقت.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="accounts" data-q="هل يمكنني حفظ أكثر من حساب">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text" data-i18n="faq_q12">هل يمكنني حفظ أكثر من حساب واحد؟</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer">
+          <p data-i18n="faq_a12">نعم، يمكنك حفظ عدد غير محدود من الحسابات. يمكنك إدارة حسابات عائلتك أو عملائك بكل سهولة من صفحة "الحسابات".</p>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="accounts" data-q="كيف أستورد وأصدر الحسابات">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text" data-i18n="faq_q13">كيف أستورد وأصدّر الحسابات؟</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer">
+          <p data-i18n="faq_a13">من صفحة "الحسابات"، اضغط على أيقونة القائمة في أعلى الصفحة. ستجد خيارات "تصدير الحسابات" (لحفظ نسخة احتياطية بصيغة JSON) و"استيراد الحسابات" (لاستعادة حسابات محفوظة مسبقاً أو نقلها من جهاز لآخر).</p>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="accounts" data-q="ما هي المفضلة">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text" data-i18n="faq_q14">ما هي خاصية المفضلة؟</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer">
+          <p data-i18n="faq_a14">المفضلة تتيح لك تثبيت الحسابات الأكثر استخداماً للوصول السريع إليها. اضغط على أيقونة النجمة بجانب أي حساب لإضافته للمفضلة، ثم ستجده في صفحة "المفضلة" من الشريط الجانبي.</p>
+        </div>
+      </div>
+
+
+      <!-- === PRIVACY === -->
+      <div class="faq-category-label" data-cat="privacy">
+        <div class="faq-category-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span data-i18n="faq_cat_privacy">الخصوصية والأمان</span>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="privacy" data-q="هل بياناتي آمنة">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text" data-i18n="faq_q19">هل بياناتي آمنة؟</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer">
+          <p data-i18n="faq_a19">نعم. جميع بياناتك تُخزّن محلياً في متصفحك فقط ولا تُرسل لأي خادم. التطبيق لا يستخدم أي أدوات تتبع أو تحليل، ولا يجمع أي معلومات شخصية.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="privacy" data-q="هل يمكنني حذف بياناتي">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text" data-i18n="faq_q20">كيف أحذف جميع بياناتي من التطبيق؟</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer">
+          <p data-i18n="faq_a20">يمكنك حذف جميع البيانات بعدة طرق:</p>
+          <ul>
+            <li data-i18n="faq_a20_opt1">من صفحة "الحسابات": حذف حسابات مفردة أو جميعها</li>
+            <li data-i18n="faq_a20_opt2">من صفحة "السجل": مسح سجل العمليات</li>
+            <li data-i18n="faq_a20_opt3">من إعدادات المتصفح: مسح بيانات الموقع بالكامل</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="privacy" data-q="ماذا يحدث لبياناتي إذا حذفت التطبيق">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text" data-i18n="faq_q21">ماذا يحدث لبياناتي إذا حذفت التطبيق أو مسحت بيانات المتصفح؟</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer">
+          <p data-i18n="faq_a21">ستُحذف جميع البيانات المحفوظة بشكل دائم لأنها تُخزّن فقط في ذاكرة المتصفح. لهذا ننصحك بتصدير حساباتك من صفحة "الحسابات" قبل مسح بيانات المتصفح للاحتفاظ بنسخة احتياطية.</p>
+        </div>
+      </div>
+
+    </div><!-- end #faqContainer -->
+
+    <!-- No Results -->
+    <div class="faq-no-results" id="faqNoResults">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <p data-i18n="faq_no_results">لم يتم العثور على نتائج. جرب كلمات مختلفة.</p>
+    </div>
+
+    <!-- Contact CTA -->
+    <div class="faq-contact-cta" id="faqContactCta">
+      <div class="cta-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </div>
+      <div class="cta-title" data-i18n="faq_contact_title">لم تجد إجابة لسؤالك؟</div>
+      <div class="cta-sub" data-i18n="faq_contact_sub">تواصل معنا وسنرد في أقرب وقت</div>
+      <button class="primary-btn" style="margin-top:4px;padding:10px 24px;" onclick="contactUs()" data-i18n="contact_us">اتصل بنا</button>
+    </div>
+
+  </main>
+
+</div>
+</div><!-- end #app-wrapper -->
+<div id="toast" class="toast"></div>
+<script src="../js/i18n.js"></script>
+<script src="../js/app.js"></script>
+<script>
+  function toggleFaq(questionEl) {
+    const item = questionEl.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    // Close all open items
+    document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+    // Open clicked if it was closed
+    if (!isOpen) item.classList.add('open');
+  }
+
+  function filterFaq(query) {
+    const q = query.toLowerCase().trim();
+    const items = document.querySelectorAll('.faq-item');
+    const labels = document.querySelectorAll('.faq-category-label');
+    let visible = 0;
+
+    // Reset category tabs to "all" when searching
+    if (q) {
+      document.querySelectorAll('.faq-tab').forEach(t => t.classList.remove('active'));
+      document.querySelector('[data-cat="all"]').classList.add('active');
+    }
+
+    labels.forEach(l => l.style.display = q ? 'none' : '');
+
+    items.forEach(item => {
+      const text = (item.dataset.q || '') + item.innerText.toLowerCase();
+      const show = !q || text.includes(q);
+      item.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+
+    document.getElementById('faqNoResults').style.display = visible === 0 ? 'flex' : 'none';
+    document.getElementById('faqContactCta').style.display = visible === 0 ? 'none' : '';
+  }
+
+  function filterCategory(cat, btn) {
+    // Clear search
+    document.getElementById('faqSearchInput').value = '';
+
+    // Update active tab
+    document.querySelectorAll('.faq-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+
+    const items = document.querySelectorAll('.faq-item');
+    const labels = document.querySelectorAll('.faq-category-label');
+    let visible = 0;
+
+    items.forEach(item => {
+      const show = cat === 'all' || item.dataset.cat === cat;
+      item.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+
+    labels.forEach(label => {
+      const show = cat === 'all' || label.dataset.cat === cat;
+      label.style.display = show ? '' : 'none';
+    });
+
+    document.getElementById('faqNoResults').style.display = visible === 0 ? 'flex' : 'none';
+    document.getElementById('faqContactCta').style.display = visible === 0 ? 'none' : '';
+  }
+</script>
+</body>
+</html>
