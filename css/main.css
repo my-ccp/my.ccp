@@ -571,7 +571,7 @@ body[data-lang="en"] .account-checkbox { right: auto; left: 12px; }
   flex: 1;
   font-size: 0.72rem;
   color: rgba(255,255,255,0.55);
-  text-align: end;
+  text-align: center;
 }
 
 /* ===== KEY ROW (CCP key | RIP key inline) ===== */
