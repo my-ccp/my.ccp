@@ -64,7 +64,6 @@ const TRANSLATIONS = {
     privacy_delete_desc: "يمكنك حذف جميع بياناتك في أي وقت من خلال التطبيق أو مسح بيانات المتصفح.",
     search_placeholder: "بحث...",
     name_placeholder: "اللقب و الإسم",
-    tap_to_copy: "اضغط لنسخ الريب",
     history: "السجل",
     sidebar_history: "السجل",
     history_title: "سجل العمليات",
@@ -213,6 +212,9 @@ const TRANSLATIONS = {
     confirm_clear_data: "مسح البيانات",
     confirm_clear_data_msg: "هل أنت متأكد من مسح جميع بيانات التطبيق؟ لا يمكن التراجع عن هذا الإجراء.",
     data_cleared: "تم مسح جميع البيانات!",
+    clear_data_btn: "مسح",
+    rip_already_saved: "هذا الريب محفوظ مسبقاً في سجل الحسابات!",
+    font_size_sample: "أ",
   },
   fr: {
     app_name: "MY CCP",
@@ -279,7 +281,6 @@ const TRANSLATIONS = {
     privacy_delete_desc: "Vous pouvez supprimer toutes vos données à tout moment via l'application ou en effaçant les données du navigateur.",
     search_placeholder: "Rechercher...",
     name_placeholder: "Nom et prénom",
-    tap_to_copy: "Appuyez pour copier le RIP",
     history: "Historique",
     sidebar_history: "Historique",
     history_title: "Historique des opérations",
@@ -428,6 +429,9 @@ const TRANSLATIONS = {
     confirm_clear_data: "Effacer les données",
     confirm_clear_data_msg: "Êtes-vous sûr de vouloir effacer toutes les données? Cette action est irréversible.",
     data_cleared: "Toutes les données ont été effacées!",
+    clear_data_btn: "Effacer",
+    rip_already_saved: "Ce RIP est déjà enregistré dans la liste des comptes!",
+    font_size_sample: "A",
   },
   en: {
     app_name: "MY CCP",
@@ -494,7 +498,6 @@ const TRANSLATIONS = {
     privacy_delete_desc: "You can delete all your data at any time through the app or by clearing browser data.",
     search_placeholder: "Search...",
     name_placeholder: "Full name",
-    tap_to_copy: "Tap to copy RIP",
     history: "History",
     sidebar_history: "History",
     history_title: "Operation History",
@@ -643,6 +646,9 @@ const TRANSLATIONS = {
     confirm_clear_data: "Clear Data",
     confirm_clear_data_msg: "Are you sure you want to clear all app data? This action cannot be undone.",
     data_cleared: "All data has been cleared!",
+    clear_data_btn: "Clear",
+    rip_already_saved: "This RIP is already saved in the accounts list!",
+    font_size_sample: "A",
   }
 };
 
