@@ -361,6 +361,18 @@
   }
   function closeSaveModal() { document.getElementById('saveModal').classList.remove('open'); }
 
+  function resetHomePage() {
+    // Clear CCP input and trigger full reset
+    ccpInput.value = '';
+    ccpInput.dispatchEvent(new Event('input'));
+    // Scroll main content back to top
+    const mc = document.querySelector('.main-content');
+    if (mc) mc.scrollTo({ top: 0, behavior: 'smooth' });
+    // Reset ccpKeyBadge / ripKeyBadge visibility
+    if (ccpKeyBadge) ccpKeyBadge.style.display = 'none';
+    if (ripKeyBadge) ripKeyBadge.style.display = 'none';
+  }
+
   function doSaveAccount() {
     const name = document.getElementById('nameInput').value.trim();
     if (!name) { showToast(t('fill_fields')); return; }
@@ -375,8 +387,9 @@
     addAccount({ name, ccp, ccpKey: ccpKeyInput.value, ripKey: ripKeyInput.value, rip: currentRIP });
     showToast(t('saved'));
     closeSaveModal();
-    ccpInput.value = ''; ccpInput.dispatchEvent(new Event('input'));
     document.getElementById('nameInput').value = '';
+    // Reset all fields and scroll to top
+    resetHomePage();
   }
 
   document.getElementById('saveModal').addEventListener('click', function(e) { if(e.target===this) closeSaveModal(); });
@@ -464,51 +477,77 @@
 
 <!-- OCR SCANNER MODAL -->
 <div class="modal-overlay" id="ocrScanModal" style="z-index:3000;">
-  <div class="modal" style="padding:0;overflow:hidden;border-radius:20px;max-width:360px;width:92%;">
-    <div style="background:var(--header-bg);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;">
+  <div class="modal" style="padding:0;overflow:hidden;border-radius:20px;max-width:380px;width:95%;">
+    <div style="background:var(--header-bg);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;">
       <div style="display:flex;align-items:center;gap:10px;">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
           <circle cx="12" cy="13" r="4"/>
         </svg>
-        <span style="color:#fff;font-weight:700;font-size:1rem;">قراءة شيك CCP</span>
+        <span style="color:#fff;font-weight:700;font-size:1rem;" data-i18n="ocr_scan_title">قراءة شيك CCP</span>
       </div>
       <button onclick="closeOCRScanner()" style="background:rgba(255,255,255,0.2);border:none;border-radius:8px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;font-size:18px;">×</button>
     </div>
-    <div style="position:relative;background:#000;width:100%;height:220px;overflow:hidden;">
+    <!-- Camera viewfinder — tall enough for a full cheque -->
+    <div style="position:relative;background:#000;width:100%;height:260px;overflow:hidden;">
       <video id="ocrVideo" autoplay playsinline muted style="width:100%;height:100%;object-fit:cover;display:block;"></video>
-      <!-- Guide overlay for cheque -->
-      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;gap:8px;">
-        <div style="width:280px;height:50px;border:2px solid rgba(34,197,94,0.8);border-radius:6px;position:relative;">
-          <div style="position:absolute;top:-18px;left:0;right:0;text-align:center;color:#22c55e;font-size:0.65rem;font-weight:600;">رقم الحساب</div>
-          <div id="ocrScanLine2" style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#22c55e,transparent);animation:scanLine 2s linear infinite 0.5s;"></div>
+      <!-- Full-cheque guide frame -->
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+        <div style="width:calc(100% - 24px);height:220px;border:2px solid rgba(34,197,94,0.85);border-radius:10px;position:relative;box-shadow:0 0 0 2000px rgba(0,0,0,0.35);">
+          <!-- Corner marks -->
+          <div style="position:absolute;top:-2px;left:-2px;width:18px;height:18px;border-top:3px solid #22c55e;border-left:3px solid #22c55e;border-radius:4px 0 0 0;"></div>
+          <div style="position:absolute;top:-2px;right:-2px;width:18px;height:18px;border-top:3px solid #22c55e;border-right:3px solid #22c55e;border-radius:0 4px 0 0;"></div>
+          <div style="position:absolute;bottom:-2px;left:-2px;width:18px;height:18px;border-bottom:3px solid #22c55e;border-left:3px solid #22c55e;border-radius:0 0 0 4px;"></div>
+          <div style="position:absolute;bottom:-2px;right:-2px;width:18px;height:18px;border-bottom:3px solid #22c55e;border-right:3px solid #22c55e;border-radius:0 0 4px 0;"></div>
+          <!-- Scan line -->
+          <div id="ocrScanLine2" style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#22c55e,transparent);animation:scanLine 2.5s linear infinite;"></div>
+          <!-- Label -->
+          <div style="position:absolute;bottom:6px;left:0;right:0;text-align:center;color:rgba(255,255,255,0.75);font-size:0.65rem;font-weight:600;letter-spacing:0.5px;">ضع الشيك بالكامل داخل الإطار</div>
         </div>
       </div>
-      <div id="ocrStatus" style="position:absolute;bottom:8px;left:0;right:0;text-align:center;color:#fff;font-size:0.75rem;opacity:0.9;padding:4px 12px;background:rgba(0,0,0,0.5);">وجّه الكاميرا نحو رقم الحساب في الشيك</div>
+      <div id="ocrStatus" style="position:absolute;bottom:5px;left:0;right:0;text-align:center;color:#fff;font-size:0.72rem;opacity:0.9;padding:3px 10px;background:rgba(0,0,0,0.55);">وجّه الكاميرا نحو الشيك</div>
     </div>
     <!-- Capture button -->
-    <div style="padding:12px 16px;background:var(--bg2);display:flex;gap:10px;align-items:center;justify-content:center;">
-      <button onclick="captureOCRFrame()" style="width:60px;height:60px;border-radius:50%;background:var(--accent);border:4px solid rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 15px rgba(37,99,235,0.4);transition:transform 0.15s;"
+    <div style="padding:10px 16px;background:var(--bg2);display:flex;gap:10px;align-items:center;justify-content:center;">
+      <button onclick="captureOCRFrame()" style="width:58px;height:58px;border-radius:50%;background:var(--accent);border:4px solid rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 15px rgba(37,99,235,0.4);transition:transform 0.15s;"
         onmousedown="this.style.transform='scale(0.9)'" onmouseup="this.style.transform='scale(1)'">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
           <circle cx="12" cy="13" r="4"/>
         </svg>
       </button>
     </div>
+    <!-- OCR Result — 4 fields -->
     <div id="ocrResultArea" style="display:none;padding:12px 16px;border-top:1px solid var(--border);">
-      <div style="font-size:0.75rem;color:var(--text2);margin-bottom:6px;">الرقم المُكتشف:</div>
-      <div id="ocrResultText" style="font-size:1.1rem;font-weight:800;color:var(--accent);direction:ltr;letter-spacing:2px;margin-bottom:10px;"></div>
+      <div style="font-size:0.75rem;color:var(--text2);margin-bottom:8px;font-weight:600;">البيانات المُكتشفة من الشيك:</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+        <div style="background:var(--bg2);border-radius:8px;padding:8px 10px;">
+          <div style="font-size:0.65rem;color:var(--text2);margin-bottom:3px;letter-spacing:1px;">رقم الحساب CCP</div>
+          <div id="ocrFieldCCP" style="font-size:1rem;font-weight:800;color:var(--accent);direction:ltr;letter-spacing:1.5px;">—</div>
+        </div>
+        <div style="background:var(--bg2);border-radius:8px;padding:8px 10px;">
+          <div style="font-size:0.65rem;color:var(--text2);margin-bottom:3px;letter-spacing:1px;">مفتاح CCP</div>
+          <div id="ocrFieldCCPKey" style="font-size:1rem;font-weight:800;color:var(--accent);direction:ltr;letter-spacing:1.5px;">—</div>
+        </div>
+        <div style="background:var(--bg2);border-radius:8px;padding:8px 10px;">
+          <div style="font-size:0.65rem;color:var(--text2);margin-bottom:3px;letter-spacing:1px;">رقم RIP</div>
+          <div id="ocrFieldRIP" style="font-size:0.8rem;font-weight:800;color:#93c5fd;direction:ltr;letter-spacing:1px;word-break:break-all;">—</div>
+        </div>
+        <div style="background:var(--bg2);border-radius:8px;padding:8px 10px;">
+          <div style="font-size:0.65rem;color:var(--text2);margin-bottom:3px;letter-spacing:1px;">مفتاح RIP</div>
+          <div id="ocrFieldRIPKey" style="font-size:1rem;font-weight:800;color:#93c5fd;direction:ltr;letter-spacing:1.5px;">—</div>
+        </div>
+      </div>
       <div style="display:flex;gap:8px;">
         <button class="btn btn-primary" id="ocrApplyBtn" onclick="applyOCRResult()" style="flex:1;">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-          تطبيق
+          <span data-i18n="apply">تطبيق</span>
         </button>
-        <button class="btn btn-outline" onclick="retryOCR()" style="flex:1;">إعادة المحاولة</button>
+        <button class="btn btn-outline" onclick="retryOCR()" style="flex:1;" data-i18n="retry">إعادة المحاولة</button>
       </div>
     </div>
-    <div style="padding:0 16px 16px;">
-      <button class="btn btn-outline" onclick="closeOCRScanner()" style="width:100%;margin-top:8px;">إغلاق</button>
+    <div style="padding:0 16px 14px;">
+      <button class="btn btn-outline" onclick="closeOCRScanner()" style="width:100%;margin-top:8px;" data-i18n="close">إغلاق</button>
     </div>
   </div>
 </div>
@@ -667,14 +706,16 @@ function closeOCRScanner() {
 
 function retryOCR() {
   document.getElementById('ocrResultArea').style.display = 'none';
-  document.getElementById('ocrStatus').textContent = 'وجّه الكاميرا نحو رقم الحساب في الشيك';
+  document.getElementById('ocrStatus').textContent = 'وجّه الكاميرا نحو الشيك';
   startOCRCamera();
 }
 
 async function startOCRCamera() {
   try {
     if (ocrStream) { ocrStream.getTracks().forEach(t => t.stop()); }
-    ocrStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } } });
+    ocrStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment', width: { ideal: 1920 }, height: { ideal: 1080 } }
+    });
     const video = document.getElementById('ocrVideo');
     video.srcObject = ocrStream;
     video.play();
@@ -693,33 +734,19 @@ async function captureOCRFrame() {
 
   document.getElementById('ocrStatus').textContent = '⏳ جارٍ التحليل...';
 
-  // Capture frame to canvas
+  // Capture full frame at native resolution
   const canvas = document.createElement('canvas');
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
+  canvas.width = video.videoWidth || 1280;
+  canvas.height = video.videoHeight || 720;
   const ctx = canvas.getContext('2d');
-  ctx.drawImage(video, 0, 0);
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-  // Try BarcodeDetector first (some phones can read barcodes on cheques)
-  if ('BarcodeDetector' in window) {
-    try {
-      const detector = new BarcodeDetector({ formats: ['code_128','code_39','ean_13','ean_8','qr_code'] });
-      const codes = await detector.detect(canvas);
-      if (codes.length > 0) {
-        const val = codes[0].rawValue.replace(/\D/g,'').slice(0,10);
-        if (val.length >= 6) { showOCRResult(val); return; }
-      }
-    } catch {}
-  }
-
-  // OCR via Tesseract.js (loaded dynamically)
+  // OCR full cheque with Tesseract.js
   await runTesseractOCR(canvas);
 }
 
 async function runTesseractOCR(canvas) {
-  // Check if Tesseract is loaded
   if (typeof Tesseract === 'undefined') {
-    // Load Tesseract.js from CDN
     document.getElementById('ocrStatus').textContent = '⏳ جارٍ تحميل محرك OCR...';
     await new Promise((resolve, reject) => {
       const s = document.createElement('script');
@@ -729,49 +756,82 @@ async function runTesseractOCR(canvas) {
     });
   }
 
-  document.getElementById('ocrStatus').textContent = '⏳ جارٍ قراءة النص...';
+  document.getElementById('ocrStatus').textContent = '⏳ جارٍ قراءة الشيك...';
 
   try {
-    // Enhance image for OCR: grayscale + contrast boost
-    const enhCanvas = document.createElement('canvas');
-    enhCanvas.width = canvas.width;
-    enhCanvas.height = canvas.height;
-    const ctx2 = enhCanvas.getContext('2d');
-    ctx2.drawImage(canvas, 0, 0);
-    const imgData = ctx2.getImageData(0, 0, enhCanvas.width, enhCanvas.height);
-    const data = imgData.data;
-    for (let i = 0; i < data.length; i += 4) {
-      const gray = 0.299 * data[i] + 0.587 * data[i+1] + 0.114 * data[i+2];
-      const enhanced = Math.min(255, Math.max(0, (gray - 128) * 1.5 + 128));
-      data[i] = data[i+1] = data[i+2] = enhanced;
+    // Enhance image: grayscale + contrast for better digit recognition
+    const enh = document.createElement('canvas');
+    enh.width = canvas.width; enh.height = canvas.height;
+    const ec = enh.getContext('2d');
+    ec.drawImage(canvas, 0, 0);
+    const id = ec.getImageData(0, 0, enh.width, enh.height);
+    const d = id.data;
+    for (let i = 0; i < d.length; i += 4) {
+      const g = 0.299*d[i] + 0.587*d[i+1] + 0.114*d[i+2];
+      const e = Math.min(255, Math.max(0, (g - 128) * 1.6 + 128));
+      d[i] = d[i+1] = d[i+2] = e;
     }
-    ctx2.putImageData(imgData, 0, 0);
+    ec.putImageData(id, 0, 0);
 
-    const result = await Tesseract.recognize(enhCanvas, 'ara+eng', {
-      tessedit_char_whitelist: '0123456789',
+    const result = await Tesseract.recognize(enh, 'ara+eng', {
+      tessedit_char_whitelist: '0123456789 \n',
       tessedit_pageseg_mode: '6',
     });
 
-    const text = result.data.text;
-    // Extract digits
-    const digits = text.replace(/\D/g, '');
-    // Find first sequence of 6-10 digits
-    const match = digits.match(/\d{6,10}/);
-    if (match) {
-      showOCRResult(match[0].slice(0, 10));
-    } else {
-      document.getElementById('ocrStatus').textContent = '⚠️ لم يُعثر على رقم — حاول مجدداً';
-    }
+    parseOCRChequeText(result.data.text);
   } catch (err) {
     document.getElementById('ocrStatus').textContent = '⚠️ خطأ في القراءة — حاول مجدداً';
   }
 }
 
-function showOCRResult(digits) {
-  ocrResult = digits.padEnd(10, '0').slice(0, 10);
-  document.getElementById('ocrResultText').textContent = ocrResult;
+// Extract up to 4 cheque fields from raw OCR text
+function parseOCRChequeText(text) {
+  const digits = text.replace(/\D/g, ' ').replace(/\s+/g, ' ').trim();
+  const groups = digits.split(' ').filter(g => g.length >= 2);
+
+  let ccpNum = '', ccpKey = '', ripNum = '', ripKey = '';
+
+  // Try to find 20-digit RIP (starts with 007)
+  const ripFull = text.replace(/\s/g,'').match(/007\d{17}/);
+  if (ripFull) {
+    ripNum = ripFull[0];
+    ripKey = ripNum.slice(18, 20);
+    ccpNum = ripNum.slice(8, 18);
+    const ck = calcCCPKey(ccpNum);
+    ccpKey = ck;
+  } else {
+    // Find longest digit group for CCP (10 digits)
+    const tens = groups.filter(g => g.length === 10);
+    const eights = groups.filter(g => g.length >= 6 && g.length <= 10);
+    if (tens.length > 0) {
+      ccpNum = tens[0];
+    } else if (eights.length > 0) {
+      ccpNum = eights[0].padEnd(10, '0').slice(0,10);
+    }
+    if (ccpNum) {
+      ccpKey = calcCCPKey(ccpNum);
+      const rk = calcRIPKey(ccpNum);
+      ripKey = rk;
+      ripNum = buildRIP(ccpNum, rk);
+    }
+    // Look for 2-digit key group
+    const twos = groups.filter(g => g.length === 2);
+    if (twos.length > 0 && !ripFull) ccpKey = twos[0];
+    if (twos.length > 1 && !ripFull) ripKey = twos[1];
+  }
+
+  if (!ccpNum) {
+    document.getElementById('ocrStatus').textContent = '⚠️ لم يُعثر على بيانات — حاول مجدداً';
+    return;
+  }
+
+  ocrResult = ccpNum;
+  document.getElementById('ocrFieldCCP').textContent = ccpNum || '—';
+  document.getElementById('ocrFieldCCPKey').textContent = ccpKey || '—';
+  document.getElementById('ocrFieldRIP').textContent = ripNum ? formatRIPDisplay(ripNum) : '—';
+  document.getElementById('ocrFieldRIPKey').textContent = ripKey || '—';
   document.getElementById('ocrResultArea').style.display = 'block';
-  document.getElementById('ocrStatus').textContent = '✓ تم العثور على رقم!';
+  document.getElementById('ocrStatus').textContent = '✓ تم قراءة الشيك';
   stopOCRCamera();
 }
 
@@ -781,7 +841,7 @@ function applyOCRResult() {
   const input = document.getElementById('ccpInput');
   input.value = ocrResult.replace(/\D/g,'').slice(0,10);
   input.dispatchEvent(new Event('input'));
-  showToast('✓ تم ملء رقم الحساب من الشيك');
+  showToast('✓ تم ملء البيانات من الشيك');
 }
 </script>
 
