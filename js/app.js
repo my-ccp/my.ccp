@@ -15,12 +15,34 @@ appChannel.onmessage = (e) => {
     updateLangButtons();
     if (typeof updateLangBtns === 'function') updateLangBtns();
   }
+  if (e.data.type === 'fontScale') {
+    document.documentElement.style.setProperty('--font-scale', e.data.value);
+    if (typeof updateFontScaleUI === 'function') updateFontScaleUI(e.data.value);
+  }
 };
+
+// ===== FONT SCALE =====
+(function() {
+  const scale = parseFloat(localStorage.getItem('fontScale') || '1');
+  document.documentElement.style.setProperty('--font-scale', scale);
+})();
+
+function applyFontScale(scale, broadcast = true) {
+  document.documentElement.style.setProperty('--font-scale', scale);
+  localStorage.setItem('fontScale', scale);
+  if (broadcast) appChannel.postMessage({ type: 'fontScale', value: scale });
+}
+
+// Listen for font scale sync across tabs
+// (added to onmessage below)
 
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', () => {
   applyTheme(window.APP_THEME, false);
   applyLang(window.APP_LANG, false);
+  // Re-apply font scale after DOM ready (in case CSS var was late)
+  const scale = parseFloat(localStorage.getItem('fontScale') || '1');
+  document.documentElement.style.setProperty('--font-scale', scale);
 });
 
 // ===== THEME =====
