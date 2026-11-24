@@ -671,7 +671,7 @@ body[data-lang="en"] .account-checkbox { right: auto; left: 12px; }
   display: flex;
   flex-direction: column;
   box-shadow: -6px 0 32px rgba(0,0,0,0.3);
-  overflow: hidden;
+  overflow: clip;
 }
 .sidebar.open { transform: translateX(0); }
 
@@ -707,6 +707,14 @@ body[data-lang="en"] .header-icons { order: -1; }
 body[data-lang="fr"] .header-title,
 body[data-lang="en"] .header-title  { order: 0; }
 
+/* FR/EN: within header-icons, swap menu to left and camera/QR to right */
+body[data-lang="fr"] #menuBtn,
+body[data-lang="en"] #menuBtn { order: -1; }
+body[data-lang="fr"] #ocrBtn,
+body[data-lang="en"] #ocrBtn { order: 1; }
+body[data-lang="fr"] #qrBtn,
+body[data-lang="en"] #qrBtn { order: 2; }
+
 .sidebar-header {
   padding: 32px 20px 20px;
   display: flex;
@@ -740,7 +748,7 @@ body[data-lang="en"] .header-title  { order: 0; }
   border-radius: 20px;
 }
 
-.sidebar-menu { flex: 1; padding: 12px 0; overflow-y: auto; }
+.sidebar-menu { flex: 1; padding: 12px 0 24px; overflow-y: auto; min-height: 0; }
 
 .sidebar-section-title {
   font-size: 0.7rem;
