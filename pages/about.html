@@ -11,6 +11,210 @@
   <link rel="apple-touch-icon" href="../icons/icon-192.png"/>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="../css/main.css"/>
+  <style>
+    .about-hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 28px 0 24px;
+      position: relative;
+    }
+    .about-logo {
+      width: 96px;
+      height: 96px;
+      border-radius: 24px;
+      box-shadow: 0 8px 32px rgba(37,99,235,0.25);
+      margin-bottom: 14px;
+    }
+    .about-app-name {
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: 1px;
+    }
+    .about-app-name span { color: var(--accent-green); }
+    .about-version-badge {
+      display: inline-block;
+      background: rgba(37,99,235,0.1);
+      color: var(--accent);
+      border: 1px solid rgba(37,99,235,0.2);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-top: 8px;
+      letter-spacing: 0.5px;
+    }
+    .about-desc-block {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+      font-size: 1rem;
+      color: var(--text);
+      line-height: 1.9;
+      border: 1px solid var(--border);
+    }
+    .about-section {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+    }
+    .about-section h3 {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .about-section ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .about-section ul li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.95rem;
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .feat-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: rgba(37,99,235,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .feat-icon svg { color: var(--accent); }
+    .about-tools-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .tool-card {
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 14px 12px;
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    .tool-card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(37,99,235,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2px;
+    }
+    .tool-card-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .tool-card-desc {
+      font-size: 0.78rem;
+      color: var(--text2);
+      line-height: 1.4;
+    }
+    .abbrev-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .abbrev-row:last-child { border-bottom: none; }
+    .abbrev-code {
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--accent);
+      min-width: 48px;
+      letter-spacing: 1px;
+    }
+    .abbrev-sep {
+      color: var(--border);
+      font-size: 1.1rem;
+    }
+    .abbrev-label {
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+    .notice-block {
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      margin-bottom: 16px;
+      background: rgba(234,179,8,0.07);
+      border: 1px solid rgba(234,179,8,0.25);
+    }
+    .notice-block h3 {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #ca8a04;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .notice-block p {
+      font-size: 0.93rem;
+      line-height: 1.85;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .official-link-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .official-link-label { font-size: 0.85rem; color: var(--text2); font-weight: 600; }
+    .official-link-url { color: var(--accent); font-size: 0.95rem; font-weight: 700; text-decoration: underline; word-break: break-all; }
+    .dev-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 24px;
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      text-align: center;
+    }
+    .dev-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg,var(--accent),var(--accent-green));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .dev-name { font-size: 1rem; font-weight: 800; color: var(--text); }
+    .dev-role { font-size: 0.85rem; color: var(--text2); }
+  </style>
 </head>
 <body>
 <div id="app-wrapper">
@@ -28,76 +232,143 @@
     <div style="width:42px;"></div>
   </header>
 
-  <main class="main-content subpage-content">
-    <!-- Logo -->
-    <div style="display:flex;flex-direction:column;align-items:center;padding:20px 0 24px;">
-      <img src="../icons/icon-192.png" alt="MY CCP" style="width:90px;height:90px;border-radius:22px;box-shadow:var(--shadow);"/>
-      <div style="font-size:1.5rem;font-weight:800;margin-top:12px;color:var(--accent);">MY <span style="color:var(--accent-green);">CCP</span></div>
+  <main class="main-content subpage-content" style="padding:16px;">
+
+    <!-- Hero -->
+    <div class="about-hero">
+      <img src="../icons/icon-192.png" alt="MY CCP" class="about-logo"/>
+      <div class="about-app-name">MY <span>CCP</span></div>
+      <div class="about-version-badge" data-i18n="version_label">الإصدار 3.0.0</div>
     </div>
 
     <!-- Description -->
-    <div class="info-section">
-      <p data-i18n="about_desc">تطبيق MY CCP يساعدك على تحويل رقم حسابك البريدي CCP إلى رقم RIP (ريب) بكل سهولة وسرعة.</p>
+    <div class="about-desc-block" data-i18n="about_desc">
+      تطبيق MY CCP هو تطبيق جزائري شامل لإدارة حسابات بريد الجزائر (CCP). يتيح لك تحويل أرقام الحسابات البريدية CCP إلى أرقام RIP، حفظ حساباتك، تتبع العمليات، واستخدام المفضلة — كل ذلك بدون إنترنت وبخصوصية تامة.
+    </div>
+
+    <!-- Tools / Services -->
+    <div class="about-section">
+      <h3>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <span data-i18n="about_services">خدمات التطبيق</span>
+      </h3>
+      <div class="about-tools-grid">
+        <div class="tool-card">
+          <div class="tool-card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          </div>
+          <div class="tool-card-title" data-i18n="tool_ccp_rip">CCP → RIP</div>
+          <div class="tool-card-desc" data-i18n="tool_ccp_rip_desc">تحويل فوري لرقم الحساب البريدي إلى رقم RIP</div>
+        </div>
+        <div class="tool-card">
+          <div class="tool-card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="6" height="6" rx="1"/><rect x="3" y="13" width="6" height="6" rx="1"/><line x1="13" y1="7" x2="21" y2="7"/><line x1="13" y1="11" x2="21" y2="11"/><line x1="13" y1="15" x2="21" y2="15"/><line x1="13" y1="19" x2="21" y2="19"/></svg>
+          </div>
+          <div class="tool-card-title" data-i18n="accounts">الحسابات</div>
+          <div class="tool-card-desc" data-i18n="tool_accounts_desc">حفظ وإدارة حسابات CCP محليًا</div>
+        </div>
+        <div class="tool-card">
+          <div class="tool-card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <div class="tool-card-title" data-i18n="sidebar_favorites">المفضلة</div>
+          <div class="tool-card-desc" data-i18n="tool_favorites_desc">وصول سريع للحسابات المستخدمة أكثر</div>
+        </div>
+      </div>
     </div>
 
     <!-- Features -->
-    <div class="info-section">
+    <div class="about-section">
       <h3>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
         <span data-i18n="about_features">مميزات التطبيق</span>
       </h3>
       <ul>
-        <li data-i18n="feat1">تحويل فوري من CCP إلى RIP</li>
-        <li data-i18n="feat2">حفظ الحسابات محليًا دون إنترنت</li>
-        <li data-i18n="feat3">واجهة سهلة وبسيطة</li>
-        <li data-i18n="feat4">متعدد اللغات</li>
-        <li data-i18n="feat5">الوضع الليلي والنهاري</li>
+        <li>
+          <div class="feat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+          <span data-i18n="feat1">تحويل فوري من CCP إلى RIP</span>
+        </li>
+        <li>
+          <div class="feat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+          <span data-i18n="feat2">حفظ الحسابات محليًا دون إنترنت</span>
+        </li>
+        <li>
+          <div class="feat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+          <span data-i18n="feat3">واجهة سهلة وبسيطة</span>
+        </li>
+        <li>
+          <div class="feat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+          <span data-i18n="feat4">متعدد اللغات (عربي، فرنسي، إنجليزي)</span>
+        </li>
+        <li>
+          <div class="feat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></div>
+          <span data-i18n="feat5">الوضع الليلي والنهاري</span>
+        </li>
+        <li>
+          <div class="feat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <span data-i18n="feat6">خصوصية كاملة — لا إنترنت للبيانات</span>
+        </li>
+        <li>
+          <div class="feat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg></div>
+          <span data-i18n="feat7">استيراد وتصدير الحسابات</span>
+        </li>
+        <li>
+          <div class="feat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
+          <span data-i18n="feat8">قابل للتثبيت كتطبيق (PWA)</span>
+        </li>
       </ul>
-    </div>
-
-    <!-- Important Notice — auto-translated by app language -->
-    <div class="info-section" style="border-radius:var(--radius);padding:18px;">
-      <h3 style="margin-bottom:12px;">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        <span data-i18n="important_notice_title">ملاحظة مهمة</span>
-      </h3>
-      <p style="font-size:0.95rem;line-height:1.85;color:var(--text);margin-bottom:14px;" data-i18n="important_notice_text">
-        هذا التطبيق ليس تابعا لبريد الجزائر أو أي كيان حكومي رسمي، الحسابات والخدمات المقدمة هي لأغراض إرشادية فقط، يرجى التحقق من أي معلومات من المصادر الرسمية قبل استخدامها.
-      </p>
-      <div style="font-weight:700;font-size:0.9rem;margin-bottom:8px;color:var(--text);" data-i18n="official_sources">المصادر الرسمية الموصى بها:</div>
-      <div style="font-size:0.9rem;margin-bottom:4px;color:var(--text2);" data-i18n="official_site_label">الموقع الرسمي لبريد الجزائر</div>
-      <a href="https://www.poste.dz" target="_blank" rel="noopener" style="color:var(--accent);font-size:0.95rem;font-weight:700;text-decoration:underline;word-break:break-all;">https://www.poste.dz</a>
     </div>
 
     <!-- Abbreviations -->
-    <div class="info-section">
+    <div class="about-section">
       <h3>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6"/><path d="M9 12h6"/><path d="M9 15h4"/></svg>
-        <span data-i18n="abbrev_title">الإختصارات المستخدمة في التطبيق</span>
+        <span data-i18n="abbrev_title">الاختصارات المستخدمة في التطبيق</span>
       </h3>
-      <ul>
-        <li><strong>CCP</strong> : <span data-i18n="abbrev_ccp">الحساب الجاري البريدي</span></li>
-        <li><strong>RIP</strong> : <span data-i18n="abbrev_rip">كشف الهوية البريدية</span></li>
-      </ul>
-    </div>
-
-    <!-- Version info -->
-    <div class="info-section">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <span style="font-size:0.95rem;color:var(--text2);font-weight:500;" data-i18n="version">الإصدار</span>
-        <span style="font-size:1rem;font-weight:700;color:var(--text);letter-spacing:1px;">1.0.0</span>
+      <div class="abbrev-row">
+        <span class="abbrev-code">CCP</span>
+        <span class="abbrev-sep">:</span>
+        <span class="abbrev-label" data-i18n="abbrev_ccp">الحساب الجاري البريدي</span>
+      </div>
+      <div class="abbrev-row">
+        <span class="abbrev-code">RIP</span>
+        <span class="abbrev-sep">:</span>
+        <span class="abbrev-label" data-i18n="abbrev_rip">كشف الهوية البريدية</span>
+      </div>
+      <div class="abbrev-row">
+        <span class="abbrev-code">DZ</span>
+        <span class="abbrev-sep">:</span>
+        <span class="abbrev-label" data-i18n="abbrev_dz">الجزائر (رمز البلد في RIP)</span>
       </div>
     </div>
 
-    <!-- Developer credit -->
-    <div class="info-section" style="text-align:center;padding:16px;border-radius:var(--radius);background:var(--card);">
-      <div style="font-size:1rem;color:var(--text2);font-weight:600;" data-i18n="developer_credit">تم التطوير بواسطة Ahmedcrypto</div>
+    <!-- Important Notice -->
+    <div class="notice-block">
+      <h3>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span data-i18n="important_notice_title">ملاحظة مهمة</span>
+      </h3>
+      <p data-i18n="important_notice_text">
+        هذا التطبيق غير تابع لبريد الجزائر أو أي كيان حكومي رسمي. الحسابات والخدمات المقدمة هي لأغراض إرشادية فقط. يرجى التحقق من أي معلومات من المصادر الرسمية قبل استخدامها.
+      </p>
+      <div class="official-link-row">
+        <span class="official-link-label" data-i18n="official_sources">المصادر الرسمية الموصى بها:</span>
+        <span class="official-link-label" data-i18n="official_site_label">الموقع الرسمي لبريد الجزائر</span>
+        <a href="https://www.poste.dz" target="_blank" rel="noopener" class="official-link-url">https://www.poste.dz</a>
+      </div>
+    </div>
+
+    <!-- Developer -->
+    <div class="dev-card">
+      <div class="dev-avatar">A</div>
+      <div class="dev-name">Ahmedcrypto</div>
+      <div class="dev-role" data-i18n="developer_role">مطور التطبيق</div>
+      <div style="font-size:0.8rem;color:var(--text2);margin-top:4px;" data-i18n="version">الإصدار <strong>3.0.0</strong></div>
     </div>
 
   </main>
 
 </div>
-
 </div><!-- end #app-wrapper -->
 <div id="toast" class="toast"></div>
 <script src="../js/i18n.js"></script>
