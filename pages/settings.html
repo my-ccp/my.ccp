@@ -234,11 +234,17 @@
 
   // ---- Clear Data ----
   function confirmClearData() {
-    document.getElementById('clearDataModal').style.display = 'flex';
+    const modal = document.getElementById('clearDataModal');
+    modal.style.display = 'flex';
+    // Use setTimeout so display:flex applies before adding .open (triggers CSS transition)
+    setTimeout(() => modal.classList.add('open'), 10);
   }
 
   function closeClearDataModal() {
-    document.getElementById('clearDataModal').style.display = 'none';
+    const modal = document.getElementById('clearDataModal');
+    modal.classList.remove('open');
+    // Wait for transition to finish before hiding
+    setTimeout(() => { modal.style.display = 'none'; }, 350);
   }
 
   function executeClearData() {
