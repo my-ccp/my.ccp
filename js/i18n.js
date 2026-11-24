@@ -225,6 +225,10 @@ const TRANSLATIONS = {
     // Scanner
     qr_scan_title: "مسح QR Code",
     ocr_scan_title: "قراءة شيك CCP",
+    // Shared buttons
+    apply: "تطبيق",
+    retry: "إعادة المحاولة",
+    close: "إغلاق",
   },
   fr: {
     app_name: "MY CCP",
@@ -451,6 +455,9 @@ const TRANSLATIONS = {
     remove_from_fav: "Retirer des favoris",
     qr_scan_title: "Scanner QR Code",
     ocr_scan_title: "Lire chèque CCP",
+    apply: "Appliquer",
+    retry: "Réessayer",
+    close: "Fermer",
   },
   en: {
     app_name: "MY CCP",
@@ -677,6 +684,9 @@ const TRANSLATIONS = {
     remove_from_fav: "Remove from Favorites",
     qr_scan_title: "Scan QR Code",
     ocr_scan_title: "Read CCP Cheque",
+    apply: "Apply",
+    retry: "Retry",
+    close: "Close",
   }
 };
 
