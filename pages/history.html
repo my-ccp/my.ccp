@@ -181,23 +181,23 @@
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
 
-        <!-- Card Top: chip icon -->
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-          <svg width="28" height="21" viewBox="0 0 34 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="1" y="1" width="32" height="24" rx="4" fill="#d4af37" stroke="#b8960a" stroke-width="1"/>
-            <line x1="12" y1="1" x2="12" y2="25" stroke="#b8960a" stroke-width="1"/>
-            <line x1="22" y1="1" x2="22" y2="25" stroke="#b8960a" stroke-width="1"/>
-            <line x1="1" y1="9" x2="33" y2="9" stroke="#b8960a" stroke-width="1"/>
-            <line x1="1" y1="17" x2="33" y2="17" stroke="#b8960a" stroke-width="1"/>
-            <rect x="12" y="9" width="10" height="8" rx="1" fill="#c9a227" stroke="#b8960a" stroke-width="0.5"/>
-          </svg>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-        </div>
-
-        <!-- CCP Number - large display -->
-        <div style="margin-bottom:8px;">
-          <div style="font-size:0.75rem;color:rgba(255,255,255,0.65);margin-bottom:3px;letter-spacing:1.5px;text-transform:uppercase;">CCP</div>
-          <div style="font-size:1.25rem;font-weight:800;color:#ffffff;direction:ltr;unicode-bidi:bidi-override;letter-spacing:2px;">${item.ccp}</div>
+        <!-- Card Top: chip + name | CCP number -->
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;gap:8px;">
+          <div style="display:flex;align-items:center;gap:8px;min-width:0;flex:1;">
+            <svg width="28" height="21" viewBox="0 0 34 26" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+              <rect x="1" y="1" width="32" height="24" rx="4" fill="#d4af37" stroke="#b8960a" stroke-width="1"/>
+              <line x1="12" y1="1" x2="12" y2="25" stroke="#b8960a" stroke-width="1"/>
+              <line x1="22" y1="1" x2="22" y2="25" stroke="#b8960a" stroke-width="1"/>
+              <line x1="1" y1="9" x2="33" y2="9" stroke="#b8960a" stroke-width="1"/>
+              <line x1="1" y1="17" x2="33" y2="17" stroke="#b8960a" stroke-width="1"/>
+              <rect x="12" y="9" width="10" height="8" rx="1" fill="#c9a227" stroke="#b8960a" stroke-width="0.5"/>
+            </svg>
+            ${item.name ? `<span style="font-size:1rem;font-weight:800;color:#ffffff;letter-spacing:0.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${item.name}</span>` : ''}
+          </div>
+          <div style="text-align:end;flex-shrink:0;">
+            <div style="font-size:0.65rem;color:rgba(255,255,255,0.65);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px;">CCP</div>
+            <div style="font-size:1.1rem;font-weight:800;color:#ffffff;direction:ltr;unicode-bidi:bidi-override;letter-spacing:1.5px;">${item.ccp}</div>
+          </div>
         </div>
 
         <!-- Keys row -->
@@ -215,10 +215,10 @@
           </div>
         </div>
 
-        <!-- RIP number - highlighted, clickable to copy -->
+        <!-- RIP number - clickable to copy -->
         <div style="background:rgba(0,0,0,0.25);border-radius:10px;padding:7px 12px;margin-bottom:8px;cursor:pointer;" onclick='copyText("${item.rip}")'>
           <div style="font-size:0.75rem;color:rgba(255,255,255,0.6);margin-bottom:2px;letter-spacing:1.5px;">RIP</div>
-          <div style="font-size:1.1rem;font-weight:800;color:#93c5fd;direction:ltr;unicode-bidi:bidi-override;letter-spacing:1.5px;">${formatRIP(item.rip)}</div>
+          <div class="rip-value" style="font-size:1.1rem;font-weight:800;color:#93c5fd;direction:ltr;unicode-bidi:bidi-override;letter-spacing:1.5px;">${formatRIP(item.rip)}</div>
         </div>
 
         <!-- Actions -->
