@@ -33,7 +33,6 @@
 
     <!-- Language -->
     <div class="settings-section">
-      <div class="settings-title" data-i18n="language">اللغة</div>
       <div class="settings-item">
         <div class="settings-item-left">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
@@ -72,7 +71,6 @@
 
     <!-- Appearance -->
     <div class="settings-section">
-      <div class="settings-title" data-i18n="dark_mode">المظهر</div>
       <div class="settings-item">
         <div class="settings-item-left">
           <svg id="themeIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -84,9 +82,31 @@
       </div>
     </div>
 
+    <!-- Font Size -->
+    <div class="settings-section">
+      <div class="settings-item" style="flex-direction:column;align-items:stretch;gap:12px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="settings-item-left">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/>
+            </svg>
+            <div class="settings-item-label" data-i18n="font_size">حجم الخط</div>
+          </div>
+          <span id="fontScaleLabel" style="font-size:0.9rem;font-weight:700;color:var(--accent);min-width:36px;text-align:center;">100%</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:0 2px;">
+          <span style="font-size:0.75rem;color:var(--text2);font-weight:700;">أ</span>
+          <input type="range" id="fontScaleSlider"
+            min="0.75" max="1.4" step="0.05" value="1"
+            style="flex:1;accent-color:var(--accent);height:4px;cursor:pointer;"
+            oninput="onFontScaleChange(this.value)"/>
+          <span style="font-size:1.1rem;color:var(--text2);font-weight:700;">أ</span>
+        </div>
+      </div>
+    </div>
+
     <!-- Data & Privacy -->
     <div class="settings-section">
-      <div class="settings-title" data-i18n="clear_data_desc">البيانات والخصوصية</div>
 
       <!-- Allow History Toggle -->
       <div class="settings-item">
@@ -246,11 +266,28 @@
     }
   });
 
+  // ---- Font Scale ----
+  function onFontScaleChange(val) {
+    const scale = parseFloat(val);
+    applyFontScale(scale, true);
+    updateFontScaleUI(scale);
+  }
+
+  function updateFontScaleUI(scale) {
+    const slider = document.getElementById('fontScaleSlider');
+    const label  = document.getElementById('fontScaleLabel');
+    if (slider) slider.value = scale;
+    if (label)  label.textContent = Math.round(scale * 100) + '%';
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     updateThemeToggle();
     updateLangDisplay();
     updateThemeLabel();
     updateHistoryToggle();
+    // Init font scale slider
+    const scale = parseFloat(localStorage.getItem('fontScale') || '1');
+    updateFontScaleUI(scale);
   });
 </script>
 </body>
