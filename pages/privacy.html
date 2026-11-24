@@ -60,25 +60,65 @@
       text-align: center;
     }
     .privacy-contact a { color: #60a5fa; font-weight: 700; text-decoration: underline; font-size: 1rem; }
-    .lang-tabs {
+    .privacy-lang-selector {
       display: flex;
-      gap: 8px;
+      align-items: center;
+      justify-content: flex-end;
       margin-bottom: 24px;
-      flex-wrap: wrap;
+      position: relative;
     }
-    .lang-tab {
-      padding: 8px 18px;
-      border-radius: 20px;
+    .priv-lang-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 16px;
+      border-radius: 12px;
+      border: 1.5px solid #1e2d60;
+      background: #0a0a18;
+      color: #ccddff;
+      font-family: inherit;
       font-size: 0.9rem;
       font-weight: 700;
-      border: 2px solid #111130;
-      background: #0a0a18;
-      color: #7a90bb;
       cursor: pointer;
-      font-family: inherit;
-      transition: all 0.2s;
+      transition: border-color 0.2s;
     }
-    .lang-tab.active { background: #2563eb; color: white; border-color: #2563eb; }
+    .priv-lang-btn .chevron { transition: transform 0.2s; }
+    .priv-lang-btn.open { border-color: #2563eb; }
+    .priv-lang-btn.open .chevron { transform: rotate(180deg); }
+    .priv-lang-dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      background: #0a0a18;
+      border: 1.5px solid #1e2d60;
+      border-radius: 12px;
+      overflow: hidden;
+      z-index: 100;
+      min-width: 160px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+    .priv-lang-dropdown.open { display: block; }
+    .priv-lang-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 11px 16px;
+      background: none;
+      border: none;
+      color: #ccddff;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: start;
+      transition: background 0.15s;
+    }
+    .priv-lang-item:hover { background: rgba(96,165,250,0.08); }
+    .priv-lang-item.active { color: #60a5fa; }
+    .priv-lang-item .check { margin-inline-start: auto; opacity: 0; }
+    .priv-lang-item.active .check { opacity: 1; }
     .main-content { padding-bottom: 24px; }
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: #000; }
@@ -101,16 +141,33 @@
 
   <main class="main-content subpage-content" style="padding:16px;">
 
-    <!-- Language tabs -->
-    <div class="lang-tabs">
-      <button class="lang-tab" onclick="setPrivacyLang('ar',this)">العربية</button>
-      <button class="lang-tab" onclick="setPrivacyLang('fr',this)">Français</button>
-      <button class="lang-tab" onclick="setPrivacyLang('en',this)">English</button>
+    <!-- Language selector dropdown -->
+    <div class="privacy-lang-selector">
+      <div style="position:relative;">
+        <button class="priv-lang-btn" id="privLangBtn" onclick="togglePrivLangDropdown()">
+          <span id="privSelectedFlag">🇺🇸</span>
+          <span id="privSelectedName">English</span>
+          <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="priv-lang-dropdown" id="privLangDropdown">
+          <button class="priv-lang-item" data-lang="ar" onclick="setPrivacyLang('ar',this)">
+            <span>🇩🇿</span><span>العربية</span>
+            <svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </button>
+          <button class="priv-lang-item" data-lang="fr" onclick="setPrivacyLang('fr',this)">
+            <span>🇫🇷</span><span>Français</span>
+            <svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </button>
+          <button class="priv-lang-item active" data-lang="en" onclick="setPrivacyLang('en',this)">
+            <span>🇺🇸</span><span>English</span>
+            <svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- AR -->
     <div class="privacy-lang" id="pl_ar" dir="rtl">
-      <div class="privacy-badge">سياسة الخصوصية · MY CCP</div>
 
       <div class="privacy-block">
         <div class="privacy-block-title">📱 MY CCP — سياسة الخصوصية</div>
@@ -128,15 +185,12 @@
       </div>
 
       <div class="privacy-contact">
-        <div style="font-size:0.95rem;color:#7a90bb;margin-bottom:10px;font-weight:700;">للاستفسارات المتعلقة بالخصوصية:</div>
-        <a href="mailto:myccp.app@gmail.com">myccp.app@gmail.com</a>
-        <div style="font-size:0.8rem;color:#4a5a7a;margin-top:8px;">آخر تحديث: نوفمبر 2026</div>
+        <div style="font-size:0.8rem;color:#4a5a7a;">آخر تحديث: نوفمبر 2026</div>
       </div>
     </div>
 
     <!-- FR -->
     <div class="privacy-lang" id="pl_fr" dir="ltr" style="display:none;">
-      <div class="privacy-badge">Politique de Confidentialité · MY CCP</div>
 
       <div class="privacy-block">
         <div class="privacy-block-title">📱 MY CCP — Politique de Confidentialité</div>
@@ -154,15 +208,12 @@ Nous pouvons mettre à jour cette politique de temps à autre. Les changements i
       </div>
 
       <div class="privacy-contact">
-        <div style="font-size:0.95rem;color:#7a90bb;margin-bottom:10px;font-weight:700;">Contact confidentialité :</div>
-        <a href="mailto:myccp.app@gmail.com">myccp.app@gmail.com</a>
-        <div style="font-size:0.8rem;color:#4a5a7a;margin-top:8px;">Dernière mise à jour : Novembre 2026</div>
+        <div style="font-size:0.8rem;color:#4a5a7a;">Dernière mise à jour : Novembre 2026</div>
       </div>
     </div>
 
     <!-- EN -->
     <div class="privacy-lang" id="pl_en" dir="ltr" style="display:none;">
-      <div class="privacy-badge">Privacy Policy · MY CCP</div>
 
       <div class="privacy-block">
         <div class="privacy-block-title">📱 MY CCP — Privacy Policy</div>
@@ -180,9 +231,7 @@ We may update this policy from time to time. Significant changes will be announc
       </div>
 
       <div class="privacy-contact">
-        <div style="font-size:0.95rem;color:#7a90bb;margin-bottom:10px;font-weight:700;">Privacy inquiries:</div>
-        <a href="mailto:myccp.app@gmail.com">myccp.app@gmail.com</a>
-        <div style="font-size:0.8rem;color:#4a5a7a;margin-top:8px;">Last updated: November 2026</div>
+        <div style="font-size:0.8rem;color:#4a5a7a;">Last updated: November 2026</div>
       </div>
     </div>
 
@@ -194,24 +243,54 @@ We may update this policy from time to time. Significant changes will be announc
 <script src="../js/i18n.js"></script>
 <script src="../js/app.js"></script>
 <script>
+  const PRIV_LANG_META = {
+    ar: { flag: '🇩🇿', name: 'العربية' },
+    fr: { flag: '🇫🇷', name: 'Français' },
+    en: { flag: '🇺🇸', name: 'English' }
+  };
+
   // Privacy page always defaults to English regardless of app language
   setPrivacyLang('en', null);
 
+  function togglePrivLangDropdown() {
+    const btn = document.getElementById('privLangBtn');
+    const dd  = document.getElementById('privLangDropdown');
+    const open = dd.classList.toggle('open');
+    btn.classList.toggle('open', open);
+  }
+
   function setPrivacyLang(lang, btn) {
+    // Close dropdown
+    document.getElementById('privLangDropdown').classList.remove('open');
+    document.getElementById('privLangBtn').classList.remove('open');
+
     document.querySelectorAll('.privacy-lang').forEach(el => el.style.display = 'none');
-    document.querySelectorAll('.lang-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.priv-lang-item').forEach(b => b.classList.remove('active'));
     const target = document.getElementById('pl_' + lang);
     if (target) target.style.display = 'block';
-    if (btn) btn.classList.add('active');
-    else {
-      // find the matching tab
-      document.querySelectorAll('.lang-tab').forEach(b => {
-        if (b.getAttribute('onclick').includes("'" + lang + "'")) b.classList.add('active');
-      });
-    }
+
+    // Mark active item
+    document.querySelectorAll('.priv-lang-item').forEach(b => {
+      if (b.getAttribute('data-lang') === lang) b.classList.add('active');
+    });
+
+    // Update button display
+    const meta = PRIV_LANG_META[lang] || PRIV_LANG_META['en'];
+    document.getElementById('privSelectedFlag').textContent = meta.flag;
+    document.getElementById('privSelectedName').textContent = meta.name;
+
     // Set direction
     document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
   }
+
+  // Close dropdown on outside click
+  document.addEventListener('click', e => {
+    const wrapper = document.querySelector('.privacy-lang-selector');
+    if (wrapper && !wrapper.contains(e.target)) {
+      document.getElementById('privLangDropdown').classList.remove('open');
+      document.getElementById('privLangBtn').classList.remove('open');
+    }
+  });
 </script>
 </body>
 </html>
