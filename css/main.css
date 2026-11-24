@@ -1396,3 +1396,41 @@ body:has(.subpage-content) {
   display: none;
 }
 .lang-dropdown-item.active .check { display: block; }
+
+/* ===== QR / OCR SCANNER ===== */
+@keyframes scanLine {
+  0%   { top: 0;    opacity: 1;   }
+  100% { top: 100%; opacity: 0.3; }
+}
+
+/* ===== STAR / FAVORITE BUTTON on account cards ===== */
+.fav-star-btn {
+  position: absolute;
+  top: 10px;
+  inset-inline-end: 10px;
+  z-index: 2;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+  border-radius: 50%;
+  transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
+}
+.fav-star-btn:active { transform: scale(0.8); }
+.fav-star-btn.active svg { filter: drop-shadow(0 0 4px rgba(245,158,11,0.6)); }
+
+/* ===== ACCOUNTS HEADER with fav count ===== */
+.accounts-header {
+  font-size: 0.8rem;
+  color: var(--text2);
+  margin-bottom: 12px;
+  padding: 0 2px;
+  font-weight: 600;
+}
+
+/* ===== SIDEBAR FAVORITES ITEM ===== */
+.sidebar-item svg[fill="#f59e0b"] { color: #f59e0b; }
+
+/* ===== HEADER SCAN BUTTONS spacing ===== */
+.header-icons .header-btn { margin-inline-start: 2px; }
