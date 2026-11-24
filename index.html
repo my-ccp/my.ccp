@@ -204,6 +204,10 @@
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       <span data-i18n="about">حول التطبيق</span>
     </button>
+    <button class="sidebar-item" onclick="navigateTo('pages/faq.html')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span data-i18n="faq">الأسئلة الشائعة</span>
+    </button>
     <button class="sidebar-item" onclick="navigateTo('pages/privacy.html')">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       <span data-i18n="privacy">سياسة الخصوصية</span>
@@ -365,12 +369,17 @@
     // Clear CCP input and trigger full reset
     ccpInput.value = '';
     ccpInput.dispatchEvent(new Event('input'));
-    // Scroll main content back to top
+    // Scroll back to top — try every scroll container
     const mc = document.querySelector('.main-content');
-    if (mc) mc.scrollTo({ top: 0, behavior: 'smooth' });
-    // Reset ccpKeyBadge / ripKeyBadge visibility
-    if (ccpKeyBadge) ccpKeyBadge.style.display = 'none';
-    if (ripKeyBadge) ripKeyBadge.style.display = 'none';
+    if (mc) { mc.scrollTop = 0; }
+    window.scrollTo(0, 0);
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+    // Make sure the app wrapper is visible and not shifted
+    const appEl = document.getElementById('app');
+    if (appEl) appEl.style.transform = '';
+    // Focus CCP input so the page snaps back
+    setTimeout(() => { ccpInput.focus(); ccpInput.blur(); }, 100);
   }
 
   function doSaveAccount() {
@@ -691,6 +700,22 @@ function parseQRValue(raw) {
 // ===== OCR SCANNER =====
 let ocrStream = null;
 let ocrResult = '';
+let tesseractWorker = null; // persistent worker — created once
+
+// Pre-load Tesseract worker in background after page load
+window.addEventListener('load', () => {
+  setTimeout(async () => {
+    if (typeof Tesseract !== 'undefined') return; // already loaded
+    try {
+      await new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
+        s.onload = resolve; s.onerror = reject;
+        document.head.appendChild(s);
+      });
+    } catch (e) { /* silent — will retry on use */ }
+  }, 3000); // load 3s after page ready, non-blocking
+});
 
 function openOCRScanner() {
   document.getElementById('ocrScanModal').classList.add('open');
@@ -734,10 +759,13 @@ async function captureOCRFrame() {
 
   document.getElementById('ocrStatus').textContent = '⏳ جارٍ التحليل...';
 
-  // Capture full frame at native resolution
+  // Capture frame — scale down to max 800px wide for speed
+  const vw = video.videoWidth || 1280;
+  const vh = video.videoHeight || 720;
+  const scale = Math.min(1, 800 / vw);
   const canvas = document.createElement('canvas');
-  canvas.width = video.videoWidth || 1280;
-  canvas.height = video.videoHeight || 720;
+  canvas.width = Math.round(vw * scale);
+  canvas.height = Math.round(vh * scale);
   const ctx = canvas.getContext('2d');
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
@@ -759,7 +787,8 @@ async function runTesseractOCR(canvas) {
   document.getElementById('ocrStatus').textContent = '⏳ جارٍ قراءة الشيك...';
 
   try {
-    // Enhance image: grayscale + contrast for better digit recognition
+    // Enhance image: grayscale + strong contrast threshold (black/white)
+    // Smaller canvas = faster OCR
     const enh = document.createElement('canvas');
     enh.width = canvas.width; enh.height = canvas.height;
     const ec = enh.getContext('2d');
@@ -768,13 +797,15 @@ async function runTesseractOCR(canvas) {
     const d = id.data;
     for (let i = 0; i < d.length; i += 4) {
       const g = 0.299*d[i] + 0.587*d[i+1] + 0.114*d[i+2];
-      const e = Math.min(255, Math.max(0, (g - 128) * 1.6 + 128));
+      // Hard threshold: dark pixels → black, light → white (better for digits)
+      const e = g < 140 ? 0 : 255;
       d[i] = d[i+1] = d[i+2] = e;
     }
     ec.putImageData(id, 0, 0);
 
-    const result = await Tesseract.recognize(enh, 'ara+eng', {
-      tessedit_char_whitelist: '0123456789 \n',
+    // Use only 'eng' (digits only) — much faster than 'ara+eng'
+    const result = await Tesseract.recognize(enh, 'eng', {
+      tessedit_char_whitelist: '0123456789',
       tessedit_pageseg_mode: '6',
     });
 
