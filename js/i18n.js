@@ -215,6 +215,16 @@ const TRANSLATIONS = {
     clear_data_btn: "مسح",
     rip_already_saved: "هذا الريب محفوظ مسبقاً في سجل الحسابات!",
     font_size_sample: "أ",
+    // Favorites
+    sidebar_favorites: "المفضلة",
+    favorites_title: "المفضلة",
+    no_favorites: "لا توجد حسابات في المفضلة",
+    no_favorites_sub: "أضف حساباً للمفضلة بالنقر على النجمة في صفحة الحسابات",
+    add_to_fav: "إضافة للمفضلة",
+    remove_from_fav: "إزالة من المفضلة",
+    // Scanner
+    qr_scan_title: "مسح QR Code",
+    ocr_scan_title: "قراءة شيك CCP",
   },
   fr: {
     app_name: "MY CCP",
@@ -432,6 +442,15 @@ const TRANSLATIONS = {
     clear_data_btn: "Effacer",
     rip_already_saved: "Ce RIP est déjà enregistré dans la liste des comptes!",
     font_size_sample: "A",
+    // Favorites
+    sidebar_favorites: "Favoris",
+    favorites_title: "Favoris",
+    no_favorites: "Aucun compte en favoris",
+    no_favorites_sub: "Ajoutez un compte aux favoris depuis la liste des comptes",
+    add_to_fav: "Ajouter aux favoris",
+    remove_from_fav: "Retirer des favoris",
+    qr_scan_title: "Scanner QR Code",
+    ocr_scan_title: "Lire chèque CCP",
   },
   en: {
     app_name: "MY CCP",
@@ -649,6 +668,15 @@ const TRANSLATIONS = {
     clear_data_btn: "Clear",
     rip_already_saved: "This RIP is already saved in the accounts list!",
     font_size_sample: "A",
+    // Favorites
+    sidebar_favorites: "Favorites",
+    favorites_title: "Favorites",
+    no_favorites: "No favorite accounts",
+    no_favorites_sub: "Add an account to favorites by tapping the star in the accounts list",
+    add_to_fav: "Add to Favorites",
+    remove_from_fav: "Remove from Favorites",
+    qr_scan_title: "Scan QR Code",
+    ocr_scan_title: "Read CCP Cheque",
   }
 };
 
