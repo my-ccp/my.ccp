@@ -91,10 +91,15 @@
       </div>
 
       <!-- RIP Result -->
-      <div class="result-box" id="ripResultBox" onclick="copyRip()">
-        <span class="result-text" id="ripResult" data-i18n="rip_result">RIP: 007 99999 XXXXXXXXXX YY</span>
-        <span class="input-icon" style="margin-inline-start:8px;">
+      <div class="input-group readonly result-box" id="ripResultBox" onclick="copyRip()" style="cursor:pointer;">
+        <span class="input-icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </span>
+        <span class="result-text" id="ripResult" data-i18n="rip_result" style="text-align:start;">RIP: 007 99999 XXXXXXXXXX YY</span>
+        <span class="input-icon" style="margin-inline-start:4px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
           </svg>
         </span>
@@ -103,13 +108,13 @@
 
       <!-- Action Buttons -->
       <div style="display:flex;gap:10px;margin-top:4px;">
-        <button class="btn btn-success" onclick="openSaveModal()" style="flex:1;">
+        <button class="btn btn-primary" onclick="openSaveModal()" style="flex:1;">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
           </svg>
           <span data-i18n="save_account">حفظ الحساب</span>
         </button>
-        <button class="btn btn-primary" id="shareBtn" onclick="doShare()" style="flex:0 0 56px;margin-bottom:0;" aria-label="share">
+        <button class="btn btn-success" id="shareBtn" onclick="doShare()" style="flex:0 0 56px;margin-bottom:0;" aria-label="share">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
             <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
@@ -232,8 +237,8 @@
   const copyAccBtn   = document.getElementById('copyAccBtn');
   const ccpKeyBadge  = document.getElementById('ccpKeyBadge');
   const ripKeyBadge  = document.getElementById('ripKeyBadge');
-  const ccpKeyVal    = document.getElementById('ccpKeyVal');
-  const ripKeyVal    = document.getElementById('ripKeyVal');
+  const ccpKeyVal    = null; // removed
+  const ripKeyVal    = null; // removed
   const copyHint     = document.getElementById('copyHint');
   const ripResultBox = document.getElementById('ripResultBox');
 
@@ -267,8 +272,7 @@
       const ck = calcCCPKey(paddedVal);
       const rk = calcRIPKey(paddedVal);
       ccpKeyInput.value = ck; ripKeyInput.value = rk;
-      ccpKeyVal.textContent = ck; ripKeyVal.textContent = rk;
-      ccpKeyBadge.style.display = 'flex'; ripKeyBadge.style.display = 'flex';
+      // ccpKeyVal / ripKeyVal badges removed
       if (len === 10) {
         const rip = buildRIP(val, rk);
         currentRIP = rip;
@@ -286,7 +290,7 @@
         copyHint.style.display = 'none';
       }
     } else {
-      ccpKeyBadge.style.display = 'none'; ripKeyBadge.style.display = 'none';
+      // badges removed
       ccpKeyInput.value = ''; ripKeyInput.value = '';
       currentRIP = '';
       ripResult.textContent = t('rip_result');
