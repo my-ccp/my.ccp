@@ -521,6 +521,10 @@
     document.getElementById('faqNoResults').style.display = visible === 0 ? 'flex' : 'none';
     document.getElementById('faqContactCta').style.display = visible === 0 ? 'none' : '';
   }
+
+  function contactUs() {
+    window.location.href = 'mailto:myccp.app@gmail.com?subject=' + encodeURIComponent('استفسار من تطبيق MY CCP');
+  }
 </script>
 </body>
 </html>
