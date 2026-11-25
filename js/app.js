@@ -9,6 +9,25 @@ appChannel.onmessage = (e) => {
   if (e.data.type === 'theme') {
     _applyThemeDOM(e.data.value);
     updateThemeToggle();
+    // Re-apply saved custom hue for the new theme (cross-tab sync)
+    const _th = e.data.value;
+    const _stored = localStorage.getItem(_getHueKey(_th));
+    if (_stored !== null) {
+      const _hue = parseInt(_stored);
+      const _dark = ['dark','black','slate'];
+      const _sat = (_th === 'green') ? 70 : 80;
+      const _lig = _dark.includes(_th) ? 60 : 45;
+      const _lig2 = _dark.includes(_th) ? 50 : 35;
+      document.documentElement.style.setProperty('--accent',        `hsl(${_hue},${_sat}%,${_lig}%)`);
+      document.documentElement.style.setProperty('--accent2',       `hsl(${_hue},${_sat}%,${_lig2}%)`);
+      document.documentElement.style.setProperty('--accent-green',  `hsl(${_hue},${_sat}%,${_lig}%)`);
+      document.documentElement.style.setProperty('--accent-green2', `hsl(${_hue},${_sat}%,${_lig2}%)`);
+    } else {
+      document.documentElement.style.removeProperty('--accent');
+      document.documentElement.style.removeProperty('--accent2');
+      document.documentElement.style.removeProperty('--accent-green');
+      document.documentElement.style.removeProperty('--accent-green2');
+    }
   }
   if (e.data.type === 'lang') {
     _applyLangDOM(e.data.value);
@@ -86,7 +105,7 @@ function _getHueKey(theme) { return 'customHue_' + theme; }
 
 // ===== NUMERAL STYLE (Edit 3) — apply saved numeral on every page =====
 (function _initNumeralStyle() {
-  const numeralId = localStorage.getItem('appNumeral') || 'eastern';
+  const numeralId = localStorage.getItem('appNumeral') || 'western';
   document.documentElement.setAttribute('data-numeral', numeralId);
 })();
 
