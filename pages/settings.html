@@ -71,6 +71,7 @@
 
     <!-- Appearance -->
     <div class="settings-section">
+      <!-- Dark mode toggle (light ↔ dark) -->
       <div class="settings-item">
         <div class="settings-item-left">
           <svg id="themeIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -80,7 +81,38 @@
         </div>
         <button class="toggle" id="themeToggle" onclick="confirmToggleTheme()"></button>
       </div>
+      <!-- Theme palette chooser -->
+      <div class="settings-item" style="flex-direction:column;align-items:flex-start;gap:10px;padding-top:4px;">
+        <div class="settings-item-left">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+          <div class="settings-item-label" data-i18n="theme_style">نمط الألوان</div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;padding-inline-start:4px;">
+          <button class="theme-swatch" id="swatch-light" onclick="selectTheme('light')" title="فاتح" style="background:linear-gradient(135deg,#f0f4ff,#e8edf8);border:2px solid #2563eb;">
+            <span style="color:#1e3a8a;font-size:0.7rem;font-weight:700;">فاتح</span>
+          </button>
+          <button class="theme-swatch" id="swatch-dark" onclick="selectTheme('dark')" title="داكن" style="background:linear-gradient(135deg,#000000,#0d1a50);">
+            <span style="color:#60a5fa;font-size:0.7rem;font-weight:700;">داكن</span>
+          </button>
+          <button class="theme-swatch" id="swatch-yellow" onclick="selectTheme('yellow')" title="أصفر" style="background:#FFD200;border:2px solid #1b4fa8;">
+            <span style="color:#1b4fa8;font-size:0.7rem;font-weight:700;">بريدي</span>
+          </button>
+          <button class="theme-swatch" id="swatch-black" onclick="selectTheme('black')" title="أسود" style="background:#050505;border:2px solid #333;">
+            <span style="color:#ffffff;font-size:0.7rem;font-weight:700;">أسود</span>
+          </button>
+        </div>
+      </div>
     </div>
+    <style>
+      .theme-swatch {
+        width: 64px; height: 44px; border-radius: 10px; border: 2px solid transparent;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; transition: transform 0.15s, border-color 0.2s;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      }
+      .theme-swatch:hover { transform: scale(1.06); }
+      .theme-swatch.active-swatch { border-color: var(--accent) !important; box-shadow: 0 0 0 3px rgba(37,99,235,0.25); }
+    </style>
 
     <!-- Font Size -->
     <div class="settings-section">
@@ -293,11 +325,31 @@
     if (clearBtn) clearBtn.textContent = t('clear_data_btn');
   }
 
+  // ---- Theme Palette ----
+  function selectTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.body.setAttribute('data-theme', theme);
+    window.APP_THEME = theme;
+    localStorage.setItem('theme', theme);
+    appChannel.postMessage({ type: 'theme', value: theme });
+    updateSwatchActive();
+    updateThemeToggle();
+    updateThemeLabel();
+  }
+
+  function updateSwatchActive() {
+    const current = window.APP_THEME || 'light';
+    document.querySelectorAll('.theme-swatch').forEach(el => {
+      el.classList.toggle('active-swatch', el.id === 'swatch-' + current);
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     updateThemeToggle();
     updateLangDisplay();
     updateThemeLabel();
     updateHistoryToggle();
+    updateSwatchActive();
     // Init font scale slider — default 0.8 (80%)
     const stored = localStorage.getItem('fontScale');
     const scale = stored ? parseFloat(stored) : 0.8;
