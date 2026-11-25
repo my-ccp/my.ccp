@@ -64,14 +64,16 @@ function applyTheme(theme, broadcast = true) {
 }
 
 function toggleTheme() {
-  const next = window.APP_THEME === 'dark' ? 'light' : 'dark';
+  // Toggle between light and dark only; yellow/black are set via palette selector
+  const cur = window.APP_THEME;
+  const next = (cur === 'dark' || cur === 'black') ? 'light' : 'dark';
   applyTheme(next, true);
 }
 
 function updateThemeToggle() {
   const toggle = document.getElementById('themeToggle');
   if (toggle) {
-    toggle.classList.toggle('on', window.APP_THEME === 'dark');
+    toggle.classList.toggle('on', window.APP_THEME === 'dark' || window.APP_THEME === 'black');
   }
 }
 
