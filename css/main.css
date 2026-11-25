@@ -1,3 +1,39 @@
+/* ===== NUMERAL STYLE (Edit 3) ===== */
+/* Eastern Arabic numerals (default for Arabic locale) */
+[data-numeral="eastern"] {
+  font-feature-settings: "locl" on;
+}
+[data-numeral="eastern"] input,
+[data-numeral="eastern"] .field-value,
+[data-numeral="eastern"] .cash-item-label,
+[data-numeral="eastern"] .cash-item-count,
+[data-numeral="eastern"] #fontScaleLabel,
+[data-numeral="eastern"] #feeValue,
+[data-numeral="eastern"] #totalValue {
+  font-variant-numeric: normal;
+  unicode-bidi: embed;
+  direction: ltr;
+  text-align: center;
+}
+
+/* Persian numerals */
+[data-numeral="persian"] {
+  font-feature-settings: "locl" on;
+}
+
+/* Western numerals (Latin digits) — reset any Arabic numeral shaping */
+[data-numeral="western"] {
+  font-feature-settings: "lnum" on;
+}
+
+/* ===== APP FONT VARIABLE (Edit 2) ===== */
+:root {
+  --app-font: 'Cairo', 'Segoe UI', system-ui, sans-serif;
+}
+html, body, * {
+  font-family: var(--app-font);
+}
+
 /* ===== CSS VARIABLES ===== */
 :root {
   --bg: #f0f4ff;
