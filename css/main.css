@@ -127,34 +127,53 @@
 
 /* ===== THEME: EMERALD (أخضر زمردي) ===== */
 [data-theme="emerald"] {
-  --bg: #064e3b;
-  --bg2: #065f46;
-  --card: #047857;
-  --border: #059669;
-  --text: #ffffff;
-  --text2: #a7f3d0;
-  --accent: #34d399;
-  --accent2: #10b981;
-  --accent-green: #6ee7b7;
-  --accent-green2: #34d399;
-  --input-bg: #065f46;
-  --input-border: #059669;
-  --header-bg: linear-gradient(135deg, #022c22 0%, #064e3b 50%, #065f46 100%);
-  --shadow: 0 4px 20px rgba(0,0,0,0.3);
-  --shadow-card: 0 2px 16px rgba(0,0,0,0.2);
-  --nav-bg: #022c22;
-  --sidebar-bg: #022c22;
-  --result-bg: linear-gradient(135deg, #065f46, #047857);
-  --result-border: #059669;
+  --bg: #ffffff;
+  --bg2: #f0fdf4;
+  --card: #ffffff;
+  --border: #16a34a;
+  --text: #15803d;
+  --text2: #22c55e;
+  --accent: #16a34a;
+  --accent2: #15803d;
+  --accent-green: #22c55e;
+  --accent-green2: #16a34a;
+  --input-bg: #f0fdf4;
+  --input-border: #16a34a;
+  --header-bg: linear-gradient(135deg, #15803d 0%, #16a34a 50%, #22c55e 100%);
+  --shadow: 0 4px 20px rgba(21,128,61,0.15);
+  --shadow-card: 0 2px 16px rgba(21,128,61,0.1);
+  --nav-bg: #ffffff;
+  --sidebar-bg: #f0fdf4;
+  --result-bg: linear-gradient(135deg, #dcfce7, #bbf7d0);
+  --result-border: #16a34a;
 }
-[data-theme="emerald"] .fees-op-title .op-name { color: #34d399 !important; }
-[data-theme="emerald"] .fees-op-title .op-sub  { color: #a7f3d0 !important; }
-[data-theme="emerald"] .fees-op-icon { background: #022c22 !important; }
-[data-theme="emerald"] .fees-other-title { color: #34d399 !important; }
-[data-theme="emerald"] .fees-other-item .item-amount { color: #34d399 !important; }
-[data-theme="emerald"] .fees-nav-item.active { color: #34d399 !important; }
-[data-theme="emerald"] .fees-nav-item.active .nav-icon-wrap { background: #022c22 !important; }
-[data-theme="emerald"] .cash-item-count { color: #34d399 !important; background: rgba(0,0,0,0.2) !important; }
+[data-theme="emerald"] .fees-op-title .op-name { color: #15803d !important; }
+[data-theme="emerald"] .fees-op-title .op-sub  { color: #16a34a !important; }
+[data-theme="emerald"] .fees-op-icon { background: #dcfce7 !important; }
+[data-theme="emerald"] .fees-other-title { color: #15803d !important; }
+[data-theme="emerald"] .fees-other-item .item-amount { color: #15803d !important; }
+[data-theme="emerald"] .fees-nav-item.active { color: #15803d !important; }
+[data-theme="emerald"] .fees-nav-item.active .nav-icon-wrap { background: #dcfce7 !important; }
+[data-theme="emerald"] .cash-item-count { color: #15803d !important; background: rgba(21,128,61,0.1) !important; }
+[data-theme="emerald"] body { color: #15803d; }
+[data-theme="emerald"] .sidebar { background: #f0fdf4 !important; border-right: 2px solid #16a34a; }
+[data-theme="emerald"] .sidebar-header { background: linear-gradient(135deg, #15803d, #16a34a) !important; }
+[data-theme="emerald"] .sidebar-app-name { color: #ffffff !important; }
+[data-theme="emerald"] .sidebar-item { color: #15803d !important; }
+[data-theme="emerald"] .sidebar-item:hover { background: #dcfce7 !important; }
+[data-theme="emerald"] .sidebar-item.active { background: #dcfce7 !important; color: #15803d !important; }
+[data-theme="emerald"] .sidebar-divider { border-color: #16a34a !important; opacity: 0.3; }
+[data-theme="emerald"] .input-group { background: #f0fdf4 !important; border-color: #16a34a !important; }
+[data-theme="emerald"] .input-label { color: #16a34a !important; }
+[data-theme="emerald"] .input-icon { color: #16a34a !important; }
+[data-theme="emerald"] #ccpInput, [data-theme="emerald"] input { color: #15803d !important; }
+[data-theme="emerald"] .result-box { color: #15803d !important; }
+[data-theme="emerald"] .bottom-nav { background: #ffffff !important; border-top: 2px solid #16a34a; }
+[data-theme="emerald"] .nav-item { color: #16a34a !important; }
+[data-theme="emerald"] .nav-item.active { color: #15803d !important; }
+[data-theme="emerald"] .btn-success { background: linear-gradient(135deg, #15803d, #16a34a) !important; color: #fff !important; }
+[data-theme="emerald"] .account-card { background: #ffffff !important; border: 1.5px solid #16a34a !important; }
+[data-theme="emerald"] .digit-counter { color: #16a34a !important; }
 
 /* ===== THEME: SLATE (رمادي فحمي) ===== */
 [data-theme="slate"] {
