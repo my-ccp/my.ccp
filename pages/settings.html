@@ -89,19 +89,25 @@
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;padding-inline-start:4px;">
           <button class="theme-swatch" id="swatch-light" onclick="selectTheme('light')" title="فاتح" style="background:linear-gradient(135deg,#f0f4ff,#e8edf8);border:2px solid #2563eb;">
-            <span style="color:#1e3a8a;font-size:0.7rem;font-weight:700;">فاتح</span>
+            <span style="color:#1e3a8a;font-size:0.7rem;font-weight:700;" data-i18n="theme_light">فاتح</span>
           </button>
           <button class="theme-swatch" id="swatch-dark" onclick="selectTheme('dark')" title="داكن" style="background:linear-gradient(135deg,#000000,#0d1a50);">
-            <span style="color:#60a5fa;font-size:0.7rem;font-weight:700;">داكن</span>
+            <span style="color:#60a5fa;font-size:0.7rem;font-weight:700;" data-i18n="theme_dark">داكن</span>
           </button>
-          <button class="theme-swatch" id="swatch-yellow" onclick="selectTheme('yellow')" title="أصفر" style="background:#FFD200;border:2px solid #1b4fa8;">
-            <span style="color:#1b4fa8;font-size:0.7rem;font-weight:700;">بريدي</span>
+          <button class="theme-swatch" id="swatch-yellow" onclick="selectTheme('yellow')" title="بريدي" style="background:#FFD200;border:2px solid #1b4fa8;">
+            <span style="color:#1b4fa8;font-size:0.7rem;font-weight:700;" data-i18n="theme_yellow">بريدي</span>
           </button>
           <button class="theme-swatch" id="swatch-black" onclick="selectTheme('black')" title="ليلي" style="background:#050505;border:2px solid #333;">
             <span style="color:#ffffff;font-size:0.7rem;font-weight:700;" data-i18n="theme_black">ليلي</span>
           </button>
           <button class="theme-swatch" id="swatch-white" onclick="selectTheme('white')" title="نهاري" style="background:#ffffff;border:2px solid #aaa;">
             <span style="color:#000000;font-size:0.7rem;font-weight:700;" data-i18n="theme_white">نهاري</span>
+          </button>
+          <button class="theme-swatch" id="swatch-emerald" onclick="selectTheme('emerald')" title="زمردي" style="background:linear-gradient(135deg,#064e3b,#059669);border:2px solid #34d399;">
+            <span style="color:#34d399;font-size:0.7rem;font-weight:700;" data-i18n="theme_emerald">زمردي</span>
+          </button>
+          <button class="theme-swatch" id="swatch-slate" onclick="selectTheme('slate')" title="فحمي" style="background:linear-gradient(135deg,#0f172a,#334155);border:2px solid #60a5fa;">
+            <span style="color:#60a5fa;font-size:0.7rem;font-weight:700;" data-i18n="theme_slate">فحمي</span>
           </button>
         </div>
       </div>
@@ -230,6 +236,8 @@
     const label = document.getElementById('themeModeLabel');
     if (!label) return;
     const lang = window.APP_LANG || 'ar';
+    const darkThemes = ['dark', 'black', 'emerald', 'slate'];
+    const isNightMode = darkThemes.includes(document.documentElement.getAttribute('data-theme'));
     const labels = {
       ar: { night: 'الوضع الليلي', day: 'النمط النهاري' },
       fr: { night: 'Mode Nuit',    day: 'Mode Jour' },
