@@ -102,7 +102,7 @@
       pointer-events: none;
     }
 
-    /* Floating swatches popup */
+    /* Floating swatches popup — anchored at button center, swatches use --tx/--ty */
     .color-wheel-popup {
       position: absolute;
       top: 50%;
@@ -110,6 +110,8 @@
       transform: translate(-50%, -50%);
       pointer-events: none;
       z-index: 100;
+      width: 0;
+      height: 0;
     }
     .color-wheel-popup.open { pointer-events: all; }
 
@@ -805,28 +807,36 @@
     { id: 'slate',  label_key: 'theme_slate',  bg: 'linear-gradient(135deg,#0f172a,#334155)', color: '#60a5fa',   border: '#60a5fa' },
   ];
 
-  // 7 swatches arranged in a circle around the wheel button
-  // Angles for 7 swatches (radians), spread evenly in top half + sides
-  function getCwAngles(n) {
-    const angles = [];
-    const startDeg = -60;
-    const spreadDeg = 240;
+  // Zigzag diagonal layout: swatches flow diagonally downward in a staggered zigzag
+  // Direction is flipped for RTL (Arabic) vs LTR languages
+  function getZigzagPositions(n) {
+    const isRTL = document.documentElement.getAttribute('dir') === 'rtl'
+               || document.body.getAttribute('dir') === 'rtl'
+               || (window.APP_LANG || 'ar') === 'ar';
+    const dir = isRTL ? -1 : 1;  // RTL: expand to the left; LTR: expand to the right
+
+    const stepX = 58;   // horizontal step per column
+    const stepY = 52;   // vertical step per row
+    const zigX  = 18;   // zigzag horizontal wobble
+    const positions = [];
+
     for (let i = 0; i < n; i++) {
-      angles.push((startDeg + (spreadDeg / (n - 1)) * i) * Math.PI / 180);
+      const col = Math.floor(i / 2);       // column index (0,0,1,1,2,2,3)
+      const row = i % 2;                   // row: 0 = top lane, 1 = bottom lane
+      const tx = dir * (col * stepX + (row === 1 ? zigX : 0));
+      const ty = row * stepY + col * 8;    // slight downward drift per column
+      positions.push({ tx, ty });
     }
-    return angles;
+    return positions;
   }
 
   function buildColorWheelPopup() {
     const popup = document.getElementById('cwPopup');
     popup.innerHTML = '';
-    const r = 72; // radius in px
-    const angles = getCwAngles(THEME_CONFIGS.length);
+    const positions = getZigzagPositions(THEME_CONFIGS.length);
     THEME_CONFIGS.forEach((cfg, i) => {
-      const angle = angles[i];
-      const tx = Math.round(Math.cos(angle) * r);
-      const ty = Math.round(Math.sin(angle) * r);
-      const delay = i * 35;
+      const { tx, ty } = positions[i];
+      const delay = i * 40;
 
       const btn = document.createElement('button');
       btn.className = 'cw-swatch';
@@ -879,13 +889,17 @@
     white: 220, green: 142, slate: 215
   };
 
+  // Global hue key — works across ALL themes
+  const HUE_GLOBAL_KEY = 'customHue_global';
+
   function getHueKey(theme) {
-    return 'customHue_' + (theme || window.APP_THEME || 'light');
+    // Keep per-theme key for backward compat but use global key
+    return HUE_GLOBAL_KEY;
   }
 
   function getCurrentHue(theme) {
     const th = theme || window.APP_THEME || 'light';
-    const stored = localStorage.getItem(getHueKey(th));
+    const stored = localStorage.getItem(HUE_GLOBAL_KEY);
     return stored !== null ? parseInt(stored) : (THEME_DEFAULT_HUE[th] ?? 220);
   }
 
@@ -906,14 +920,15 @@
   function onHueChange(val) {
     const hue = parseInt(val);
     const theme = window.APP_THEME || 'light';
-    localStorage.setItem(getHueKey(theme), hue);
+    // Save globally so it persists across ALL theme switches
+    localStorage.setItem(HUE_GLOBAL_KEY, hue);
     applyCustomHue(hue, theme);
     updateHueUI(hue);
   }
 
   function resetCustomHue() {
     const theme = window.APP_THEME || 'light';
-    localStorage.removeItem(getHueKey(theme));
+    localStorage.removeItem(HUE_GLOBAL_KEY);
     document.documentElement.style.removeProperty('--accent');
     document.documentElement.style.removeProperty('--accent2');
     document.documentElement.style.removeProperty('--accent-green');
@@ -940,7 +955,7 @@
     const theme = window.APP_THEME || 'light';
     const hue = getCurrentHue(theme);
     updateHueUI(hue);
-    const stored = localStorage.getItem(getHueKey(theme));
+    const stored = localStorage.getItem(HUE_GLOBAL_KEY);
     if (stored !== null) applyCustomHue(hue, theme);
   }
 
@@ -962,9 +977,9 @@
     updateThemeLabel();
     updateCwSwatchActive();
     updateActiveThemeDot();
-    // Re-apply stored hue for new theme
+    // Re-apply global hue for new theme (custom color works across ALL themes)
     const hue = getCurrentHue(theme);
-    const stored = localStorage.getItem(getHueKey(theme));
+    const stored = localStorage.getItem(HUE_GLOBAL_KEY);
     if (stored !== null) applyCustomHue(hue, theme);
     updateHueUI(hue);
   }
@@ -1265,7 +1280,7 @@
     updateFontSelectDisplay();
 
     // Numeral style
-    currentNumeral = localStorage.getItem('appNumeral') || 'eastern';
+    currentNumeral = localStorage.getItem('appNumeral') || 'western';
     applyNumeralStyle(currentNumeral);
     renderNumeralDropdown();
     updateNumeralSelectDisplay();
