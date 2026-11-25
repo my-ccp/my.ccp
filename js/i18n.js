@@ -311,6 +311,17 @@ const TRANSLATIONS = {
     apply: "تطبيق",
     retry: "إعادة المحاولة",
     close: "إغلاق",
+    // OCR result fields
+    ocr_detected_title: "البيانات المُكتشفة من الشيك:",
+    ocr_field_ccp_num: "رقم حساب CCP",
+    ocr_field_ccp_key: "مفتاح CCP",
+    ocr_field_rip_num: "رقم RIP",
+    ocr_field_rip_key: "مفتاح RIP",
+    // Settings
+    theme_style: "نمط الألوان",
+    // Fees page (extra)
+    fees_other_atm_title: "رسوم السحب من الصراف الآلي",
+    fees_other_nocard_title: "رسوم السحب بدون بطاقة",
   },
   fr: {
     app_name: "MY CCP",
@@ -622,6 +633,14 @@ const TRANSLATIONS = {
     apply: "Appliquer",
     retry: "Réessayer",
     close: "Fermer",
+    // OCR result fields
+    ocr_detected_title: "Données détectées du chèque:",
+    ocr_field_ccp_num: "N° Compte CCP",
+    ocr_field_ccp_key: "Clé CCP",
+    ocr_field_rip_num: "N° RIP",
+    ocr_field_rip_key: "Clé RIP",
+    // Settings
+    theme_style: "Style de couleurs",
   },
   en: {
     app_name: "MY CCP",
@@ -933,6 +952,14 @@ const TRANSLATIONS = {
     apply: "Apply",
     retry: "Retry",
     close: "Close",
+    // OCR result fields
+    ocr_detected_title: "Detected data from cheque:",
+    ocr_field_ccp_num: "CCP Account No.",
+    ocr_field_ccp_key: "CCP Key",
+    ocr_field_rip_num: "RIP No.",
+    ocr_field_rip_key: "RIP Key",
+    // Settings
+    theme_style: "Color Theme",
   }
 };
 
