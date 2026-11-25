@@ -264,15 +264,15 @@
     .font-select-btn.open .font-select-chevron { transform: rotate(180deg); }
 
     .font-dropdown {
-      position: absolute;
-      inset-inline-end: 18px;
+      position: fixed;
       background: var(--card-bg, #fff);
       border: 1.5px solid var(--border, rgba(0,0,0,0.12));
       border-radius: 14px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-      z-index: 200;
-      min-width: 180px;
-      max-height: 260px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+      z-index: 500;
+      min-width: 200px;
+      max-width: calc(100vw - 32px);
+      max-height: 60vh;
       overflow-y: auto;
       display: none;
       padding: 6px;
@@ -326,14 +326,16 @@
       color: var(--text);
     }
     .numeral-dropdown {
-      position: absolute;
-      inset-inline-end: 18px;
+      position: fixed;
       background: var(--card-bg, #fff);
       border: 1.5px solid var(--border, rgba(0,0,0,0.12));
       border-radius: 14px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-      z-index: 200;
-      min-width: 180px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+      z-index: 500;
+      min-width: 240px;
+      max-width: calc(100vw - 32px);
+      max-height: 70vh;
+      overflow-y: auto;
       display: none;
       padding: 6px;
     }
@@ -888,15 +890,15 @@
   }
 
   function applyCustomHue(hue, theme) {
-    const th = theme || window.APP_THEME || 'light';
+    const th = theme || window.APP_THEME || document.documentElement.getAttribute('data-theme') || 'light';
     const darkThemes = ['dark', 'black', 'slate'];
     const isLight = !darkThemes.includes(th);
     const saturation = (th === 'green') ? 70 : 80;
     const lightness  = isLight ? 45 : 60;
     const color  = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
     const color2 = `hsl(${hue}, ${saturation}%, ${isLight ? 35 : 50}%)`;
-    document.documentElement.style.setProperty('--accent',  color);
-    document.documentElement.style.setProperty('--accent2', color2);
+    document.documentElement.style.setProperty('--accent',        color);
+    document.documentElement.style.setProperty('--accent2',       color2);
     document.documentElement.style.setProperty('--accent-green',  color);
     document.documentElement.style.setProperty('--accent-green2', color2);
   }
@@ -1014,16 +1016,42 @@
     if (nameEl) nameEl.textContent = getFontLabel(opt);
   }
 
+  function positionDropdown(dd, btn) {
+    // Reset position first to measure real size
+    dd.style.top = '';
+    dd.style.bottom = '';
+    dd.style.left = '';
+    dd.style.right = '';
+
+    const rect   = btn.getBoundingClientRect();
+    const ddH    = dd.offsetHeight || 300;
+    const vw     = window.innerWidth;
+    const vh     = window.innerHeight;
+    const margin = 8;
+
+    // Vertical: open below if room, otherwise above
+    if (rect.bottom + ddH + margin <= vh) {
+      dd.style.top = (rect.bottom + 4) + 'px';
+    } else if (rect.top - ddH - margin >= 0) {
+      dd.style.top = (rect.top - ddH - 4) + 'px';
+    } else {
+      // Center vertically on screen
+      dd.style.top = Math.max(margin, (vh - ddH) / 2) + 'px';
+    }
+
+    // Horizontal: center on screen (safe for RTL & LTR)
+    const ddW = dd.offsetWidth || 240;
+    let left = rect.left + rect.width / 2 - ddW / 2;
+    left = Math.max(margin, Math.min(left, vw - ddW - margin));
+    dd.style.left = left + 'px';
+  }
+
   function toggleFontDropdown() {
     const btn = document.getElementById('fontSelectBtn');
     const dd = document.getElementById('fontDropdown');
     const isOpen = dd.classList.toggle('open');
     btn.classList.toggle('open', isOpen);
-    // Position dropdown
-    if (isOpen) {
-      const rect = btn.getBoundingClientRect();
-      dd.style.top = (rect.bottom + 6) + 'px';
-    }
+    if (isOpen) positionDropdown(dd, btn);
   }
 
   function selectFont(fontId) {
@@ -1054,7 +1082,7 @@
     { id: 'neg_circled',  label_ar: 'دائرة معكوسة',       label_fr: 'Cerclé inversé',       label_en: 'Neg. Circled',         sample: '⓿❶⓿❶⓿❶' },
   ];
 
-  let currentNumeral = localStorage.getItem('appNumeral') || 'eastern';
+  let currentNumeral = localStorage.getItem('appNumeral') || 'western';
 
   function getNumeralLabel(opt) {
     const lang = window.APP_LANG || 'ar';
@@ -1094,10 +1122,7 @@
     btn.classList.toggle('open', isOpen);
     const chevron = document.getElementById('numeralChevron');
     if (chevron) chevron.style.transform = isOpen ? 'rotate(180deg)' : '';
-    if (isOpen) {
-      const rect = btn.getBoundingClientRect();
-      dd.style.top = (rect.bottom + 6) + 'px';
-    }
+    if (isOpen) positionDropdown(dd, btn);
   }
 
   function selectNumeral(numeralId) {
