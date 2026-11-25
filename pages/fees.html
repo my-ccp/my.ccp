@@ -499,6 +499,94 @@
     return result.trim();
   }
 
+  // ===== NUMBER TO FRENCH WORDS =====
+  const onesFr = ['','un','deux','trois','quatre','cinq','six','sept','huit','neuf',
+    'dix','onze','douze','treize','quatorze','quinze','seize','dix-sept','dix-huit','dix-neuf'];
+  const tensFr = ['','dix','vingt','trente','quarante','cinquante','soixante','soixante','quatre-vingts','quatre-vingt'];
+
+  function numToFrench(n) {
+    n = Math.round(n);
+    if (n === 0) return 'zéro';
+    if (n < 0) return 'moins ' + numToFrench(-n);
+    let result = '';
+    if (n >= 1000000) {
+      const m = Math.floor(n / 1000000);
+      result += (m === 1 ? 'un million' : numToFrench(m) + ' millions') + ' ';
+      n %= 1000000;
+      if (n > 0) result += '';
+    }
+    if (n >= 1000) {
+      const k = Math.floor(n / 1000);
+      result += (k === 1 ? 'mille' : numToFrench(k) + ' mille') + ' ';
+      n %= 1000;
+    }
+    if (n >= 100) {
+      const h = Math.floor(n / 100);
+      result += (h === 1 ? 'cent' : onesFr[h] + ' cent') + ' ';
+      n %= 100;
+    }
+    if (n >= 80 && n < 90) {
+      result += 'quatre-vingt-' + onesFr[n - 80] + ' ';
+    } else if (n >= 70 && n < 80) {
+      result += 'soixante-' + onesFr[n - 60] + ' ';
+    } else if (n >= 20) {
+      const t = Math.floor(n / 10);
+      const o = n % 10;
+      result += tensFr[t] + (o > 0 ? (o === 1 && t < 8 ? '-et-un' : '-' + onesFr[o]) : '') + ' ';
+    } else if (n > 0) {
+      result += onesFr[n] + ' ';
+    }
+    return result.trim();
+  }
+
+  // ===== NUMBER TO ENGLISH WORDS =====
+  const onesEn = ['','one','two','three','four','five','six','seven','eight','nine',
+    'ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'];
+  const tensEn = ['','ten','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety'];
+
+  function numToEnglish(n) {
+    n = Math.round(n);
+    if (n === 0) return 'zero';
+    if (n < 0) return 'minus ' + numToEnglish(-n);
+    let result = '';
+    if (n >= 1000000) {
+      result += numToEnglish(Math.floor(n / 1000000)) + ' million ';
+      n %= 1000000;
+    }
+    if (n >= 1000) {
+      result += numToEnglish(Math.floor(n / 1000)) + ' thousand ';
+      n %= 1000;
+    }
+    if (n >= 100) {
+      result += onesEn[Math.floor(n / 100)] + ' hundred ';
+      n %= 100;
+    }
+    if (n >= 20) {
+      result += tensEn[Math.floor(n / 10)] + (n % 10 ? '-' + onesEn[n % 10] : '') + ' ';
+    } else if (n > 0) {
+      result += onesEn[n] + ' ';
+    }
+    return result.trim();
+  }
+
+  // ===== AMOUNT IN WORDS (locale-aware) — EDIT 6 =====
+  function amountInWords(total) {
+    const lang = window.APP_LANG || 'ar';
+    if (lang === 'fr') {
+      return numToFrench(total) + ' dinars algériens (DZD)';
+    } else if (lang === 'en') {
+      return numToEnglish(total) + ' Algerian dinars (DZD)';
+    } else {
+      return numToArabic(total) + ' دينار جزائري';
+    }
+  }
+
+  // ===== CURRENCY LABEL (DZD vs دج) — EDIT 6 =====
+  function getCurrencyLabel() {
+    const lang = window.APP_LANG || 'ar';
+    return (lang === 'fr' || lang === 'en') ? ' DZD' : ' دج';
+  }
+
   // ===== ALGERIAN CURRENCY DATA =====
   const CURRENCY_IMG = {
     2000: { isNote: true,  src: '../images/currency/2000dz.jpg' },
@@ -543,6 +631,7 @@
     ph.style.display = 'none';
     wrap.style.display = 'flex';
 
+    const ns = localStorage.getItem('appNumeral') || 'eastern';
     wrap.innerHTML = `<div class="cash-breakdown-items">${
       parts.map(({ denom, count }) => {
         const info = CURRENCY_IMG[denom] || CURRENCY_IMG[1];
@@ -554,8 +643,8 @@
           <div style="display:flex;align-items:center;justify-content:center;">
             <img src="${info.src}" alt="${denom} دج" style="${imgStyle}box-shadow:0 2px 6px rgba(0,0,0,0.25);" loading="lazy"/>
           </div>
-          <span class="cash-item-count">×${count}</span>
-          <span class="cash-item-label">${denom} دج</span>
+          <span class="cash-item-count">×${convertNumerals(count, ns)}</span>
+          <span class="cash-item-label">${convertNumerals(denom, ns)}${getCurrencyLabel()}</span>
         </div>`;
       }).join('')
     }</div>`;
@@ -623,9 +712,11 @@
       }
     }
 
-    setField('feePlaceholder',  'feeValue',  'feeField',  fee.toLocaleString('ar-DZ') + ' دج');
-    setField('totalPlaceholder','totalValue','totalField', total.toLocaleString('ar-DZ') + ' دج');
-    setField('wordsPlaceholder','wordsValue','wordsField', amount > 0 ? numToArabic(total) + ' دينار جزائري' : '');
+    const currLabel = getCurrencyLabel();
+    const numStyle = localStorage.getItem('appNumeral') || 'eastern';
+    setField('feePlaceholder',  'feeValue',  'feeField',  convertNumerals(fee.toLocaleString('ar-DZ'), numStyle) + currLabel);
+    setField('totalPlaceholder','totalValue','totalField', convertNumerals(total.toLocaleString('ar-DZ'), numStyle) + currLabel);
+    setField('wordsPlaceholder','wordsValue','wordsField', amount > 0 ? amountInWords(total) : '');
 
     // Cash field — render coin/note visuals
     if (amount > 0) {
@@ -646,6 +737,16 @@
   // Init
   document.addEventListener('DOMContentLoaded', () => {
     switchTab('deposit');
+  });
+
+  // Re-calculate when language changes so DZD/دج and words update
+  window.addEventListener('langChanged', () => {
+    if (currentTab !== 'other') calcFees();
+  });
+
+  // Re-calculate when numeral style changes so numbers update
+  window.addEventListener('numeralChanged', () => {
+    if (currentTab !== 'other') calcFees();
   });
 </script>
 </body>
