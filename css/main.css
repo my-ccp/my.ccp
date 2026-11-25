@@ -125,6 +125,60 @@
   --result-border: #333333;
 }
 
+/* ===== THEME: EMERALD (أخضر زمردي) ===== */
+[data-theme="emerald"] {
+  --bg: #064e3b;
+  --bg2: #065f46;
+  --card: #047857;
+  --border: #059669;
+  --text: #ffffff;
+  --text2: #a7f3d0;
+  --accent: #34d399;
+  --accent2: #10b981;
+  --accent-green: #6ee7b7;
+  --accent-green2: #34d399;
+  --input-bg: #065f46;
+  --input-border: #059669;
+  --header-bg: linear-gradient(135deg, #022c22 0%, #064e3b 50%, #065f46 100%);
+  --shadow: 0 4px 20px rgba(0,0,0,0.3);
+  --shadow-card: 0 2px 16px rgba(0,0,0,0.2);
+  --nav-bg: #022c22;
+  --sidebar-bg: #022c22;
+  --result-bg: linear-gradient(135deg, #065f46, #047857);
+  --result-border: #059669;
+}
+[data-theme="emerald"] .fees-op-title .op-name { color: #34d399 !important; }
+[data-theme="emerald"] .fees-op-title .op-sub  { color: #a7f3d0 !important; }
+[data-theme="emerald"] .fees-op-icon { background: #022c22 !important; }
+[data-theme="emerald"] .fees-other-title { color: #34d399 !important; }
+[data-theme="emerald"] .fees-other-item .item-amount { color: #34d399 !important; }
+[data-theme="emerald"] .fees-nav-item.active { color: #34d399 !important; }
+[data-theme="emerald"] .fees-nav-item.active .nav-icon-wrap { background: #022c22 !important; }
+[data-theme="emerald"] .cash-item-count { color: #34d399 !important; background: rgba(0,0,0,0.2) !important; }
+
+/* ===== THEME: SLATE (رمادي فحمي) ===== */
+[data-theme="slate"] {
+  --bg: #1e293b;
+  --bg2: #0f172a;
+  --card: #334155;
+  --border: #475569;
+  --text: #f1f5f9;
+  --text2: #94a3b8;
+  --accent: #60a5fa;
+  --accent2: #3b82f6;
+  --accent-green: #34d399;
+  --accent-green2: #10b981;
+  --input-bg: #1e293b;
+  --input-border: #475569;
+  --header-bg: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+  --shadow: 0 4px 20px rgba(0,0,0,0.4);
+  --shadow-card: 0 2px 16px rgba(0,0,0,0.3);
+  --nav-bg: #0f172a;
+  --sidebar-bg: #0f172a;
+  --result-bg: linear-gradient(135deg, #0f172a, #1e293b);
+  --result-border: #475569;
+}
+
 /* ===== RESET ===== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { font-size: calc(16px * var(--font-scale, 1)); height: 100%; overflow: hidden; }
