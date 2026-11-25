@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>MY CCP – حاسبة الرسوم</title>
+  <meta name="theme-color" content="#1b4fa8"/>
+  <link rel="manifest" href="../manifest.json"/>
+  <link rel="icon" type="image/x-icon" href="../favicon.ico"/>
+  <link rel="icon" type="image/png" href="../icons/icon-192.png"/>
+  <link rel="apple-touch-icon" href="../icons/icon-192.png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <style>
+    /* ===== FEES PAGE SPECIFIC — Algérie Poste inspired ===== */
+    #fees-app {
+      display: flex;
+      flex-direction: column;
+      height: 100dvh;
+      background: #FFD200;
+      font-family: 'Cairo', 'Segoe UI', system-ui, sans-serif;
+      direction: rtl;
+    }
+
+    /* Header */
+    .fees-header {
+      background: #1b4fa8;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      min-height: 56px;
+    }
+    .fees-header-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #ffffff;
+      flex: 1;
+      text-align: center;
+    }
+    .fees-back-btn {
+      background: rgba(255,255,255,0.15);
+      border: none;
+      border-radius: 10px;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      cursor: pointer;
+    }
+    .fees-back-btn:hover { background: rgba(255,255,255,0.25); }
+
+    /* OP Banner */
+    .fees-op-banner {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+      padding: 18px 16px 10px;
+    }
+    .fees-op-title {
+      text-align: right;
+    }
+    .fees-op-title .op-name {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #1b4fa8;
+      direction: rtl;
+    }
+    .fees-op-title .op-sub {
+      font-size: 0.8rem;
+      color: #333;
+      direction: rtl;
+    }
+    .fees-op-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #1b4fa8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .fees-op-icon svg { color: #fff; }
+
+    /* Fields */
+    .fees-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 6px 16px 16px;
+      flex: 1;
+      overflow-y: auto;
+    }
+    .fees-field {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      position: relative;
+    }
+    .fees-field input {
+      width: 100%;
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1b4fa8;
+      font-family: inherit;
+      background: transparent;
+      border: none;
+      outline: none;
+    }
+    .fees-field input::placeholder {
+      color: #aab4c8;
+      font-weight: 500;
+    }
+    .fees-field .field-label {
+      position: absolute;
+      inset-inline-end: 14px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #aab4c8;
+      pointer-events: none;
+      display: none;
+    }
+    .fees-field.has-value .field-label { display: block; }
+    .fees-field .field-value {
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1b4fa8;
+      width: 100%;
+      direction: ltr;
+    }
+    .fees-field .field-placeholder {
+      font-size: 0.95rem;
+      color: #aab4c8;
+      font-weight: 500;
+    }
+
+    /* Amount field special */
+    .fees-field.amount-field input {
+      font-size: 1.2rem;
+    }
+
+    /* Copy icon */
+    .fees-field .copy-icon {
+      position: absolute;
+      inset-inline-start: 12px;
+      cursor: pointer;
+      color: #aab4c8;
+      display: none;
+    }
+    .fees-field.has-value .copy-icon { display: flex; }
+    .fees-field .copy-icon:hover { color: #1b4fa8; }
+
+    /* Bottom nav */
+    .fees-bottom-nav {
+      background: #f5f5f5;
+      display: flex;
+      border-top: 1px solid #e0e0e0;
+      position: sticky;
+      bottom: 0;
+    }
+    .fees-nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 10px 4px 12px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #888;
+      border-radius: 0;
+      transition: color 0.2s;
+    }
+    .fees-nav-item.active {
+      background: rgba(27,79,168,0.08);
+      color: #1b4fa8;
+      border-radius: 12px 12px 0 0;
+    }
+    .fees-nav-item .nav-icon-wrap {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+    .fees-nav-item.active .nav-icon-wrap {
+      background: #1b4fa8;
+    }
+
+    /* Other fees info card */
+    .fees-other-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 16px;
+      margin: 0 16px 12px;
+    }
+    .fees-other-title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #1b4fa8;
+      margin-bottom: 8px;
+      text-align: right;
+    }
+    .fees-other-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 0.85rem;
+    }
+    .fees-other-item:last-child { border-bottom: none; }
+    .fees-other-item .item-label { color: #555; }
+    .fees-other-item .item-amount { font-weight: 800; color: #1b4fa8; }
+
+    /* Pro upgrade banner */
+    .fees-pro-banner {
+      background: #f0f4ff;
+      border: 1px solid #c3d0f0;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      margin: 0 16px 12px;
+      gap: 10px;
+    }
+    .fees-pro-info { text-align: right; }
+    .fees-pro-info .pro-title { font-size: 0.95rem; font-weight: 800; color: #1b4fa8; }
+    .fees-pro-info .pro-sub { font-size: 0.75rem; color: #666; }
+    .fees-pro-btn {
+      background: #1b4fa8;
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      padding: 8px 18px;
+      font-weight: 700;
+      font-family: inherit;
+      font-size: 0.85rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+<div id="app-wrapper">
+<div id="fees-app">
+
+  <!-- Header -->
+  <header class="fees-header">
+    <button class="fees-back-btn" onclick="history.back()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+      </svg>
+    </button>
+    <div class="fees-header-title" data-i18n="fees_page_title">حاسبة الرسوم</div>
+    <div style="width:38px;"></div>
+  </header>
+
+  <!-- Main scroll area -->
+  <div style="flex:1;overflow-y:auto;display:flex;flex-direction:column;">
+
+    <!-- OP Banner -->
+    <div class="fees-op-banner" id="opBanner">
+      <div class="fees-op-title">
+        <div class="op-name" id="opName">رسوم الدفع نقدا</div>
+        <div class="op-sub" id="opSub">مكتب البريد</div>
+      </div>
+      <div class="fees-op-icon" id="opIcon">
+        <!-- deposit icon -->
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="6" width="20" height="14" rx="2"/>
+          <path d="M2 10h20"/><circle cx="12" cy="15" r="2"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Fields -->
+    <div class="fees-fields" id="feesFields">
+      <!-- Amount -->
+      <div class="fees-field amount-field">
+        <input type="number" id="amountInput" placeholder="المبلغ" inputmode="decimal" oninput="calcFees()"/>
+      </div>
+      <!-- Fee -->
+      <div class="fees-field" id="feeField">
+        <span class="field-placeholder" id="feePlaceholder">الرسم</span>
+        <span class="field-value" id="feeValue" style="display:none;"></span>
+        <span class="copy-icon" onclick="copyField('feeValue')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        </span>
+      </div>
+      <!-- Total -->
+      <div class="fees-field" id="totalField">
+        <span class="field-placeholder" id="totalPlaceholder">المجموع</span>
+        <span class="field-value" id="totalValue" style="display:none;"></span>
+        <span class="copy-icon" onclick="copyField('totalValue')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        </span>
+      </div>
+      <!-- In words -->
+      <div class="fees-field" id="wordsField">
+        <span class="field-placeholder" id="wordsPlaceholder">بالأحرف</span>
+        <span class="field-value" id="wordsValue" style="display:none;font-size:0.85rem;"></span>
+        <span class="copy-icon" onclick="copyField('wordsValue')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        </span>
+      </div>
+      <!-- Cash/Naqdan -->
+      <div class="fees-field" id="cashField">
+        <span class="field-placeholder" id="cashPlaceholder">نقدا</span>
+        <span class="field-value" id="cashValue" style="display:none;font-size:0.85rem;"></span>
+      </div>
+    </div>
+
+    <!-- Other fees info panel (shown on tab "other") -->
+    <div id="otherPanel" style="display:none;padding-bottom:8px;">
+      <div class="fees-pro-banner">
+        <div class="fees-pro-info">
+          <div class="pro-title">👑 النسخة الاحترافية</div>
+          <div class="pro-sub">إزالة الإعلانات وفتح جميع الميزات</div>
+        </div>
+        <button class="fees-pro-btn" onclick="showToast('قريباً!')">ترقية</button>
+      </div>
+
+      <div class="fees-other-card">
+        <div class="fees-other-title">رسوم السحب من الصراف الآلي</div>
+        <div class="fees-other-item">
+          <span class="item-amount">30 دج/معاملة</span>
+          <span class="item-label">السحب من موزع البريد</span>
+        </div>
+        <div class="fees-other-item">
+          <span class="item-amount">35 دج/معاملة</span>
+          <span class="item-label">السحب من موزع البنك</span>
+        </div>
+      </div>
+      <div class="fees-other-card">
+        <div class="fees-other-title">رسوم السحب بدون بطاقة من الصراف الآلي</div>
+        <div class="fees-other-item">
+          <span class="item-amount">80 دج/معاملة</span>
+          <span class="item-label">السحب بدون بطاقة</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end scroll area -->
+
+  <!-- Bottom Nav -->
+  <nav class="fees-bottom-nav">
+    <button class="fees-nav-item active" id="tab-deposit" onclick="switchTab('deposit')">
+      <div class="nav-icon-wrap">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><polyline points="8 12 12 16 16 12"/><line x1="12" y1="8" x2="12" y2="16"/>
+        </svg>
+      </div>
+      <span>الدفع</span>
+    </button>
+    <button class="fees-nav-item" id="tab-transfer" onclick="switchTab('transfer')">
+      <div class="nav-icon-wrap">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+          <polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+        </svg>
+      </div>
+      <span>التحويل</span>
+    </button>
+    <button class="fees-nav-item" id="tab-withdrawal" onclick="switchTab('withdrawal')">
+      <div class="nav-icon-wrap">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><polyline points="8 12 12 8 16 12"/><line x1="12" y1="16" x2="12" y2="8"/>
+        </svg>
+      </div>
+      <span>السحب</span>
+    </button>
+    <button class="fees-nav-item" id="tab-other" onclick="switchTab('other')">
+      <div class="nav-icon-wrap">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
+        </svg>
+      </div>
+      <span>رسوم أخرى</span>
+    </button>
+  </nav>
+
+</div><!-- end fees-app -->
+</div><!-- end app-wrapper -->
+<div id="toast" class="toast"></div>
+
+<script src="../js/i18n.js"></script>
+<script src="../js/app.js"></script>
+<script>
+  // ===== FEES CALCULATION (Algérie Poste official rates) =====
+  // Source: official Algérie Poste fee schedule
+
+  let currentTab = 'deposit';
+
+  // Fee calculation rules per operation type
+  // Returns fee in DZD for given amount
+  function calcDepositFee(amount) {
+    // Cash payment at post office
+    // Progressive scale based on official Algérie Poste rates
+    if (amount <= 1000)   return 15;
+    if (amount <= 5000)   return 20;
+    if (amount <= 10000)  return 30;
+    if (amount <= 50000)  return 50;
+    if (amount <= 100000) return 100;
+    // > 100 000 DZD: 0.1% min 150 DZD
+    return Math.max(150, Math.round(amount * 0.001));
+  }
+
+  function calcTransferFee(amount) {
+    // CCP to CCP transfer (virement)
+    // Official rates: progressive
+    if (amount <= 10000)  return 30;
+    if (amount <= 50000)  return 60;
+    if (amount <= 100000) return 100;
+    if (amount <= 500000) return 150;
+    // > 500 000: 0.03% min 200
+    return Math.max(200, Math.round(amount * 0.0003));
+  }
+
+  function calcWithdrawalFee(amount) {
+    // Cash withdrawal at post office window (guichet)
+    if (amount <= 10000)  return 30;
+    if (amount <= 50000)  return 50;
+    if (amount <= 100000) return 80;
+    // > 100 000: 0.08% min 100
+    return Math.max(100, Math.round(amount * 0.0008));
+  }
+
+  // ===== NUMBER TO ARABIC WORDS =====
+  const ones = ['','واحد','اثنان','ثلاثة','أربعة','خمسة','ستة','سبعة','ثمانية','تسعة',
+                 'عشرة','أحد عشر','اثنا عشر','ثلاثة عشر','أربعة عشر','خمسة عشر',
+                 'ستة عشر','سبعة عشر','ثمانية عشر','تسعة عشر'];
+  const tens = ['','عشرة','عشرون','ثلاثون','أربعون','خمسون','ستون','سبعون','ثمانون','تسعون'];
+  const hundreds = ['','مئة','مئتان','ثلاثمئة','أربعمئة','خمسمئة','ستمئة','سبعمئة','ثمانمئة','تسعمئة'];
+
+  function numToArabic(n) {
+    n = Math.round(n);
+    if (n === 0) return 'صفر';
+    if (n < 0) return 'سالب ' + numToArabic(-n);
+
+    let result = '';
+
+    if (n >= 1000000) {
+      const m = Math.floor(n / 1000000);
+      if (m === 1) result += 'مليون ';
+      else if (m === 2) result += 'مليونان ';
+      else if (m <= 10) result += numToArabic(m) + ' ملايين ';
+      else result += numToArabic(m) + ' مليون ';
+      n %= 1000000;
+      if (n > 0) result += 'و';
+    }
+    if (n >= 1000) {
+      const k = Math.floor(n / 1000);
+      if (k === 1) result += 'ألف ';
+      else if (k === 2) result += 'ألفان ';
+      else if (k <= 10) result += numToArabic(k) + ' آلاف ';
+      else result += numToArabic(k) + ' ألف ';
+      n %= 1000;
+      if (n > 0) result += 'و';
+    }
+    if (n >= 100) {
+      result += hundreds[Math.floor(n / 100)] + ' ';
+      n %= 100;
+      if (n > 0) result += 'و';
+    }
+    if (n >= 20) {
+      result += tens[Math.floor(n / 10)] + ' ';
+      n %= 10;
+      if (n > 0) result += 'و' + ones[n] + ' ';
+    } else if (n > 0) {
+      result += ones[n] + ' ';
+    }
+    return result.trim();
+  }
+
+  // Banknotes available in Algeria (DZD)
+  const BANKNOTES = [2000, 1000, 500, 200, 100, 50, 20, 10, 5];
+
+  function cashBreakdown(amount) {
+    amount = Math.round(amount);
+    const parts = [];
+    for (const note of BANKNOTES) {
+      const count = Math.floor(amount / note);
+      if (count > 0) {
+        parts.push(note + ' × ' + count);
+        amount -= note * count;
+      }
+    }
+    return parts.join(' + ');
+  }
+
+  // ===== UI =====
+  const OP_META = {
+    deposit: {
+      name: 'رسوم الدفع نقدا',
+      sub: 'مكتب البريد',
+      icon: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="6" width="20" height="14" rx="2"/>
+        <path d="M2 10h20"/><circle cx="12" cy="15" r="2"/>
+      </svg>`
+    },
+    transfer: {
+      name: 'التحويل من حساب إلى حساب آخر',
+      sub: 'مكتب البريد و بريدي موب',
+      icon: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+        <polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+      </svg>`
+    },
+    withdrawal: {
+      name: 'رسوم السحب',
+      sub: 'مكتب البريد: الصك البريدي و البطاقة الذهبية',
+      icon: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
+        <line x1="6" y1="15" x2="10" y2="15"/>
+      </svg>`
+    },
+    other: {
+      name: 'رسوم أخرى',
+      sub: 'الصراف الآلي وخدمات أخرى',
+      icon: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
+      </svg>`
+    }
+  };
+
+  function switchTab(tab) {
+    currentTab = tab;
+    // Update active tab
+    document.querySelectorAll('.fees-nav-item').forEach(el => {
+      el.classList.toggle('active', el.id === 'tab-' + tab);
+    });
+    // Update banner
+    const meta = OP_META[tab];
+    document.getElementById('opName').textContent = meta.name;
+    document.getElementById('opSub').textContent = meta.sub;
+    document.getElementById('opIcon').innerHTML = meta.icon;
+    // Show/hide panels
+    const isOther = tab === 'other';
+    document.getElementById('feesFields').style.display = isOther ? 'none' : 'flex';
+    document.getElementById('otherPanel').style.display = isOther ? 'block' : 'none';
+    document.getElementById('opBanner').style.display = 'flex';
+    // Recalc
+    calcFees();
+  }
+
+  function calcFees() {
+    if (currentTab === 'other') return;
+    const amountRaw = parseFloat(document.getElementById('amountInput').value);
+    const amount = isNaN(amountRaw) || amountRaw <= 0 ? 0 : amountRaw;
+
+    let fee = 0;
+    if (amount > 0) {
+      if (currentTab === 'deposit')    fee = calcDepositFee(amount);
+      if (currentTab === 'transfer')   fee = calcTransferFee(amount);
+      if (currentTab === 'withdrawal') fee = calcWithdrawalFee(amount);
+    }
+    const total = amount + fee;
+
+    function setField(placeholderId, valueId, fieldId, text) {
+      const ph = document.getElementById(placeholderId);
+      const vl = document.getElementById(valueId);
+      const fd = document.getElementById(fieldId);
+      if (amount > 0) {
+        ph.style.display = 'none';
+        vl.style.display = 'block';
+        vl.textContent = text;
+        if (fd) fd.classList.add('has-value');
+      } else {
+        ph.style.display = 'block';
+        vl.style.display = 'none';
+        if (fd) fd.classList.remove('has-value');
+      }
+    }
+
+    setField('feePlaceholder',  'feeValue',   'feeField',   fee.toLocaleString('ar-DZ') + ' دج');
+    setField('totalPlaceholder','totalValue',  'totalField',  total.toLocaleString('ar-DZ') + ' دج');
+    setField('wordsPlaceholder','wordsValue',  'wordsField',  amount > 0 ? numToArabic(total) + ' دينار جزائري' : '');
+    setField('cashPlaceholder', 'cashValue',   'cashField',   amount > 0 ? cashBreakdown(total) : '');
+  }
+
+  function copyField(id) {
+    const el = document.getElementById(id);
+    if (el && el.textContent) copyText(el.textContent);
+  }
+
+  // Init
+  document.addEventListener('DOMContentLoaded', () => {
+    switchTab('deposit');
+  });
+</script>
+</body>
+</html>
