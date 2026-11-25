@@ -296,6 +296,8 @@ const TRANSLATIONS = {
     faq_contact_sub: "تواصل معنا وسنرد في أقرب وقت",
     // Settings page
     font_size: "حجم الخط",
+    font_family: "نوع الخط",
+    numeral_style: "نوع الأرقام",
     allow_history: "السماح بحفظ سجل العمليات",
     allow_history_desc: "حفظ نتائج التحويل في السجل",
     clear_data: "مسح بيانات التطبيق",
@@ -681,6 +683,8 @@ const TRANSLATIONS = {
     faq_contact_sub: "Contactez-nous et nous répondrons dès que possible",
     // Settings page
     font_size: "Taille de police",
+    font_family: "Type de police",
+    numeral_style: "Style des chiffres",
     allow_history: "Autoriser l'historique des opérations",
     allow_history_desc: "Enregistrer les résultats de conversion",
     clear_data: "Effacer les données de l'application",
@@ -1064,6 +1068,8 @@ const TRANSLATIONS = {
     faq_contact_sub: "Contact us and we'll reply as soon as possible",
     // Settings page
     font_size: "Font Size",
+    font_family: "Font Type",
+    numeral_style: "Numeral Style",
     allow_history: "Allow operation history",
     allow_history_desc: "Save conversion results to history",
     clear_data: "Clear app data",
