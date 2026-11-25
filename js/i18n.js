@@ -336,8 +336,26 @@ const TRANSLATIONS = {
     fees_tab_transfer: "التحويل",
     fees_tab_withdrawal: "السحب",
     fees_tab_other: "رسوم أخرى",
+    // Fees banner op names
+    fees_op_deposit_name: "رسوم الدفع نقدا",
+    fees_op_deposit_sub: "مكتب البريد",
+    fees_op_transfer_name: "التحويل من حساب إلى حساب آخر",
+    fees_op_transfer_sub: "مكتب البريد و بريدي موب",
+    fees_op_withdrawal_name: "رسوم السحب",
+    fees_op_withdrawal_sub: "مكتب البريد: الصك البريدي و البطاقة الذهبية",
+    fees_op_other_name: "رسوم أخرى",
+    fees_op_other_sub: "الصراف الآلي وخدمات أخرى",
+    // Theme swatches
     theme_white: "نهاري",
     theme_black: "ليلي",
+    theme_light: "فاتح",
+    theme_dark: "داكن",
+    theme_yellow: "بريدي",
+    theme_emerald: "زمردي",
+    theme_slate: "فحمي",
+    // Favorites dropdown
+    fav_copy_rip: "نسخ الريب",
+    fav_share: "مشاركة",
   },
   fr: {
     app_name: "MY CCP",
@@ -674,8 +692,26 @@ const TRANSLATIONS = {
     fees_tab_transfer: "Virement",
     fees_tab_withdrawal: "Retrait",
     fees_tab_other: "Autres frais",
+    // Fees banner op names
+    fees_op_deposit_name: "Frais de versement en espèces",
+    fees_op_deposit_sub: "Bureau de Poste",
+    fees_op_transfer_name: "Virement de compte à compte",
+    fees_op_transfer_sub: "Bureau de Poste et BaridiMob",
+    fees_op_withdrawal_name: "Frais de retrait",
+    fees_op_withdrawal_sub: "Bureau de Poste: Chèque postal et Carte dorée",
+    fees_op_other_name: "Autres frais",
+    fees_op_other_sub: "DAB et autres services",
+    // Theme swatches
     theme_white: "Jour",
     theme_black: "Nuit",
+    theme_light: "Clair",
+    theme_dark: "Sombre",
+    theme_yellow: "Postal",
+    theme_emerald: "Émeraude",
+    theme_slate: "Ardoise",
+    // Favorites dropdown
+    fav_copy_rip: "Copier le RIB",
+    fav_share: "Partager",
   },
   en: {
     app_name: "MY CCP",
@@ -1012,8 +1048,26 @@ const TRANSLATIONS = {
     fees_tab_transfer: "Transfer",
     fees_tab_withdrawal: "Withdrawal",
     fees_tab_other: "Other Fees",
+    // Fees banner op names
+    fees_op_deposit_name: "Cash Deposit Fees",
+    fees_op_deposit_sub: "Post Office",
+    fees_op_transfer_name: "Account to Account Transfer",
+    fees_op_transfer_sub: "Post Office & BaridiMob",
+    fees_op_withdrawal_name: "Withdrawal Fees",
+    fees_op_withdrawal_sub: "Post Office: Postal Cheque & Gold Card",
+    fees_op_other_name: "Other Fees",
+    fees_op_other_sub: "ATM & Other Services",
+    // Theme swatches
     theme_white: "Day",
     theme_black: "Night",
+    theme_light: "Light",
+    theme_dark: "Dark",
+    theme_yellow: "Postal",
+    theme_emerald: "Emerald",
+    theme_slate: "Slate",
+    // Favorites dropdown
+    fav_copy_rip: "Copy RIB",
+    fav_share: "Share",
   }
 };
 
