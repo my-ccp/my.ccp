@@ -769,7 +769,7 @@
     // Re-apply hue for new theme state
     const theme = window.APP_THEME || 'light';
     const hue = getCurrentHue(theme);
-    const stored = localStorage.getItem(getHueKey(theme));
+    const stored = localStorage.getItem(HUE_GLOBAL_KEY);
     if (stored !== null) applyCustomHue(hue, theme);
     updateHueUI(hue);
     updateActiveThemeDot();
@@ -813,7 +813,7 @@
     const isRTL = document.documentElement.getAttribute('dir') === 'rtl'
                || document.body.getAttribute('dir') === 'rtl'
                || (window.APP_LANG || 'ar') === 'ar';
-    const dir = isRTL ? -1 : 1;  // RTL: expand to the left; LTR: expand to the right
+    const dir = isRTL ? 1 : -1;  // RTL: expand to the right (inward); LTR: expand to the left (inward)
 
     const stepX = 58;   // horizontal step per column
     const stepY = 52;   // vertical step per row
