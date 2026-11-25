@@ -103,8 +103,8 @@
           <button class="theme-swatch" id="swatch-white" onclick="selectTheme('white')" title="نهاري" style="background:#ffffff;border:2px solid #aaa;">
             <span style="color:#000000;font-size:0.7rem;font-weight:700;" data-i18n="theme_white">نهاري</span>
           </button>
-          <button class="theme-swatch" id="swatch-emerald" onclick="selectTheme('emerald')" title="زمردي" style="background:linear-gradient(135deg,#064e3b,#059669);border:2px solid #34d399;">
-            <span style="color:#34d399;font-size:0.7rem;font-weight:700;" data-i18n="theme_emerald">زمردي</span>
+          <button class="theme-swatch" id="swatch-green" onclick="selectTheme('green')" title="أخضر" style="background:linear-gradient(135deg,#064e3b,#059669);border:2px solid #34d399;">
+            <span style="color:#34d399;font-size:0.7rem;font-weight:700;" data-i18n="theme_green">أخضر</span>
           </button>
           <button class="theme-swatch" id="swatch-slate" onclick="selectTheme('slate')" title="فحمي" style="background:linear-gradient(135deg,#0f172a,#334155);border:2px solid #60a5fa;">
             <span style="color:#60a5fa;font-size:0.7rem;font-weight:700;" data-i18n="theme_slate">فحمي</span>
@@ -236,7 +236,7 @@
     const label = document.getElementById('themeModeLabel');
     if (!label) return;
     const lang = window.APP_LANG || 'ar';
-    const darkThemes = ['dark', 'black', 'emerald', 'slate'];
+    const darkThemes = ['dark', 'black', 'green', 'slate'];
     const isNightMode = darkThemes.includes(document.documentElement.getAttribute('data-theme'));
     // Show the current mode name using translation keys
     label.textContent = isNight ? t('dark_mode') : t('day_mode');
