@@ -66,11 +66,11 @@ const _THEME_DEFAULT_HUE = {
   light:220, dark:220, yellow:215, black:220, white:220, green:142, slate:215
 };
 
-function _getHueKey(theme) { return 'customHue_' + theme; }
+function _getHueKey(theme) { return 'customHue_global'; }
 
 (function _initCustomHue() {
   const theme = window.APP_THEME || 'white';
-  const stored = localStorage.getItem(_getHueKey(theme));
+  const stored = localStorage.getItem('customHue_global');
   if (stored === null) return; // no custom hue — let CSS handle it
   const hue = parseInt(stored);
   const darkThemes = ['dark','black','slate'];
