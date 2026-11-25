@@ -38,6 +38,29 @@ function applyFontScale(scale, broadcast = true) {
 // Listen for font scale sync across tabs
 // (added to onmessage below)
 
+// ===== CUSTOM HUE =====
+const _THEME_DEFAULT_HUE = {
+  light:220, dark:220, yellow:215, black:220, white:220, green:142, slate:215
+};
+
+function _getHueKey(theme) { return 'customHue_' + theme; }
+
+(function _initCustomHue() {
+  const theme = window.APP_THEME || 'white';
+  const stored = localStorage.getItem(_getHueKey(theme));
+  if (stored === null) return; // no custom hue — let CSS handle it
+  const hue = parseInt(stored);
+  const darkThemes = ['dark','black','slate'];
+  const isLight = !darkThemes.includes(theme);
+  const sat = (theme === 'green') ? 70 : 80;
+  const lig = isLight ? 45 : 60;
+  const lig2 = isLight ? 35 : 50;
+  document.documentElement.style.setProperty('--accent',        `hsl(${hue},${sat}%,${lig}%)`);
+  document.documentElement.style.setProperty('--accent2',       `hsl(${hue},${sat}%,${lig2}%)`);
+  document.documentElement.style.setProperty('--accent-green',  `hsl(${hue},${sat}%,${lig}%)`);
+  document.documentElement.style.setProperty('--accent-green2', `hsl(${hue},${sat}%,${lig2}%)`);
+})();
+
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', () => {
   applyTheme(window.APP_THEME, false);
