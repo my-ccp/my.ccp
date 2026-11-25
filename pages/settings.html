@@ -114,7 +114,7 @@
     </div>
     <style>
       .theme-swatch {
-        width: 64px; height: 44px; border-radius: 10px; border: 2px solid transparent;
+        width: 56px; height: 56px; border-radius: 50%; border: 2px solid transparent;
         display: flex; align-items: center; justify-content: center;
         cursor: pointer; transition: transform 0.15s, border-color 0.2s;
         box-shadow: 0 2px 8px rgba(0,0,0,0.15);
@@ -238,14 +238,8 @@
     const lang = window.APP_LANG || 'ar';
     const darkThemes = ['dark', 'black', 'emerald', 'slate'];
     const isNightMode = darkThemes.includes(document.documentElement.getAttribute('data-theme'));
-    const labels = {
-      ar: { night: 'الوضع الليلي', day: 'النمط النهاري' },
-      fr: { night: 'Mode Nuit',    day: 'Mode Jour' },
-      en: { night: 'Night Mode',   day: 'Day Mode' }
-    };
-    const set = labels[lang] || labels['ar'];
-    // Show the current mode name
-    label.textContent = isNight ? set.night : set.day;
+    // Show the current mode name using translation keys
+    label.textContent = isNight ? t('dark_mode') : t('day_mode');
     label.removeAttribute('data-i18n');
 
     // Switch icon: night now → show moon; day now → show sun
