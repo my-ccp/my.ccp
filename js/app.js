@@ -1,6 +1,6 @@
 // ===== STATE =====
 window.APP_LANG = localStorage.getItem('lang') || 'ar';
-window.APP_THEME = localStorage.getItem('theme') || 'light';
+window.APP_THEME = localStorage.getItem('theme') || 'white';
 
 // ===== BROADCAST CHANNEL (sync across tabs/pages without reload) =====
 const appChannel = new BroadcastChannel('myrip_app_channel');
@@ -64,16 +64,16 @@ function applyTheme(theme, broadcast = true) {
 }
 
 function toggleTheme() {
-  // Toggle between light and dark only; yellow/black are set via palette selector
+  // Toggle between white (day) and black (night) only
   const cur = window.APP_THEME;
-  const next = (cur === 'dark' || cur === 'black') ? 'light' : 'dark';
+  const next = (cur === 'black') ? 'white' : 'black';
   applyTheme(next, true);
 }
 
 function updateThemeToggle() {
   const toggle = document.getElementById('themeToggle');
   if (toggle) {
-    toggle.classList.toggle('on', window.APP_THEME === 'dark' || window.APP_THEME === 'black');
+    toggle.classList.toggle('on', window.APP_THEME === 'black');
   }
 }
 
