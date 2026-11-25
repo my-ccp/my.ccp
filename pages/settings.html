@@ -111,6 +111,26 @@
           </button>
         </div>
       </div>
+      <!-- Custom Hue Slider -->
+      <div style="padding:10px 4px 4px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="10" stroke-dasharray="2 4"/></svg>
+            <span style="font-size:0.88rem;font-weight:600;color:var(--text);" data-i18n="custom_color">لون مخصص</span>
+          </div>
+          <button onclick="resetCustomHue()" style="font-size:0.75rem;color:var(--text2);background:none;border:none;cursor:pointer;padding:2px 6px;" data-i18n="reset_color">إعادة ضبط</button>
+        </div>
+        <div style="position:relative;height:36px;display:flex;align-items:center;">
+          <div style="position:absolute;inset:0;border-radius:18px;background:linear-gradient(to right,hsl(0,80%,55%),hsl(60,80%,55%),hsl(120,80%,45%),hsl(180,80%,45%),hsl(240,80%,60%),hsl(300,80%,55%),hsl(360,80%,55%));box-shadow:0 2px 8px rgba(0,0,0,0.15);"></div>
+          <input type="range" id="hueSlider" min="0" max="359" step="1" value="220"
+            oninput="onHueChange(this.value)"
+            style="position:relative;z-index:1;width:100%;height:100%;opacity:0;cursor:pointer;margin:0;padding:0;"/>
+          <div id="hueThumb" style="position:absolute;width:32px;height:32px;border-radius:50%;border:3px solid #fff;box-shadow:0 2px 10px rgba(0,0,0,0.3);pointer-events:none;z-index:2;top:50%;transform:translate(-50%,-50%);transition:left 0.05s;left:61%;background:hsl(220,80%,55%);"></div>
+        </div>
+        <div style="display:flex;justify-content:center;margin-top:6px;">
+          <span id="huePreviewBox" style="display:inline-block;width:40px;height:14px;border-radius:7px;background:hsl(220,80%,55%);box-shadow:0 1px 4px rgba(0,0,0,0.2);"></span>
+        </div>
+      </div>
     </div>
     <style>
       .theme-swatch {
@@ -121,6 +141,8 @@
       }
       .theme-swatch:hover { transform: scale(1.06); }
       .theme-swatch.active-swatch { border-color: var(--accent) !important; box-shadow: 0 0 0 3px rgba(37,99,235,0.25); }
+      #hueSlider::-webkit-slider-thumb { -webkit-appearance: none; width: 32px; height: 32px; }
+      #hueSlider::-moz-range-thumb { width: 32px; height: 32px; border: none; background: transparent; }
     </style>
 
     <!-- Font Size -->
@@ -330,8 +352,90 @@
     if (clearBtn) clearBtn.textContent = t('clear_data_btn');
   }
 
+  // ---- Custom Hue per Theme ----
+  // Default hues for each theme (the natural accent hue)
+  const THEME_DEFAULT_HUE = {
+    light:  220, dark:  220, yellow: 215, black: 220,
+    white:  220, green: 142, slate:  215
+  };
+
+  function getHueKey(theme) {
+    return 'customHue_' + (theme || window.APP_THEME || 'light');
+  }
+
+  function getCurrentHue(theme) {
+    const t = theme || window.APP_THEME || 'light';
+    const stored = localStorage.getItem(getHueKey(t));
+    return stored !== null ? parseInt(stored) : (THEME_DEFAULT_HUE[t] ?? 220);
+  }
+
+  function applyCustomHue(hue, theme) {
+    const t = theme || window.APP_THEME || 'light';
+    // Determine lightness/saturation based on theme darkness
+    const darkThemes = ['dark', 'black', 'slate'];
+    const isLight = !darkThemes.includes(t);
+    // For green theme, don't override the green-specific accent from the theme
+    // Instead we apply hue to --accent and --accent2
+    const saturation = (t === 'green') ? 70 : 80;
+    const lightness  = isLight ? 45 : 60;
+    const color  = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+    const color2 = `hsl(${hue}, ${saturation}%, ${isLight ? 35 : 50}%)`;
+    document.documentElement.style.setProperty('--accent',  color);
+    document.documentElement.style.setProperty('--accent2', color2);
+    document.documentElement.style.setProperty('--accent-green',  color);
+    document.documentElement.style.setProperty('--accent-green2', color2);
+  }
+
+  function onHueChange(val) {
+    const hue = parseInt(val);
+    const theme = window.APP_THEME || 'light';
+    localStorage.setItem(getHueKey(theme), hue);
+    applyCustomHue(hue, theme);
+    updateHueUI(hue);
+  }
+
+  function resetCustomHue() {
+    const theme = window.APP_THEME || 'light';
+    localStorage.removeItem(getHueKey(theme));
+    // Remove inline CSS overrides so theme CSS takes over
+    document.documentElement.style.removeProperty('--accent');
+    document.documentElement.style.removeProperty('--accent2');
+    document.documentElement.style.removeProperty('--accent-green');
+    document.documentElement.style.removeProperty('--accent-green2');
+    const defaultHue = THEME_DEFAULT_HUE[theme] ?? 220;
+    updateHueUI(defaultHue);
+  }
+
+  function updateHueUI(hue) {
+    const slider = document.getElementById('hueSlider');
+    const thumb  = document.getElementById('hueThumb');
+    const preview = document.getElementById('huePreviewBox');
+    if (!slider) return;
+    slider.value = hue;
+    const pct = (hue / 359) * 100;
+    if (thumb) {
+      thumb.style.left = pct + '%';
+      thumb.style.background = `hsl(${hue}, 80%, 55%)`;
+    }
+    if (preview) preview.style.background = `hsl(${hue}, 80%, 55%)`;
+  }
+
+  function initHueSlider() {
+    const theme = window.APP_THEME || 'light';
+    const hue = getCurrentHue(theme);
+    updateHueUI(hue);
+    // Apply stored hue if customized
+    const stored = localStorage.getItem(getHueKey(theme));
+    if (stored !== null) applyCustomHue(hue, theme);
+  }
+
   // ---- Theme Palette ----
   function selectTheme(theme) {
+    // Before switching, clear inline accent overrides from previous theme
+    document.documentElement.style.removeProperty('--accent');
+    document.documentElement.style.removeProperty('--accent2');
+    document.documentElement.style.removeProperty('--accent-green');
+    document.documentElement.style.removeProperty('--accent-green2');
     document.documentElement.setAttribute('data-theme', theme);
     document.body.setAttribute('data-theme', theme);
     window.APP_THEME = theme;
@@ -340,6 +444,11 @@
     updateSwatchActive();
     updateThemeToggle();
     updateThemeLabel();
+    // Apply custom hue for the new theme if one was saved
+    const hue = getCurrentHue(theme);
+    const stored = localStorage.getItem(getHueKey(theme));
+    if (stored !== null) applyCustomHue(hue, theme);
+    updateHueUI(hue);
   }
 
   function updateSwatchActive() {
@@ -364,6 +473,8 @@
     }
     updateFontScaleUI(scale);
     updateFontSizeSamples();
+    // Init custom hue slider
+    initHueSlider();
   });
 </script>
 </body>
