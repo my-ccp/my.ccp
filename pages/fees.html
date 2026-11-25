@@ -25,7 +25,7 @@
 
     /* Header */
     .fees-header {
-      background: var(--accent, #1b4fa8);
+      background: var(--header-bg, linear-gradient(135deg, #1b4fa8, #2563eb));
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -323,7 +323,7 @@
     <div class="fees-fields" id="feesFields">
       <!-- Amount -->
       <div class="fees-field amount-field">
-        <input type="number" id="amountInput" placeholder="المبلغ" inputmode="decimal" oninput="calcFees()"/>
+        <input type="number" id="amountInput" data-i18n-ph="enter_amount_ph" placeholder="أدخل المبلغ بالدينار الجزائري" inputmode="decimal" oninput="calcFees()"/>
       </div>
       <!-- Fee -->
       <div class="fees-field" id="feeField">
