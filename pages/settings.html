@@ -97,8 +97,11 @@
           <button class="theme-swatch" id="swatch-yellow" onclick="selectTheme('yellow')" title="أصفر" style="background:#FFD200;border:2px solid #1b4fa8;">
             <span style="color:#1b4fa8;font-size:0.7rem;font-weight:700;">بريدي</span>
           </button>
-          <button class="theme-swatch" id="swatch-black" onclick="selectTheme('black')" title="أسود" style="background:#050505;border:2px solid #333;">
-            <span style="color:#ffffff;font-size:0.7rem;font-weight:700;">أسود</span>
+          <button class="theme-swatch" id="swatch-black" onclick="selectTheme('black')" title="ليلي" style="background:#050505;border:2px solid #333;">
+            <span style="color:#ffffff;font-size:0.7rem;font-weight:700;" data-i18n="theme_black">ليلي</span>
+          </button>
+          <button class="theme-swatch" id="swatch-white" onclick="selectTheme('white')" title="نهاري" style="background:#ffffff;border:2px solid #aaa;">
+            <span style="color:#000000;font-size:0.7rem;font-weight:700;" data-i18n="theme_white">نهاري</span>
           </button>
         </div>
       </div>
@@ -223,29 +226,29 @@
   }
 
   function updateThemeLabel() {
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const isNight = document.documentElement.getAttribute('data-theme') === 'black';
     const label = document.getElementById('themeModeLabel');
     if (!label) return;
     const lang = window.APP_LANG || 'ar';
     const labels = {
-      ar: { dark: 'الوضع الداكن',  light: 'الوضع الفاتح' },
-      fr: { dark: 'Mode Sombre',    light: 'Mode Clair' },
-      en: { dark: 'Dark Mode',      light: 'Light Mode' }
+      ar: { night: 'الوضع الليلي', day: 'النمط النهاري' },
+      fr: { night: 'Mode Nuit',    day: 'Mode Jour' },
+      en: { night: 'Night Mode',   day: 'Day Mode' }
     };
     const set = labels[lang] || labels['ar'];
-    // Show the opposite — what the toggle will switch TO
-    label.textContent = isDark ? set.light : set.dark;
+    // Show the current mode name
+    label.textContent = isNight ? set.night : set.day;
     label.removeAttribute('data-i18n');
 
-    // Switch icon: dark now → show sun (will switch to light); light now → show moon
+    // Switch icon: night now → show moon; day now → show sun
     const icon = document.getElementById('themeIcon');
     if (!icon) return;
-    if (isDark) {
-      // Show sun icon
-      icon.innerHTML = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
-    } else {
-      // Show moon icon
+    if (isNight) {
+      // Show moon icon (currently in night mode)
       icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+    } else {
+      // Show sun icon (currently in day mode)
+      icon.innerHTML = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
     }
   }
 
