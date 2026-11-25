@@ -172,7 +172,7 @@
 [data-theme="green"] .nav-item { color: #16a34a !important; }
 [data-theme="green"] .nav-item.active { color: #15803d !important; }
 [data-theme="green"] .btn-success { background: linear-gradient(135deg, #15803d, #16a34a) !important; color: #fff !important; }
-[data-theme="green"] .account-card { background: #ffffff !important; border: 1.5px solid #16a34a !important; }
+/* account-card keeps its original blue gradient in green theme */
 [data-theme="green"] .digit-counter { color: #16a34a !important; }
 
 /* ===== THEME: SLATE (رمادي فحمي) ===== */
