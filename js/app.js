@@ -19,6 +19,10 @@ appChannel.onmessage = (e) => {
     document.documentElement.style.setProperty('--font-scale', e.data.value);
     if (typeof updateFontScaleUI === 'function') updateFontScaleUI(e.data.value);
   }
+  if (e.data.type === 'numeral') {
+    document.documentElement.setAttribute('data-numeral', e.data.value);
+    window.dispatchEvent(new CustomEvent('numeralChanged', { detail: { numeral: e.data.value } }));
+  }
 };
 
 // ===== FONT SCALE =====
@@ -60,6 +64,68 @@ function _getHueKey(theme) { return 'customHue_' + theme; }
   document.documentElement.style.setProperty('--accent-green',  `hsl(${hue},${sat}%,${lig}%)`);
   document.documentElement.style.setProperty('--accent-green2', `hsl(${hue},${sat}%,${lig2}%)`);
 })();
+
+// ===== FONT FAMILY (Edit 2) — apply saved font on every page =====
+(function _initAppFont() {
+  const fontId = localStorage.getItem('appFont') || 'Cairo';
+  const FONT_STACKS = {
+    'Cairo':              "'Cairo', sans-serif",
+    'Tajawal':            "'Tajawal', sans-serif",
+    'Amiri':              "'Amiri', serif",
+    'Noto Naskh Arabic':  "'Noto Naskh Arabic', serif",
+    'Lateef':             "'Lateef', serif",
+    'Scheherazade New':   "'Scheherazade New', serif",
+    'system-ui':          "system-ui, sans-serif",
+  };
+  const stack = FONT_STACKS[fontId] || FONT_STACKS['Cairo'];
+  document.documentElement.style.setProperty('--app-font', stack);
+  document.addEventListener('DOMContentLoaded', () => {
+    document.body.style.fontFamily = stack;
+  });
+})();
+
+// ===== NUMERAL STYLE (Edit 3) — apply saved numeral on every page =====
+(function _initNumeralStyle() {
+  const numeralId = localStorage.getItem('appNumeral') || 'eastern';
+  document.documentElement.setAttribute('data-numeral', numeralId);
+})();
+
+// ===== NUMERAL CONVERSION — maps Western digits to Unicode styles =====
+// Each array maps digits 0–9 to the corresponding Unicode character.
+const NUMERAL_MAPS = {
+  eastern:    ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'],
+  western:    ['0','1','2','3','4','5','6','7','8','9'],
+  persian:    ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'],
+  // Math sans-serif  𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿  (U+1D7F6–1D7FF)
+  math_sans:  ['𝟶','𝟷','𝟸','𝟹','𝟺','𝟻','𝟼','𝟽','𝟾','𝟿'],
+  // Math sans-serif bold  𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵  (U+1D7EC–1D7F5)
+  math_bold:  ['𝟬','𝟭','𝟮','𝟯','𝟰','𝟱','𝟲','𝟳','𝟴','𝟵'],
+  // Fullwidth  ０１２３４５６７８９  (U+FF10–FF19)
+  fullwidth:  ['０','１','２','３','４','５','６','７','８','９'],
+  // Underlined  0̲1̲2̲...  (digit + U+0332 combining underline)
+  underlined: ['0̲','1̲','2̲','3̲','4̲','5̲','6̲','7̲','8̲','9̲'],
+  // Strikethrough  0̸1̸2̸...  (digit + U+0338 combining long solidus overlay)
+  strikethrough: ['0̸','1̸','2̸','3̸','4̸','5̸','6̸','7̸','8̸','9̸'],
+  // Double-struck  𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡  (U+1D7D8–1D7E1)
+  dbl_struck: ['𝟘','𝟙','𝟚','𝟛','𝟜','𝟝','𝟞','𝟟','𝟠','𝟡'],
+  // Circled  ⓪①②③④⑤⑥⑦⑧⑨  (U+24EA, U+2460–2468)
+  circled:    ['⓪','①','②','③','④','⑤','⑥','⑦','⑧','⑨'],
+  // Negative circled  ❶❷❸❹❺❻❼❽❾  (U+2776–277E; no filled zero — use ⓪ or ❶ for 0)
+  neg_circled:['⓿','❶','❷','❸','❹','❺','❻','❼','❽','❾'],
+};
+
+/**
+ * Convert all ASCII digits (0-9) in `text` to the target numeral style.
+ * Returns original text if style is 'western' or unknown.
+ */
+window.convertNumerals = function(text, style) {
+  if (!text && text !== 0) return text;
+  const str = String(text);
+  const map = NUMERAL_MAPS[style || localStorage.getItem('appNumeral') || 'eastern'];
+  if (!map) return str;
+  // Replace each ASCII digit with its mapped counterpart
+  return str.replace(/[0-9]/g, d => map[parseInt(d)]);
+};
 
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', () => {
@@ -113,6 +179,8 @@ function _applyLangDOM(lang) {
   if (typeof updateLangBtns === 'function') updateLangBtns();
   // Update sidebar position after lang change
   updateSidebarPosition();
+  // Notify pages that listen for lang changes (e.g. fees page — Edit 6)
+  window.dispatchEvent(new CustomEvent('langChanged', { detail: { lang } }));
 }
 
 function applyLang(lang, broadcast = true) {
