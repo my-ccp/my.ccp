@@ -710,7 +710,7 @@ const TRANSLATIONS = {
     theme_emerald: "Émeraude",
     theme_slate: "Ardoise",
     // Favorites dropdown
-    fav_copy_rip: "Copier le RIB",
+    fav_copy_rip: "Copier le RIP",
     fav_share: "Partager",
   },
   en: {
@@ -1066,7 +1066,7 @@ const TRANSLATIONS = {
     theme_emerald: "Emerald",
     theme_slate: "Slate",
     // Favorites dropdown
-    fav_copy_rip: "Copy RIB",
+    fav_copy_rip: "Copy RIP",
     fav_share: "Share",
   }
 };
