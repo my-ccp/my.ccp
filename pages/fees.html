@@ -25,7 +25,7 @@
 
     /* Header */
     .fees-header {
-      background: #1b4fa8;
+      background: var(--accent, #1b4fa8);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -65,21 +65,19 @@
     .fees-op-title .op-name {
       font-size: 1.15rem;
       font-weight: 800;
-      color: #1b4fa8;
+      color: var(--accent);
       direction: rtl;
     }
     .fees-op-title .op-sub {
       font-size: 0.8rem;
-      color: #333;
+      color: var(--text2);
       direction: rtl;
     }
-    [data-theme="dark"] .fees-op-title .op-sub,
-    [data-theme="black"] .fees-op-title .op-sub { color: #aaa; }
     .fees-op-icon {
       width: 56px;
       height: 56px;
       border-radius: 50%;
-      background: #1b4fa8;
+      background: var(--accent);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -112,7 +110,7 @@
       text-align: center;
       font-size: 1rem;
       font-weight: 700;
-      color: #1b4fa8;
+      color: var(--accent);
       font-family: inherit;
       background: transparent;
       border: none;
@@ -136,7 +134,7 @@
       text-align: center;
       font-size: 1rem;
       font-weight: 700;
-      color: #1b4fa8;
+      color: var(--accent);
       width: 100%;
       direction: ltr;
     }
@@ -156,7 +154,7 @@
       display: none;
     }
     .fees-field.has-value .copy-icon { display: flex; }
-    .fees-field .copy-icon:hover { color: #1b4fa8; }
+    .fees-field .copy-icon:hover { color: var(--accent); }
 
     /* ===== CASH BREAKDOWN with coin/note images ===== */
     .cash-breakdown-wrap {
@@ -195,8 +193,8 @@
     .cash-item-count {
       font-size: 0.8rem;
       font-weight: 800;
-      color: #1b4fa8;
-      background: rgba(27,79,168,0.1);
+      color: var(--accent);
+      background: rgba(var(--accent-rgb, 27,79,168),0.1);
       border-radius: 20px;
       padding: 2px 8px;
     }
@@ -234,8 +232,8 @@
       transition: color 0.2s;
     }
     .fees-nav-item.active {
-      background: rgba(27,79,168,0.08);
-      color: #1b4fa8;
+      background: rgba(37,99,235,0.08);
+      color: var(--accent);
       border-radius: 12px 12px 0 0;
     }
     .fees-nav-item .nav-icon-wrap {
@@ -248,7 +246,7 @@
       justify-content: center;
       color: #fff;
     }
-    .fees-nav-item.active .nav-icon-wrap { background: #1b4fa8; }
+    .fees-nav-item.active .nav-icon-wrap { background: var(--accent); }
 
     /* Other fees info card */
     .fees-other-card {
@@ -261,7 +259,7 @@
     .fees-other-title {
       font-size: 1rem;
       font-weight: 800;
-      color: #1b4fa8;
+      color: var(--accent);
       margin-bottom: 8px;
       text-align: right;
     }
@@ -274,15 +272,14 @@
       font-size: 0.85rem;
     }
     .fees-other-item:last-child { border-bottom: none; }
-    .fees-other-item .item-label { color: #555; }
-    .fees-other-item .item-amount { font-weight: 800; color: #1b4fa8; }
-    [data-theme="dark"] .fees-other-item .item-label,
-    [data-theme="black"] .fees-other-item .item-label,
-    [data-theme="white"] .fees-other-item .item-label { color: #444; }
-    [data-theme="white"] .fees-other-title { color: #000 !important; }
-    [data-theme="white"] .fees-other-item .item-amount { color: #000 !important; }
+    .fees-other-item .item-label { color: var(--text2); }
+    .fees-other-item .item-amount { font-weight: 800; color: var(--accent); }
 
-    /* back button: RTL → right arrow (exit), LTR → flip to left arrow (exit) */
+    /* back button: RTL → right side (exit right), LTR → left side (exit left) */
+    body[data-lang="fr"] .fees-header,
+    body[data-lang="en"] .fees-header {
+      flex-direction: row-reverse;
+    }
     body[data-lang="fr"] .fees-back-btn svg,
     body[data-lang="en"] .fees-back-btn svg {
       transform: scaleX(-1);
@@ -503,69 +500,18 @@
   }
 
   // ===== ALGERIAN CURRENCY DATA =====
-  // SVG coin/note renderings for each denomination
-  const CURRENCY_SVG = {
-    // Banknotes — landscape rectangles
-    2000: { isNote: true, svg: `<svg viewBox="0 0 80 50" xmlns="http://www.w3.org/2000/svg">
-      <rect width="80" height="50" rx="4" fill="#4a9b8e"/>
-      <rect x="2" y="2" width="76" height="46" rx="3" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/>
-      <text x="40" y="30" font-family="Cairo,Arial" font-weight="800" font-size="18" fill="white" text-anchor="middle">2000</text>
-      <text x="40" y="42" font-family="Cairo,Arial" font-size="7" fill="rgba(255,255,255,0.8)" text-anchor="middle">دينار</text>
-    </svg>` },
-    1000: { isNote: true, svg: `<svg viewBox="0 0 80 50" xmlns="http://www.w3.org/2000/svg">
-      <rect width="80" height="50" rx="4" fill="#c0392b"/>
-      <rect x="2" y="2" width="76" height="46" rx="3" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/>
-      <text x="40" y="30" font-family="Cairo,Arial" font-weight="800" font-size="18" fill="white" text-anchor="middle">1000</text>
-      <text x="40" y="42" font-family="Cairo,Arial" font-size="7" fill="rgba(255,255,255,0.8)" text-anchor="middle">دينار</text>
-    </svg>` },
-    500: { isNote: true, svg: `<svg viewBox="0 0 80 50" xmlns="http://www.w3.org/2000/svg">
-      <rect width="80" height="50" rx="4" fill="#8e44ad"/>
-      <rect x="2" y="2" width="76" height="46" rx="3" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/>
-      <text x="40" y="30" font-family="Cairo,Arial" font-weight="800" font-size="18" fill="white" text-anchor="middle">500</text>
-      <text x="40" y="42" font-family="Cairo,Arial" font-size="7" fill="rgba(255,255,255,0.8)" text-anchor="middle">دينار</text>
-    </svg>` },
-    200: { isNote: false, svg: `<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="28" cy="28" r="27" fill="#b8860b"/>
-      <circle cx="28" cy="28" r="21" fill="#d4a017"/>
-      <circle cx="28" cy="28" r="15" fill="#c8960c"/>
-      <text x="28" y="33" font-family="Cairo,Arial" font-weight="800" font-size="13" fill="white" text-anchor="middle">200</text>
-    </svg>` },
-    100: { isNote: false, svg: `<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="28" cy="28" r="27" fill="#888"/>
-      <circle cx="28" cy="28" r="21" fill="#b8b8b8"/>
-      <circle cx="28" cy="28" r="15" fill="#d0d0d0"/>
-      <text x="28" y="33" font-family="Cairo,Arial" font-weight="800" font-size="13" fill="#333" text-anchor="middle">100</text>
-    </svg>` },
-    50: { isNote: false, svg: `<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="28" cy="28" r="27" fill="#b8860b"/>
-      <circle cx="28" cy="28" r="20" fill="#c8c8c8"/>
-      <text x="28" y="34" font-family="Cairo,Arial" font-weight="800" font-size="15" fill="#555" text-anchor="middle">50</text>
-    </svg>` },
-    20: { isNote: false, svg: `<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="28" cy="28" r="27" fill="#b8860b"/>
-      <circle cx="28" cy="28" r="20" fill="#d4a017"/>
-      <text x="28" y="34" font-family="Cairo,Arial" font-weight="800" font-size="15" fill="white" text-anchor="middle">20</text>
-    </svg>` },
-    10: { isNote: false, svg: `<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="28" cy="28" r="27" fill="#aaa"/>
-      <circle cx="28" cy="28" r="20" fill="#c8c8c8"/>
-      <text x="28" y="34" font-family="Cairo,Arial" font-weight="800" font-size="15" fill="#333" text-anchor="middle">10</text>
-    </svg>` },
-    5: { isNote: false, svg: `<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="28" cy="28" r="27" fill="#999"/>
-      <circle cx="28" cy="28" r="20" fill="#bbb"/>
-      <text x="28" y="34" font-family="Cairo,Arial" font-weight="800" font-size="15" fill="#333" text-anchor="middle">5</text>
-    </svg>` },
-    2: { isNote: false, svg: `<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="28" cy="28" r="27" fill="#888"/>
-      <circle cx="28" cy="28" r="20" fill="#aaa"/>
-      <text x="28" y="34" font-family="Cairo,Arial" font-weight="800" font-size="15" fill="#333" text-anchor="middle">2</text>
-    </svg>` },
-    1: { isNote: false, svg: `<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="28" cy="28" r="27" fill="#777"/>
-      <circle cx="28" cy="28" r="20" fill="#999"/>
-      <text x="28" y="34" font-family="Cairo,Arial" font-weight="800" font-size="15" fill="#333" text-anchor="middle">1</text>
-    </svg>` },
+  const CURRENCY_IMG = {
+    2000: { isNote: true,  src: '../images/currency/2000dz.jpg' },
+    1000: { isNote: true,  src: '../images/currency/1000dz.jpg' },
+    500:  { isNote: true,  src: '../images/currency/500dz.jpg'  },
+    200:  { isNote: false, src: '../images/currency/200dz.jpg'  },
+    100:  { isNote: false, src: '../images/currency/100dz.jpg'  },
+    50:   { isNote: false, src: '../images/currency/50dz.jpg'   },
+    20:   { isNote: false, src: '../images/currency/20dz.jpg'   },
+    10:   { isNote: false, src: '../images/currency/10dz.jpg'   },
+    5:    { isNote: false, src: '../images/currency/5dz.jpg'    },
+    2:    { isNote: false, src: '../images/currency/2dz.jpg'    },
+    1:    { isNote: false, src: '../images/currency/1dz.jpg'    },
   };
 
   const DENOMINATIONS = [2000, 1000, 500, 200, 100, 50, 20, 10, 5, 2, 1];
@@ -599,11 +545,14 @@
 
     wrap.innerHTML = `<div class="cash-breakdown-items">${
       parts.map(({ denom, count }) => {
-        const info = CURRENCY_SVG[denom] || CURRENCY_SVG[1];
+        const info = CURRENCY_IMG[denom] || CURRENCY_IMG[1];
         const isNote = info.isNote;
+        const imgStyle = isNote
+          ? 'width:88px;height:55px;object-fit:cover;border-radius:5px;'
+          : 'width:60px;height:60px;object-fit:cover;border-radius:50%;';
         return `<div class="cash-item">
-          <div style="width:${isNote?'80px':'56px'};height:${isNote?'50px':'56px'};display:flex;align-items:center;justify-content:center;">
-            ${info.svg.replace('<svg ', `<svg style="width:100%;height:100%;" `)}
+          <div style="display:flex;align-items:center;justify-content:center;">
+            <img src="${info.src}" alt="${denom} دج" style="${imgStyle}box-shadow:0 2px 6px rgba(0,0,0,0.25);" loading="lazy"/>
           </div>
           <span class="cash-item-count">×${count}</span>
           <span class="cash-item-label">${denom} دج</span>
@@ -613,38 +562,22 @@
   }
 
   // ===== UI =====
-  const OP_META = {
-    deposit: {
-      name: 'رسوم الدفع نقدا',
-      sub: 'مكتب البريد',
-      icon: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  const OP_ICONS = {
+    deposit: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <rect x="2" y="6" width="20" height="14" rx="2"/>
         <path d="M2 10h20"/><circle cx="12" cy="15" r="2"/>
-      </svg>`
-    },
-    transfer: {
-      name: 'التحويل من حساب إلى حساب آخر',
-      sub: 'مكتب البريد و بريدي موب',
-      icon: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      </svg>`,
+    transfer: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/>
         <polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>
-      </svg>`
-    },
-    withdrawal: {
-      name: 'رسوم السحب',
-      sub: 'مكتب البريد: الصك البريدي و البطاقة الذهبية',
-      icon: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      </svg>`,
+    withdrawal: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
         <line x1="6" y1="15" x2="10" y2="15"/>
-      </svg>`
-    },
-    other: {
-      name: 'رسوم أخرى',
-      sub: 'الصراف الآلي وخدمات أخرى',
-      icon: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      </svg>`,
+    other: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
       </svg>`
-    }
   };
 
   function switchTab(tab) {
@@ -652,10 +585,9 @@
     document.querySelectorAll('.fees-nav-item').forEach(el => {
       el.classList.toggle('active', el.id === 'tab-' + tab);
     });
-    const meta = OP_META[tab] || OP_META['deposit'];
-    document.getElementById('opName').textContent = meta.name;
-    document.getElementById('opSub').textContent = meta.sub;
-    document.getElementById('opIcon').innerHTML = meta.icon;
+    document.getElementById('opName').textContent = t('fees_op_' + tab + '_name');
+    document.getElementById('opSub').textContent = t('fees_op_' + tab + '_sub');
+    document.getElementById('opIcon').innerHTML = OP_ICONS[tab] || OP_ICONS['deposit'];
     const isOther = tab === 'other';
     document.getElementById('feesFields').style.display = isOther ? 'none' : 'flex';
     document.getElementById('otherPanel').style.display = isOther ? 'block' : 'none';
