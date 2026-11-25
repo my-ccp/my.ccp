@@ -12,11 +12,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="../css/main.css"/>
   <style>
-    /* Privacy page is ALWAYS dark regardless of app theme */
+    /* Privacy page is ALWAYS dark regardless of app theme — forced black */
+    html { background: #000000 !important; }
     html, body, #app-wrapper, #app { background: #000000 !important; color: #ffffff !important; }
     .subpage-header { background: #000000 !important; border-bottom: 1px solid #111130; }
     .subpage-title { color: #ffffff !important; font-size: 1.2rem !important; }
     .back-btn { color: #ffffff !important; }
+    /* Override any theme that may bleed in */
+    [data-theme] html, [data-theme] body { background: #000000 !important; }
 
     .priv-hero {
       display: flex;
@@ -312,6 +315,42 @@
         </div>
       </div>
 
+      <!-- What data is stored -->
+      <div class="privacy-block">
+        <div class="privacy-block-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          ما الذي يُخزَّن على جهازك؟
+        </div>
+        <div style="font-size:0.9rem;color:#8899bb;line-height:1.8;">
+          التطبيق يحفظ فقط ما تدخله أنت بنفسك في ذاكرة المتصفح (localStorage):
+          <ul style="margin:10px 0 0;padding-inline-start:20px;display:flex;flex-direction:column;gap:6px;">
+            <li><span style="color:#e2e8f0;font-weight:700;">الحسابات المحفوظة:</span> الاسم، رقم CCP، المفتاح، رقم RIP</li>
+            <li><span style="color:#e2e8f0;font-weight:700;">سجل العمليات:</span> سجل اختياري للعمليات التي أجريتها (يمكن تعطيله)</li>
+            <li><span style="color:#e2e8f0;font-weight:700;">إعدادات التطبيق:</span> اللغة، النمط، حجم الخط، اللون المخصص</li>
+            <li><span style="color:#e2e8f0;font-weight:700;">المفضلة:</span> الحسابات التي أضفتها للمفضلة</li>
+          </ul>
+          <br/>لا نجمع أي معلومات تقنية كعنوان IP، نوع الجهاز، أو بيانات الموقع الجغرافي.
+        </div>
+      </div>
+
+      <!-- Rights -->
+      <div class="privacy-block">
+        <div class="privacy-block-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          حقوقك كمستخدم
+        </div>
+        <div style="font-size:0.9rem;color:#8899bb;line-height:1.8;">
+          نظراً لأن جميع البيانات محلية على جهازك، فأنت تتمتع بالتحكم الكامل:
+          <ul style="margin:10px 0 0;padding-inline-start:20px;display:flex;flex-direction:column;gap:6px;">
+            <li><span style="color:#e2e8f0;font-weight:700;">الوصول:</span> جميع بياناتك مرئية في التطبيق في أي وقت</li>
+            <li><span style="color:#e2e8f0;font-weight:700;">التعديل:</span> يمكنك تعديل أي حساب محفوظ</li>
+            <li><span style="color:#e2e8f0;font-weight:700;">التصدير:</span> تصدير جميع حساباتك بصيغة JSON للنسخ الاحتياطي</li>
+            <li><span style="color:#e2e8f0;font-weight:700;">الحذف:</span> حذف بيانات مفردة أو جميعها في أي وقت</li>
+            <li><span style="color:#e2e8f0;font-weight:700;">الإيقاف:</span> إيقاف سجل العمليات من الإعدادات</li>
+          </ul>
+        </div>
+      </div>
+
       <div class="privacy-block">
         <div class="privacy-block-title">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -391,6 +430,40 @@
 
       <div class="privacy-block">
         <div class="privacy-block-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Que stocke l'application ?
+        </div>
+        <div style="font-size:0.9rem;color:#8899bb;line-height:1.8;">
+          L'application sauvegarde uniquement ce que vous saisissez, en local dans votre navigateur (localStorage) :
+          <ul style="margin:10px 0 0;padding-inline-start:20px;display:flex;flex-direction:column;gap:6px;">
+            <li><span style="color:#e2e8f0;font-weight:700;">Comptes sauvegardés :</span> nom, numéro CCP, clé, numéro RIP</li>
+            <li><span style="color:#e2e8f0;font-weight:700;">Historique des opérations :</span> journal optionnel (peut être désactivé)</li>
+            <li><span style="color:#e2e8f0;font-weight:700;">Paramètres :</span> langue, thème, taille de police, couleur personnalisée</li>
+            <li><span style="color:#e2e8f0;font-weight:700;">Favoris :</span> les comptes que vous avez marqués</li>
+          </ul>
+          <br/>Nous ne collectons aucune donnée technique : adresse IP, type d'appareil ou localisation.
+        </div>
+      </div>
+
+      <div class="privacy-block">
+        <div class="privacy-block-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Vos droits en tant qu'utilisateur
+        </div>
+        <div style="font-size:0.9rem;color:#8899bb;line-height:1.8;">
+          Puisque toutes les données sont locales sur votre appareil, vous avez un contrôle total :
+          <ul style="margin:10px 0 0;padding-inline-start:20px;display:flex;flex-direction:column;gap:6px;">
+            <li><span style="color:#e2e8f0;font-weight:700;">Accès :</span> toutes vos données sont visibles dans l'application</li>
+            <li><span style="color:#e2e8f0;font-weight:700;">Modification :</span> modifiez n'importe quel compte enregistré</li>
+            <li><span style="color:#e2e8f0;font-weight:700;">Export :</span> exportez vos comptes en JSON pour sauvegarde</li>
+            <li><span style="color:#e2e8f0;font-weight:700;">Suppression :</span> supprimez des données individuelles ou tout effacer</li>
+            <li><span style="color:#e2e8f0;font-weight:700;">Désactivation :</span> désactivez l'historique depuis les paramètres</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="privacy-block">
+        <div class="privacy-block-title">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           Avertissement
         </div>
@@ -463,6 +536,40 @@
             <div class="privacy-point-title">Full Right to Deletion</div>
             <div class="privacy-point-text">You can at any time: delete individual or all accounts from the "Accounts" page, clear the operation history from the "History" page, and remove all data via the app settings or browser settings.</div>
           </div>
+        </div>
+      </div>
+
+      <div class="privacy-block">
+        <div class="privacy-block-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          What Does the App Store?
+        </div>
+        <div style="font-size:0.9rem;color:#8899bb;line-height:1.8;">
+          The app only saves what you enter yourself, locally in your browser (localStorage):
+          <ul style="margin:10px 0 0;padding-inline-start:20px;display:flex;flex-direction:column;gap:6px;">
+            <li><span style="color:#e2e8f0;font-weight:700;">Saved accounts:</span> name, CCP number, key, RIP number</li>
+            <li><span style="color:#e2e8f0;font-weight:700;">Operation history:</span> optional log (can be disabled)</li>
+            <li><span style="color:#e2e8f0;font-weight:700;">Settings:</span> language, theme, font size, custom colour</li>
+            <li><span style="color:#e2e8f0;font-weight:700;">Favourites:</span> accounts you have starred</li>
+          </ul>
+          <br/>We do not collect any technical data: IP address, device type, or location.
+        </div>
+      </div>
+
+      <div class="privacy-block">
+        <div class="privacy-block-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Your Rights as a User
+        </div>
+        <div style="font-size:0.9rem;color:#8899bb;line-height:1.8;">
+          Since all data is local on your device, you have full control:
+          <ul style="margin:10px 0 0;padding-inline-start:20px;display:flex;flex-direction:column;gap:6px;">
+            <li><span style="color:#e2e8f0;font-weight:700;">Access:</span> all your data is visible in the app at any time</li>
+            <li><span style="color:#e2e8f0;font-weight:700;">Edit:</span> modify any saved account</li>
+            <li><span style="color:#e2e8f0;font-weight:700;">Export:</span> export all accounts as JSON for backup</li>
+            <li><span style="color:#e2e8f0;font-weight:700;">Delete:</span> remove individual data or wipe everything</li>
+            <li><span style="color:#e2e8f0;font-weight:700;">Disable:</span> turn off operation history from settings</li>
+          </ul>
         </div>
       </div>
 
