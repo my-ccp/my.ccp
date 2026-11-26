@@ -386,6 +386,8 @@ const TRANSLATIONS = {
     theme_yellow: "بريدي",
     theme_green: "أخضر",
     theme_slate: "فحمي",
+    theme_purple: "بنفسجي",
+    theme_burgundy: "عنابي",
     // Favorites dropdown
     fav_copy_rip: "نسخ الريب",
     fav_share: "مشاركة",
@@ -775,6 +777,8 @@ const TRANSLATIONS = {
     theme_yellow: "Postal",
     theme_green: "vert",
     theme_slate: "Ardoise",
+    theme_purple: "Violet",
+    theme_burgundy: "Bordeaux",
     // Favorites dropdown
     fav_copy_rip: "Copier le RIP",
     fav_share: "Partager",
@@ -1164,6 +1168,8 @@ const TRANSLATIONS = {
     theme_yellow: "Postal",
     theme_green: "Green",
     theme_slate: "Slate",
+    theme_purple: "Purple",
+    theme_burgundy: "Burgundy",
     // Favorites dropdown
     fav_copy_rip: "Copy RIP",
     fav_share: "Share",
