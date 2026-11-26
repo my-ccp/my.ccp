@@ -833,10 +833,10 @@ body[data-lang="en"] .account-checkbox { right: auto; left: 12px; }
 /* ===== SIDEBAR ===== */
 /* overlay & sidebar are now inside #app-wrapper, not #app */
 .sidebar-overlay {
-  position: absolute;
+  position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.6);
-  z-index: 200;
+  z-index: 400;
   opacity: 0;
   pointer-events: none;
   transition: opacity var(--transition);
@@ -846,14 +846,15 @@ body[data-lang="en"] .account-checkbox { right: auto; left: 12px; }
 
 /* Default (ar) — sidebar opens from RIGHT */
 .sidebar {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: auto;
   right: 0;
-  width: 290px;
+  width: min(290px, 85vw);
   height: 100%;
+  height: 100dvh;
   background: var(--sidebar-bg);
-  z-index: 201;
+  z-index: 401;
   transform: translateX(100%);
   transition: transform 0.32s cubic-bezier(0.4,0,0.2,1);
   display: flex;
@@ -871,6 +872,9 @@ body[data-lang="en"] .sidebar {
   transform: translateX(-100%);
   box-shadow: 6px 0 32px rgba(0,0,0,0.3);
 }
+
+/* Prevent body scroll when sidebar is open */
+body.sidebar-open { overflow: hidden; }
 body[data-lang="fr"] .sidebar.open,
 body[data-lang="en"] .sidebar.open { transform: translateX(0); }
 
