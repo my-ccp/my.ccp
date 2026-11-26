@@ -993,10 +993,15 @@
     const lightness  = isLight ? 45 : 60;
     const color  = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
     const color2 = `hsl(${hue}, ${saturation}%, ${isLight ? 35 : 50}%)`;
-    document.documentElement.style.setProperty('--accent',        color);
-    document.documentElement.style.setProperty('--accent2',       color2);
-    document.documentElement.style.setProperty('--accent-green',  color);
-    document.documentElement.style.setProperty('--accent-green2', color2);
+    // Set on BOTH html and body: data-theme is on both elements, so the [data-theme]
+    // CSS block on <body> overrides the var for all children via inheritance.
+    // Setting inline style on body too ensures the custom hue always wins.
+    [document.documentElement, document.body].forEach(el => {
+      el.style.setProperty('--accent',        color);
+      el.style.setProperty('--accent2',       color2);
+      el.style.setProperty('--accent-green',  color);
+      el.style.setProperty('--accent-green2', color2);
+    });
   }
 
   function onHueChange(val) {
@@ -1021,10 +1026,12 @@
   function resetCustomHue() {
     const theme = window.APP_THEME || 'light';
     localStorage.removeItem(HUE_GLOBAL_KEY);
-    document.documentElement.style.removeProperty('--accent');
-    document.documentElement.style.removeProperty('--accent2');
-    document.documentElement.style.removeProperty('--accent-green');
-    document.documentElement.style.removeProperty('--accent-green2');
+    [document.documentElement, document.body].forEach(el => {
+      el.style.removeProperty('--accent');
+      el.style.removeProperty('--accent2');
+      el.style.removeProperty('--accent-green');
+      el.style.removeProperty('--accent-green2');
+    });
     const defaultHue = THEME_DEFAULT_HUE[theme] ?? 220;
     updateHueUI(defaultHue);
   }
@@ -1055,11 +1062,13 @@
   // SELECT THEME (called from color wheel swatches)
   // =============================================
   function selectTheme(theme) {
-    // Clear previous inline accent overrides
-    document.documentElement.style.removeProperty('--accent');
-    document.documentElement.style.removeProperty('--accent2');
-    document.documentElement.style.removeProperty('--accent-green');
-    document.documentElement.style.removeProperty('--accent-green2');
+    // Clear previous inline accent overrides from BOTH html and body
+    [document.documentElement, document.body].forEach(el => {
+      el.style.removeProperty('--accent');
+      el.style.removeProperty('--accent2');
+      el.style.removeProperty('--accent-green');
+      el.style.removeProperty('--accent-green2');
+    });
     document.documentElement.setAttribute('data-theme', theme);
     document.body.setAttribute('data-theme', theme);
     window.APP_THEME = theme;
