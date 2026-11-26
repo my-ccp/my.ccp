@@ -234,6 +234,104 @@ html, body, * {
   --result-border: #475569;
 }
 
+/* ===== THEME: PURPLE (بنفسجي) ===== */
+[data-theme="purple"] {
+  --bg: #f5f0ff;
+  --bg2: #ede8f8;
+  --card: #ffffff;
+  --border: #7c3aed;
+  --text: #3b0764;
+  --text2: #7c3aed;
+  --accent: #7c3aed;
+  --accent2: #6d28d9;
+  --accent-green: #059669;
+  --accent-green2: #047857;
+  --input-bg: #ffffff;
+  --input-border: #a78bfa;
+  --header-bg: linear-gradient(135deg, #4c1d95 0%, #6d28d9 50%, #7c3aed 100%);
+  --shadow: 0 4px 20px rgba(124,58,237,0.18);
+  --shadow-card: 0 2px 16px rgba(109,40,217,0.1);
+  --nav-bg: #ffffff;
+  --sidebar-bg: #f5f0ff;
+  --result-bg: linear-gradient(135deg, #ede9fe, #ddd6fe);
+  --result-border: #a78bfa;
+}
+[data-theme="purple"] .fees-op-title .op-name { color: #6d28d9 !important; }
+[data-theme="purple"] .fees-op-title .op-sub  { color: #7c3aed !important; }
+[data-theme="purple"] .fees-op-icon { background: #ede9fe !important; }
+[data-theme="purple"] .fees-other-title { color: #6d28d9 !important; }
+[data-theme="purple"] .fees-other-item .item-amount { color: #6d28d9 !important; }
+[data-theme="purple"] .fees-nav-item.active { color: #6d28d9 !important; }
+[data-theme="purple"] .fees-nav-item.active .nav-icon-wrap { background: #ede9fe !important; }
+[data-theme="purple"] .cash-item-count { color: #6d28d9 !important; background: rgba(109,40,217,0.1) !important; }
+[data-theme="purple"] body { color: #3b0764; }
+[data-theme="purple"] .sidebar { background: #f5f0ff !important; border-right: 2px solid #7c3aed; }
+[data-theme="purple"] .sidebar-header { background: linear-gradient(135deg, #4c1d95, #7c3aed) !important; }
+[data-theme="purple"] .sidebar-app-name { color: #ffffff !important; }
+[data-theme="purple"] .sidebar-item { color: #6d28d9 !important; }
+[data-theme="purple"] .sidebar-item:hover { background: #ede9fe !important; }
+[data-theme="purple"] .sidebar-item.active { background: #ede9fe !important; color: #6d28d9 !important; }
+[data-theme="purple"] .sidebar-divider { border-color: #7c3aed !important; opacity: 0.3; }
+[data-theme="purple"] .input-group { background: #f5f0ff !important; border-color: #7c3aed !important; }
+[data-theme="purple"] .input-label { color: #7c3aed !important; }
+[data-theme="purple"] .input-icon { color: #7c3aed !important; }
+[data-theme="purple"] #ccpInput, [data-theme="purple"] input { color: #3b0764 !important; }
+[data-theme="purple"] .result-box { color: #6d28d9 !important; }
+[data-theme="purple"] .bottom-nav { background: #ffffff !important; border-top: 2px solid #7c3aed; }
+[data-theme="purple"] .nav-item { color: #7c3aed !important; }
+[data-theme="purple"] .nav-item.active { color: #6d28d9 !important; }
+[data-theme="purple"] .btn-success { background: linear-gradient(135deg, #4c1d95, #7c3aed) !important; color: #fff !important; }
+[data-theme="purple"] .digit-counter { color: #7c3aed !important; }
+
+/* ===== THEME: BURGUNDY (عنابي لامع) ===== */
+[data-theme="burgundy"] {
+  --bg: #fdf2f4;
+  --bg2: #fce4e9;
+  --card: #ffffff;
+  --border: #9b1a3a;
+  --text: #5a0a1a;
+  --text2: #9b1a3a;
+  --accent: #9b1a3a;
+  --accent2: #7f1530;
+  --accent-green: #059669;
+  --accent-green2: #047857;
+  --input-bg: #ffffff;
+  --input-border: #c4455e;
+  --header-bg: linear-gradient(135deg, #5a0a1a 0%, #800020 50%, #9b1a3a 100%);
+  --shadow: 0 4px 20px rgba(155,26,58,0.18);
+  --shadow-card: 0 2px 16px rgba(128,0,32,0.1);
+  --nav-bg: #ffffff;
+  --sidebar-bg: #fdf2f4;
+  --result-bg: linear-gradient(135deg, #fce4e9, #fbd0d9);
+  --result-border: #c4455e;
+}
+[data-theme="burgundy"] .fees-op-title .op-name { color: #800020 !important; }
+[data-theme="burgundy"] .fees-op-title .op-sub  { color: #9b1a3a !important; }
+[data-theme="burgundy"] .fees-op-icon { background: #fce4e9 !important; }
+[data-theme="burgundy"] .fees-other-title { color: #800020 !important; }
+[data-theme="burgundy"] .fees-other-item .item-amount { color: #800020 !important; }
+[data-theme="burgundy"] .fees-nav-item.active { color: #800020 !important; }
+[data-theme="burgundy"] .fees-nav-item.active .nav-icon-wrap { background: #fce4e9 !important; }
+[data-theme="burgundy"] .cash-item-count { color: #800020 !important; background: rgba(128,0,32,0.1) !important; }
+[data-theme="burgundy"] body { color: #5a0a1a; }
+[data-theme="burgundy"] .sidebar { background: #fdf2f4 !important; border-right: 2px solid #9b1a3a; }
+[data-theme="burgundy"] .sidebar-header { background: linear-gradient(135deg, #5a0a1a, #9b1a3a) !important; }
+[data-theme="burgundy"] .sidebar-app-name { color: #ffffff !important; }
+[data-theme="burgundy"] .sidebar-item { color: #800020 !important; }
+[data-theme="burgundy"] .sidebar-item:hover { background: #fce4e9 !important; }
+[data-theme="burgundy"] .sidebar-item.active { background: #fce4e9 !important; color: #800020 !important; }
+[data-theme="burgundy"] .sidebar-divider { border-color: #9b1a3a !important; opacity: 0.3; }
+[data-theme="burgundy"] .input-group { background: #fdf2f4 !important; border-color: #9b1a3a !important; }
+[data-theme="burgundy"] .input-label { color: #9b1a3a !important; }
+[data-theme="burgundy"] .input-icon { color: #9b1a3a !important; }
+[data-theme="burgundy"] #ccpInput, [data-theme="burgundy"] input { color: #5a0a1a !important; }
+[data-theme="burgundy"] .result-box { color: #800020 !important; }
+[data-theme="burgundy"] .bottom-nav { background: #ffffff !important; border-top: 2px solid #9b1a3a; }
+[data-theme="burgundy"] .nav-item { color: #9b1a3a !important; }
+[data-theme="burgundy"] .nav-item.active { color: #800020 !important; }
+[data-theme="burgundy"] .btn-success { background: linear-gradient(135deg, #5a0a1a, #9b1a3a) !important; color: #fff !important; }
+[data-theme="burgundy"] .digit-counter { color: #9b1a3a !important; }
+
 /* ===== RESET ===== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { font-size: calc(16px * var(--font-scale, 1)); height: 100%; overflow: hidden; }
