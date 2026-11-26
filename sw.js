@@ -1,4 +1,4 @@
-const CACHE_NAME = 'myccp-v5';
+const CACHE_NAME = 'myccp-v6';
 const BASE = '/my.ccp';
 const ASSETS = [
   `${BASE}/`,
