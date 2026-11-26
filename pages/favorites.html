@@ -255,11 +255,11 @@
     document.getElementById('qrRipText').textContent = rip;
     const canvasEl = document.getElementById('qrCanvas');
     QRGen.render(rip, canvasEl, '#000000', '#ffffff');
-    document.getElementById('qrModal').classList.add('active');
+    document.getElementById('qrModal').classList.add('open');
   }
 
   function closeQRModal() {
-    document.getElementById('qrModal').classList.remove('active');
+    document.getElementById('qrModal').classList.remove('open');
   }
 
   function downloadQR() {
