@@ -85,196 +85,14 @@
     updateAccount(account);
   
 
-  // ===== SELF-CONTAINED QR CODE GENERATOR (no external library) =====
-  const QRGen = (() => {
-    const GF_EXP = new Uint8Array(512);
-    const GF_LOG = new Uint8Array(256);
-    (() => {
-      let x = 1;
-      for (let i = 0; i < 255; i++) {
-        GF_EXP[i] = x; GF_LOG[x] = i;
-        x <<= 1; if (x & 0x100) x ^= 0x11d;
-      }
-      for (let i = 255; i < 512; i++) GF_EXP[i] = GF_EXP[i - 255];
-    })();
-    const gfMul = (a, b) => a && b ? GF_EXP[GF_LOG[a] + GF_LOG[b]] : 0;
-    const gfPoly = (n) => {
-      let p = [1];
-      for (let i = 0; i < n; i++) {
-        const q = [1, GF_EXP[i]];
-        const r = new Uint8Array(p.length + 1);
-        for (let j = 0; j < q.length; j++)
-          for (let k = 0; k < p.length; k++)
-            r[j + k] ^= gfMul(q[j], p[k]);
-        p = Array.from(r);
-      }
-      return p;
-    };
-    const rsEncode = (data, nec) => {
-      const gen = gfPoly(nec);
-      const msg = [...data, ...new Array(nec).fill(0)];
-      for (let i = 0; i < data.length; i++) {
-        const c = msg[i];
-        if (c) for (let j = 0; j < gen.length; j++) msg[i + j] ^= gfMul(gen[j], c);
-      }
-      return msg.slice(data.length);
-    };
-    const ALNUM = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:';
-    const VER = [null,
-      {m:21,b:1,ec:10,dc:16},{m:25,b:1,ec:16,dc:28},{m:29,b:1,ec:26,dc:44},
-      {m:33,b:2,ec:18,dc:64},{m:37,b:2,ec:24,dc:86},{m:41,b:4,ec:16,dc:108},
-      {m:45,b:4,ec:18,dc:124},{m:49,b:4,ec:26,dc:154},{m:53,b:4,ec:22,dc:182},
-      {m:57,b:6,ec:24,dc:216}
-    ];
-    const ALNUM_CAP = [0,20,38,61,90,122,154,178,221,262,311];
-    function encode(text) {
-      const str = text.toUpperCase();
-      for (const c of str) if (ALNUM.indexOf(c) < 0) throw new Error('Non-alnum: '+c);
-      const len = str.length;
-      let ver = -1;
-      for (let v = 1; v <= 10; v++) if (ALNUM_CAP[v] >= len) { ver = v; break; }
-      if (ver < 0) throw new Error('Too long');
-      const info = VER[ver];
-      const size = info.m;
-      const bits = [];
-      const pushBits = (val, n) => { for (let i = n-1; i >= 0; i--) bits.push((val>>i)&1); };
-      pushBits(0b0010, 4);
-      pushBits(len, 9);
-      for (let i = 0; i < len - 1; i += 2) {
-        const v = ALNUM.indexOf(str[i]) * 45 + ALNUM.indexOf(str[i+1]);
-        pushBits(v, 11);
-      }
-      if (len % 2) pushBits(ALNUM.indexOf(str[len-1]), 6);
-      for (let i = 0; i < 4 && bits.length < info.dc * 8; i++) bits.push(0);
-      while (bits.length % 8) bits.push(0);
-      const PAD = [0xEC, 0x11]; let pi = 0;
-      while (bits.length < info.dc * 8) { pushBits(PAD[pi++ % 2], 8); }
-      const data = [];
-      for (let i = 0; i < bits.length; i += 8) {
-        let b = 0; for (let j = 0; j < 8; j++) b = (b << 1) | bits[i+j];
-        data.push(b);
-      }
-      const blocks = info.b, ecPerBlock = info.ec, totalDC = info.dc;
-      const dcPerBlock = Math.floor(totalDC / blocks);
-      const extraBlocks = totalDC % blocks;
-      const dataBlocks = [], ecBlocks = [];
-      let pos = 0;
-      for (let b = 0; b < blocks; b++) {
-        const blen = dcPerBlock + (b >= blocks - extraBlocks ? 1 : 0);
-        const block = data.slice(pos, pos + blen); pos += blen;
-        dataBlocks.push(block); ecBlocks.push(rsEncode(block, ecPerBlock));
-      }
-      const codewords = [];
-      const maxDC = Math.max(...dataBlocks.map(b=>b.length));
-      for (let i = 0; i < maxDC; i++) for (const b of dataBlocks) if (i < b.length) codewords.push(b[i]);
-      for (let i = 0; i < ecPerBlock; i++) for (const b of ecBlocks) codewords.push(b[i]);
-      const mat = Array.from({length:size}, () => new Array(size).fill(-1));
-      const isFunc = Array.from({length:size}, () => new Array(size).fill(false));
-      const setFunc = (r, c, v) => { if (r>=0&&r<size&&c>=0&&c<size){mat[r][c]=v;isFunc[r][c]=true;} };
-      const addFinder = (row, col) => {
-        for (let r=-1;r<=7;r++) for (let c=-1;c<=7;c++) {
-          const v=(r>=0&&r<=6&&(c===0||c===6))||(c>=0&&c<=6&&(r===0||r===6))||(r>=2&&r<=4&&c>=2&&c<=4)?1:0;
-          if(r>=0&&r<size&&c>=0&&c<size) setFunc(row+r,col+c,v);
-        }
-      };
-      addFinder(0,0); addFinder(0,size-7); addFinder(size-7,0);
-      for(let r=0;r<8;r++){setFunc(7,r,mat[7][r]<0?0:mat[7][r]);setFunc(r,7,mat[r][7]<0?0:mat[r][7]);}
-      for(let r=0;r<8;r++){setFunc(7,size-8+r,mat[7][size-8+r]<0?0:mat[7][size-8+r]);setFunc(r,size-8,mat[r][size-8]<0?0:mat[r][size-8]);}
-      for(let r=size-8;r<size;r++){setFunc(size-8,r-size+8+1,mat[size-8][r-size+8+1]<0?0:mat[size-8][r-size+8+1]);}
-      for(let r=0;r<8;r++) setFunc(size-8+r,7,mat[size-8+r][7]<0?0:mat[size-8+r][7]);
-      for(let i=8;i<size-8;i++){setFunc(6,i,(i%2===0)?1:0);setFunc(i,6,(i%2===0)?1:0);}
-      setFunc(size-8,8,1);
-      const FMT_POS=[[8,0],[8,1],[8,2],[8,3],[8,4],[8,5],[8,7],[8,8],[7,8],[5,8],[4,8],[3,8],[2,8],[1,8],[0,8],
-                     [size-1,8],[size-2,8],[size-3,8],[size-4,8],[size-5,8],[size-6,8],[size-7,8],
-                     [8,size-8],[8,size-7],[8,size-6],[8,size-5],[8,size-4],[8,size-3],[8,size-2],[8,size-1]];
-      for(const[r,c]of FMT_POS) setFunc(r,c,0);
-      const alignCenters=[null,[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,28,46],[6,32,50]];
-      if(ver>=2){
-        const cp=alignCenters[ver];
-        for(const ar of cp) for(const ac of cp){
-          if(!((ar===6&&ac===6)||(ar===6&&ac===cp[cp.length-1])||(ar===cp[cp.length-1]&&ac===6))){
-            for(let dr=-2;dr<=2;dr++) for(let dc=-2;dc<=2;dc++){
-              const v=(Math.abs(dr)===2||Math.abs(dc)===2)?1:(dr===0&&dc===0)?1:0;
-              setFunc(ar+dr,ac+dc,v);
-            }
-          }
-        }
-      }
-      const cwBits=[];
-      for(const cw of codewords) for(let i=7;i>=0;i--) cwBits.push((cw>>i)&1);
-      const remBits=[0,7,7,7,7,7,0,0,0,0,0][ver]||0;
-      for(let i=0;i<remBits;i++) cwBits.push(0);
-      let bitIdx=0, up=true;
-      for(let col=size-1;col>=1;col-=2){
-        if(col===6) col=5;
-        for(let ri=0;ri<size;ri++){
-          const r=up?size-1-ri:ri;
-          for(let d=0;d<=1;d++){
-            const c=col-d;
-            if(!isFunc[r][c]&&bitIdx<cwBits.length) mat[r][c]=cwBits[bitIdx++];
-          }
-        }
-        up=!up;
-      }
-      for(let r=0;r<size;r++) for(let c=0;c<size;c++)
-        if(!isFunc[r][c]&&mat[r][c]>=0&&(r+c)%2===0) mat[r][c]^=1;
-      const fmtBits=[1,0,1,0,1,0,0,0,0,0,1,0,0,1,0];
-      for(let i=0;i<15;i++){
-        mat[FMT_POS[i][0]][FMT_POS[i][1]]=fmtBits[i];
-        mat[FMT_POS[i+15][0]][FMT_POS[i+15][1]]=fmtBits[i];
-      }
-      return {mat,size};
+    // ===== QR CODE — navigate to dedicated page =====
+  function openQRModal(rip, accId) {
+    if (accId) {
+      window.location.href = 'qr.html?id=' + encodeURIComponent(accId);
+    } else {
+      window.location.href = 'qr.html?rip=' + encodeURIComponent(rip);
     }
-    function render(rip, canvasEl, dark, light) {
-      dark = dark||'#000000'; light = light||'#ffffff';
-      let res;
-      try { res = encode(rip); } catch(e) {
-        try { res = encode(rip.replace(/[^0-9A-Z $%*+\-./:]/gi,'')); } catch(e2) { return null; }
-      }
-      const {mat,size} = res;
-      const W = 220, H = 220;
-      const scale = Math.floor((W - 16) / size);
-      const quiet = Math.floor((W - scale * size) / 2);
-      const cvs = document.createElement('canvas');
-      cvs.width = W; cvs.height = H;
-      cvs.style.cssText = 'border-radius:8px;display:block;';
-      const ctx = cvs.getContext('2d');
-      ctx.fillStyle = light; ctx.fillRect(0,0,W,H);
-      ctx.fillStyle = dark;
-      for(let r=0;r<size;r++) for(let c=0;c<size;c++)
-        if(mat[r][c]===1) ctx.fillRect(quiet+c*scale, quiet+r*scale, scale, scale);
-      canvasEl.innerHTML = '';
-      canvasEl.appendChild(cvs);
-      return cvs;
-    }
-    return {render};
-  })();
-
-  // ===== QR CODE MODAL =====
-  function openQRModal(rip) {
-    document.getElementById('qrRipText').textContent = rip;
-    const canvasEl = document.getElementById('qrCanvas');
-    QRGen.render(rip, canvasEl, '#000000', '#ffffff');
-    document.getElementById('qrModal').classList.add('open');
   }
-
-  function closeQRModal() {
-    document.getElementById('qrModal').classList.remove('open');
-  }
-
-  function downloadQR() {
-    const cvs = document.querySelector('#qrCanvas canvas');
-    if (!cvs) return;
-    const rip = document.getElementById('qrRipText').textContent || 'rip';
-    const a = document.createElement('a');
-    a.href = cvs.toDataURL('image/png');
-    a.download = 'QR_' + rip.replace(/\s/g,'') + '.png';
-    a.click();
-  }
-
-  document.getElementById('qrModal').addEventListener('click', function(e) {
-    if (e.target === this) closeQRModal();
-  });
 
   renderFavorites();
   }
@@ -433,7 +251,7 @@
     if (!id) return;
     const acc = getAccounts().find(a => a.id == id);
     if (!acc) return;
-    if (action === 'qr') { openQRModal(acc.rip); }
+    if (action === 'qr') { openQRModal(acc.rip, acc.id); }
     else if (action === 'copy') { copyText(acc.rip); }
     else if (action === 'share') { shareText(acc.rip, acc.name); }
     else if (action === 'unfav') {
@@ -450,18 +268,5 @@
   renderFavorites();
 </script>
 
-<!-- QR CODE MODAL -->
-<div class="modal-overlay" id="qrModal">
-  <div class="modal" style="text-align:center;">
-    <div class="modal-handle"></div>
-    <div class="modal-title" data-i18n="qr_modal_title">QR Code الريب</div>
-    <div id="qrCanvas" style="margin:16px auto;display:flex;justify-content:center;align-items:center;"></div>
-    <p id="qrRipText" style="color:var(--text2);font-size:0.78rem;letter-spacing:1px;margin-bottom:12px;direction:ltr;"></p>
-    <div class="modal-actions">
-      <button class="btn btn-outline" onclick="closeQRModal()" style="flex:1;" data-i18n="cancel">إلغاء</button>
-      <button class="btn btn-success" onclick="downloadQR()" style="flex:1;" data-i18n="download_qr">تحميل</button>
-    </div>
-  </div>
-</div>
 </body>
 </html>
