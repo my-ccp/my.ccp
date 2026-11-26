@@ -68,9 +68,24 @@
   </button>
 </div>
 
+<!-- QR CODE MODAL -->
+<div class="modal-overlay" id="qrModal">
+  <div class="modal" style="text-align:center;">
+    <div class="modal-handle"></div>
+    <div class="modal-title" data-i18n="qr_modal_title">QR Code للريب</div>
+    <div id="qrCanvas" style="margin:16px auto;display:flex;justify-content:center;align-items:center;min-height:180px;"></div>
+    <p id="qrRipText" style="color:var(--text2);font-size:0.78rem;letter-spacing:1px;margin-bottom:12px;direction:ltr;text-align:center;"></p>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeQRModal()" style="flex:1;" data-i18n="cancel">إلغاء</button>
+      <button class="btn btn-success" onclick="downloadQR()" style="flex:1;" data-i18n="download_qr">تحميل</button>
+    </div>
+  </div>
+</div>
+
 </div><!-- end #app-wrapper -->
 <div id="toast" class="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script src="../js/i18n.js"></script>
 <script src="../js/app.js"></script>
 <script>
@@ -86,14 +101,39 @@
     renderFavorites();
   }
 
-  // ===== QR CODE — navigate to dedicated page =====
-  function openQRModal(rip, accId) {
-    if (accId) {
-      window.location.href = 'qr.html?id=' + encodeURIComponent(accId);
-    } else {
-      window.location.href = 'qr.html?rip=' + encodeURIComponent(rip);
-    }
+  // ===== QR CODE MODAL =====
+  let qrInstance = null;
+  function openQRModal(rip) {
+    document.getElementById('qrRipText').textContent = rip;
+    const canvasEl = document.getElementById('qrCanvas');
+    canvasEl.innerHTML = '';
+    qrInstance = new QRCode(canvasEl, {
+      text: rip,
+      width: 200,
+      height: 200,
+      colorDark: '#000000',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+    document.getElementById('qrModal').classList.add('open');
   }
+  function closeQRModal() {
+    document.getElementById('qrModal').classList.remove('open');
+  }
+  function downloadQR() {
+    const img = document.querySelector('#qrCanvas img');
+    const cvs = document.querySelector('#qrCanvas canvas');
+    const rip = document.getElementById('qrRipText').textContent || 'qr';
+    const a = document.createElement('a');
+    if (cvs) { a.href = cvs.toDataURL('image/png'); }
+    else if (img) { a.href = img.src; }
+    else return;
+    a.download = 'QR_' + rip.replace(/\s+/g,'_') + '.png';
+    a.click();
+  }
+  document.getElementById('qrModal').addEventListener('click', function(e) {
+    if (e.target === this) closeQRModal();
+  });
 
   function toggleSearch() {
     const bar = document.getElementById('searchBar');
@@ -249,7 +289,7 @@
     if (!id) return;
     const acc = getAccounts().find(a => a.id == id);
     if (!acc) return;
-    if (action === 'qr') { openQRModal(acc.rip, acc.id); }
+    if (action === 'qr') { openQRModal(acc.rip); }
     else if (action === 'copy') { copyText(acc.rip); }
     else if (action === 'share') { shareText(acc.rip, acc.name); }
     else if (action === 'unfav') {
