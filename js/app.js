@@ -18,15 +18,21 @@ appChannel.onmessage = (e) => {
       const _sat = (_th === 'green') ? 70 : 80;
       const _lig = _dark.includes(_th) ? 60 : 45;
       const _lig2 = _dark.includes(_th) ? 50 : 35;
-      document.documentElement.style.setProperty('--accent',        `hsl(${_hue},${_sat}%,${_lig}%)`);
-      document.documentElement.style.setProperty('--accent2',       `hsl(${_hue},${_sat}%,${_lig2}%)`);
-      document.documentElement.style.setProperty('--accent-green',  `hsl(${_hue},${_sat}%,${_lig}%)`);
-      document.documentElement.style.setProperty('--accent-green2', `hsl(${_hue},${_sat}%,${_lig2}%)`);
+      const _ca  = `hsl(${_hue},${_sat}%,${_lig}%)`;
+      const _ca2 = `hsl(${_hue},${_sat}%,${_lig2}%)`;
+      [document.documentElement, document.body].forEach(el => {
+        el.style.setProperty('--accent',        _ca);
+        el.style.setProperty('--accent2',       _ca2);
+        el.style.setProperty('--accent-green',  _ca);
+        el.style.setProperty('--accent-green2', _ca2);
+      });
     } else {
-      document.documentElement.style.removeProperty('--accent');
-      document.documentElement.style.removeProperty('--accent2');
-      document.documentElement.style.removeProperty('--accent-green');
-      document.documentElement.style.removeProperty('--accent-green2');
+      [document.documentElement, document.body].forEach(el => {
+        el.style.removeProperty('--accent');
+        el.style.removeProperty('--accent2');
+        el.style.removeProperty('--accent-green');
+        el.style.removeProperty('--accent-green2');
+      });
     }
   }
   if (e.data.type === 'lang') {
@@ -78,10 +84,17 @@ function _getHueKey(theme) { return 'customHue_global'; }
   const sat = (theme === 'green') ? 70 : 80;
   const lig = isLight ? 45 : 60;
   const lig2 = isLight ? 35 : 50;
-  document.documentElement.style.setProperty('--accent',        `hsl(${hue},${sat}%,${lig}%)`);
-  document.documentElement.style.setProperty('--accent2',       `hsl(${hue},${sat}%,${lig2}%)`);
-  document.documentElement.style.setProperty('--accent-green',  `hsl(${hue},${sat}%,${lig}%)`);
-  document.documentElement.style.setProperty('--accent-green2', `hsl(${hue},${sat}%,${lig2}%)`);
+  const _a  = `hsl(${hue},${sat}%,${lig}%)`;
+  const _a2 = `hsl(${hue},${sat}%,${lig2}%)`;
+  // Set on BOTH html and body — data-theme is on both elements, so
+  // child elements inherit --accent from body (closest ancestor).
+  // Without setting it on body, the [data-theme] CSS block on body wins.
+  [document.documentElement, document.body].forEach(el => {
+    el.style.setProperty('--accent',        _a);
+    el.style.setProperty('--accent2',       _a2);
+    el.style.setProperty('--accent-green',  _a);
+    el.style.setProperty('--accent-green2', _a2);
+  });
 })();
 
 // ===== FONT FAMILY (Edit 2) — apply saved font on every page =====
@@ -153,9 +166,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // Re-apply font scale after DOM ready (in case CSS var was late)
   const scale = parseFloat(localStorage.getItem('fontScale') || '0.8');
   document.documentElement.style.setProperty('--font-scale', scale);
-  // Re-apply custom hue AFTER applyTheme sets data-theme on <html>,
-  // because [data-theme="X"] CSS rules override :root inline --accent vars.
-  // This must run last so the inline style wins over the stylesheet rule.
+  // Re-apply custom hue AFTER applyTheme sets data-theme on <html> AND <body>.
+  // The [data-theme="X"] CSS block on <body> overrides the css var for all children
+  // because body is the closest ancestor — inline style on <html> alone is not enough.
+  // Setting inline style on BOTH elements ensures the custom hue always wins.
   (function _reApplyCustomHueAfterTheme() {
     const th = window.APP_THEME || 'white';
     const stored = localStorage.getItem('customHue_global');
@@ -166,10 +180,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const sat = (th === 'green') ? 70 : 80;
     const lig  = isLight ? 45 : 60;
     const lig2 = isLight ? 35 : 50;
-    document.documentElement.style.setProperty('--accent',        `hsl(${hue},${sat}%,${lig}%)`);
-    document.documentElement.style.setProperty('--accent2',       `hsl(${hue},${sat}%,${lig2}%)`);
-    document.documentElement.style.setProperty('--accent-green',  `hsl(${hue},${sat}%,${lig}%)`);
-    document.documentElement.style.setProperty('--accent-green2', `hsl(${hue},${sat}%,${lig2}%)`);
+    const _a  = `hsl(${hue},${sat}%,${lig}%)`;
+    const _a2 = `hsl(${hue},${sat}%,${lig2}%)`;
+    [document.documentElement, document.body].forEach(el => {
+      el.style.setProperty('--accent',        _a);
+      el.style.setProperty('--accent2',       _a2);
+      el.style.setProperty('--accent-green',  _a);
+      el.style.setProperty('--accent-green2', _a2);
+    });
   })();
 });
 
