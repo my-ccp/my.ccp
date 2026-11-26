@@ -153,6 +153,24 @@ document.addEventListener('DOMContentLoaded', () => {
   // Re-apply font scale after DOM ready (in case CSS var was late)
   const scale = parseFloat(localStorage.getItem('fontScale') || '0.8');
   document.documentElement.style.setProperty('--font-scale', scale);
+  // Re-apply custom hue AFTER applyTheme sets data-theme on <html>,
+  // because [data-theme="X"] CSS rules override :root inline --accent vars.
+  // This must run last so the inline style wins over the stylesheet rule.
+  (function _reApplyCustomHueAfterTheme() {
+    const th = window.APP_THEME || 'white';
+    const stored = localStorage.getItem('customHue_global');
+    if (stored === null) return;
+    const hue = parseInt(stored);
+    const darkThemes = ['dark', 'black', 'slate'];
+    const isLight = !darkThemes.includes(th);
+    const sat = (th === 'green') ? 70 : 80;
+    const lig  = isLight ? 45 : 60;
+    const lig2 = isLight ? 35 : 50;
+    document.documentElement.style.setProperty('--accent',        `hsl(${hue},${sat}%,${lig}%)`);
+    document.documentElement.style.setProperty('--accent2',       `hsl(${hue},${sat}%,${lig2}%)`);
+    document.documentElement.style.setProperty('--accent-green',  `hsl(${hue},${sat}%,${lig}%)`);
+    document.documentElement.style.setProperty('--accent-green2', `hsl(${hue},${sat}%,${lig2}%)`);
+  })();
 });
 
 // ===== THEME =====
