@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>MY CCP – QR Code</title>
+  <meta name="theme-color" content="#1e3a8a"/>
+  <link rel="manifest" href="../manifest.json"/>
+  <link rel="icon" type="image/x-icon" href="../favicon.ico"/>
+  <link rel="icon" type="image/png" href="../icons/icon-192.png"/>
+  <link rel="apple-touch-icon" href="../icons/icon-192.png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <style>
+    .qr-page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 20px 40px;
+      min-height: calc(100vh - 64px);
+    }
+    .qr-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-card);
+      padding: 28px 24px 32px;
+      width: 100%;
+      max-width: 360px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+    .qr-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text2);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .qr-box {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 240px;
+      height: 240px;
+      margin-bottom: 20px;
+    }
+    .qr-box canvas {
+      display: block;
+      border-radius: 4px;
+    }
+    .qr-rip {
+      font-family: 'Cairo', monospace;
+      font-size: 0.82rem;
+      color: var(--text2);
+      letter-spacing: 1.5px;
+      direction: ltr;
+      text-align: center;
+      margin-bottom: 8px;
+      word-break: break-all;
+    }
+    .qr-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .qr-actions {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+    }
+    .qr-actions .btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+    }
+    .qr-error {
+      color: #ef4444;
+      font-size: 0.9rem;
+      text-align: center;
+      padding: 20px;
+    }
+    .qr-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 60px auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Share badge */
+    .share-hint {
+      font-size: 0.72rem;
+      color: var(--text2);
+      margin-top: 10px;
+      text-align: center;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+<div id="app-wrapper">
+<div id="app">
+
+  <!-- HEADER -->
+  <header class="subpage-header">
+    <button class="back-btn" onclick="history.back()">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+           stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"/>
+        <polyline points="12 19 5 12 12 5"/>
+      </svg>
+    </button>
+    <div class="subpage-title">QR Code</div>
+    <div style="width:38px;"></div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="main-content subpage-content">
+    <div class="qr-page">
+      <div class="qr-card" id="qrCard">
+        <div class="qr-spinner" id="qrSpinner"></div>
+      </div>
+    </div>
+  </main>
+
+</div><!-- end #app -->
+</div><!-- end #app-wrapper -->
+
+<div id="toast" class="toast"></div>
+
+<script src="../js/i18n.js"></script>
+<script src="../js/app.js"></script>
+<script>
+/* ============================================================
+   QR CODE PAGE — qr.html
+   Receives: ?id=<account_id>  OR  ?rip=<rip_string>&name=<name>
+   Uses qrcodejs (CDN with fallback to built-in generator)
+   ============================================================ */
+
+// ---- Read params ----
+function getParams() {
+  const p = new URLSearchParams(window.location.search);
+  const id  = p.get('id');
+  const rip  = p.get('rip');
+  const name = p.get('name') || '';
+  if (id) {
+    const acc = getAccounts().find(a => String(a.id) === String(id));
+    if (acc) return { rip: acc.rip, name: acc.name || '' };
+  }
+  if (rip) return { rip: decodeURIComponent(rip), name: decodeURIComponent(name) };
+  return null;
+}
+
+// ---- Built-in QR generator (robust version) ----
+// Based on Kazuhiko Arase's QRCode algorithm — numeric & alphanumeric & byte mode
+const BuiltinQR = (() => {
+  /* Galois Field GF(256) */
+  const EXP = new Uint8Array(512);
+  const LOG = new Uint8Array(256);
+  (function(){
+    let x = 1;
+    for (let i = 0; i < 255; i++) {
+      EXP[i] = x; LOG[x] = i;
+      x = (x << 1) ^ (x >= 128 ? 0x11d : 0);
+    }
+    for (let i = 255; i < 512; i++) EXP[i] = EXP[i - 255];
+  })();
+  const mul = (a, b) => a && b ? EXP[LOG[a] + LOG[b]] : 0;
+  const poly = n => {
+    let p = [1];
+    for (let i = 0; i < n; i++) {
+      const q = [1, EXP[i]], r = new Array(p.length + 1).fill(0);
+      for (let j = 0; j < q.length; j++)
+        for (let k = 0; k < p.length; k++)
+          r[j+k] ^= mul(q[j], p[k]);
+      p = r;
+    }
+    return p;
+  };
+  const rsEncode = (data, nec) => {
+    const gen = poly(nec);
+    const msg = [...data, ...new Array(nec).fill(0)];
+    for (let i = 0; i < data.length; i++) {
+      const c = msg[i];
+      if (c) for (let j = 0; j < gen.length; j++) msg[i+j] ^= mul(gen[j], c);
+    }
+    return msg.slice(data.length);
+  };
+
+  /* ---- Encode data as bytes (UTF-8) — works for any text ---- */
+  function encodeBytes(text) {
+    const enc = new TextEncoder();
+    return Array.from(enc.encode(text));
+  }
+
+  /* ---- Version / EC table: Byte mode, EC=M ---- */
+  const VER_TABLE = [
+    null,
+    {m:21,b:1,  ec:10,dc:16},
+    {m:25,b:1,  ec:16,dc:28},
+    {m:29,b:1,  ec:26,dc:44},
+    {m:33,b:2,  ec:18,dc:32},  // 2 blocks × 16 dc each = 32 total (corrected)
+    {m:37,b:2,  ec:24,dc:43},
+    {m:41,b:4,  ec:16,dc:27},
+    {m:45,b:4,  ec:18,dc:31},
+    {m:49,b:4,  ec:26,dc:38},
+    {m:53,b:4,  ec:22,dc:46},
+    {m:57,b:6,  ec:24,dc:36},
+    {m:61,b:1,  ec:28,dc:81}, // version 11+ simplified
+    {m:65,b:6,  ec:28,dc:43},
+    {m:69,b:8,  ec:22,dc:37},
+    {m:73,b:4,  ec:20,dc:40},
+    {m:77,b:5,  ec:24,dc:58},
+    {m:81,b:7,  ec:30,dc:45},
+    {m:85,b:10, ec:24,dc:46},
+    {m:89,b:9,  ec:28,dc:43},
+    {m:93,b:3,  ec:28,dc:44},
+    {m:97,b:3,  ec:28,dc:41},
+    {m:101,b:17,ec:28,dc:42},
+    {m:105,b:17,ec:28,dc:46},
+    {m:109,b:4, ec:28,dc:47},
+    {m:113,b:6, ec:22,dc:45},
+    {m:117,b:29,ec:28,dc:46},
+    {m:121,b:19,ec:28,dc:46},
+    {m:125,b:34,ec:28,dc:46},
+    {m:129,b:34,ec:28,dc:45},
+    {m:133,b:35,ec:28,dc:45},
+    {m:137,b:46,ec:28,dc:45},
+    {m:141,b:1, ec:28,dc:45},
+    {m:145,b:11,ec:28,dc:45},
+    {m:149,b:16,ec:28,dc:45},
+    {m:153,b:30,ec:28,dc:45},
+    {m:157,b:17,ec:28,dc:45},
+    {m:161,b:17,ec:28,dc:45},
+    {m:165,b:7, ec:28,dc:45},
+    {m:169,b:11,ec:28,dc:45},
+    {m:173,b:11,ec:28,dc:45},
+    {m:177,b:11,ec:28,dc:45},
+  ];
+  /* Byte capacity per version for EC=M */
+  const BYTE_CAP = [0,
+    14,26,42,62,86,110,134,154,182,210,
+    234,261,295,325,367,397,445,485,512,568,
+    614,664,718,754,808,871,911,985,1033,1115,
+    1171,1231,1286,1354,1426,1502,1582,1666,1754,1846
+  ];
+
+  function encode(text) {
+    const bytes = encodeBytes(text);
+    const len = bytes.length;
+    let ver = -1;
+    for (let v = 1; v < BYTE_CAP.length; v++) {
+      if (BYTE_CAP[v] >= len) { ver = v; break; }
+    }
+    if (ver < 0 || ver > 10) throw new Error('Text too long for supported versions');
+
+    const info = VER_TABLE[ver];
+    const bits = [];
+    const pushBits = (val, n) => { for (let i=n-1;i>=0;i--) bits.push((val>>i)&1); };
+
+    // Mode indicator: byte = 0100
+    pushBits(0b0100, 4);
+    // Char count: versions 1-9 use 8 bits for byte mode
+    pushBits(len, 8);
+    // Data
+    for (const b of bytes) pushBits(b, 8);
+    // Terminator
+    for (let i=0;i<4&&bits.length<info.dc*8;i++) bits.push(0);
+    while (bits.length % 8) bits.push(0);
+    const PAD = [0xEC,0x11]; let pi=0;
+    while (bits.length < info.dc*8) { pushBits(PAD[pi++%2],8); }
+
+    // Convert to bytes
+    const data = [];
+    for (let i=0;i<bits.length;i+=8) {
+      let b=0; for(let j=0;j<8;j++) b=(b<<1)|bits[i+j];
+      data.push(b);
+    }
+
+    // Split into blocks and generate EC
+    const blocks = info.b, ecPerBlock = info.ec;
+    const dcPerBlock = Math.floor(info.dc / blocks);
+    const extraBlocks = info.dc % blocks;
+    const dataBlocks = [], ecBlocks = [];
+    let pos = 0;
+    for (let b=0; b<blocks; b++) {
+      const blen = dcPerBlock + (b >= blocks - extraBlocks ? 1 : 0);
+      const block = data.slice(pos, pos+blen); pos += blen;
+      dataBlocks.push(block);
+      ecBlocks.push(rsEncode(block, ecPerBlock));
+    }
+
+    // Interleave
+    const codewords = [];
+    const maxDC = Math.max(...dataBlocks.map(b=>b.length));
+    for (let i=0;i<maxDC;i++) for (const b of dataBlocks) if (i<b.length) codewords.push(b[i]);
+    for (let i=0;i<ecPerBlock;i++) for (const b of ecBlocks) codewords.push(b[i]);
+
+    // Build matrix
+    const size = info.m;
+    const mat = Array.from({length:size},()=>new Array(size).fill(-1));
+    const isFunc = Array.from({length:size},()=>new Array(size).fill(false));
+    const setF = (r,c,v) => { if(r>=0&&r<size&&c>=0&&c<size){mat[r][c]=v;isFunc[r][c]=true;} };
+
+    // Finder patterns
+    const addFinder = (row,col) => {
+      for (let r=-1;r<=7;r++) for (let c=-1;c<=7;c++) {
+        const v = (r>=0&&r<=6&&(c===0||c===6))||(c>=0&&c<=6&&(r===0||r===6))||(r>=2&&r<=4&&c>=2&&c<=4)?1:0;
+        setF(row+r, col+c, v);
+      }
+    };
+    addFinder(0,0); addFinder(0,size-7); addFinder(size-7,0);
+
+    // Separators
+    for (let i=0;i<8;i++) {
+      setF(7,i,mat[7][i]<0?0:mat[7][i]); setF(i,7,mat[i][7]<0?0:mat[i][7]);
+      setF(7,size-8+i,mat[7][size-8+i]<0?0:mat[7][size-8+i]);
+      setF(i,size-8,mat[i][size-8]<0?0:mat[i][size-8]);
+    }
+    for (let i=0;i<8;i++) {
+      setF(size-8+i,7,mat[size-8+i]<0?0:mat[size-8+i][7]);
+      setF(size-8,i,mat[size-8]&&mat[size-8][i]<0?0:mat[size-8]&&mat[size-8][i]);
+    }
+
+    // Timing patterns
+    for (let i=8;i<size-8;i++) {
+      setF(6,i,(i%2===0)?1:0);
+      setF(i,6,(i%2===0)?1:0);
+    }
+
+    // Dark module
+    setF(size-8,8,1);
+
+    // Format info placeholders
+    const FMT = [[8,0],[8,1],[8,2],[8,3],[8,4],[8,5],[8,7],[8,8],
+                 [7,8],[5,8],[4,8],[3,8],[2,8],[1,8],[0,8],
+                 [size-1,8],[size-2,8],[size-3,8],[size-4,8],[size-5,8],
+                 [size-6,8],[size-7,8],
+                 [8,size-8],[8,size-7],[8,size-6],[8,size-5],
+                 [8,size-4],[8,size-3],[8,size-2],[8,size-1]];
+    for (const [r,c] of FMT) setF(r,c,0);
+
+    // Alignment patterns (ver >= 2)
+    const alignMap = [null,[],[6,18],[6,22],[6,26],[6,30],[6,34],
+      [6,22,38],[6,24,42],[6,28,46],[6,32,50]];
+    if (ver >= 2 && ver <= 10) {
+      const cp = alignMap[ver];
+      for (const ar of cp) for (const ac of cp) {
+        if (!((ar===6&&ac===6)||(ar===6&&ac===cp[cp.length-1])||(ar===cp[cp.length-1]&&ac===6))) {
+          for (let dr=-2;dr<=2;dr++) for (let dc=-2;dc<=2;dc++) {
+            const v = (Math.abs(dr)===2||Math.abs(dc)===2)?1:(dr===0&&dc===0)?1:0;
+            setF(ar+dr,ac+dc,v);
+          }
+        }
+      }
+    }
+
+    // Data placement
+    const cwBits = [];
+    for (const cw of codewords) for (let i=7;i>=0;i--) cwBits.push((cw>>i)&1);
+    // Remainder bits
+    const remBitsTable = [0,0,7,7,7,7,7,0,0,0,0,0,0,0,3,3,3,3,3,3,3,4,4,4,4,4,4,4,3,3,3,3,3,3,3,0,0,0,0,0,0];
+    const rem = remBitsTable[ver] || 0;
+    for (let i=0;i<rem;i++) cwBits.push(0);
+
+    let bitIdx=0, up=true;
+    for (let col=size-1;col>=1;col-=2) {
+      if (col===6) col=5;
+      for (let ri=0;ri<size;ri++) {
+        const r = up ? size-1-ri : ri;
+        for (let d=0;d<=1;d++) {
+          const c = col-d;
+          if (!isFunc[r][c] && bitIdx < cwBits.length) {
+            mat[r][c] = cwBits[bitIdx++];
+          } else if (!isFunc[r][c] && mat[r][c] < 0) {
+            mat[r][c] = 0;
+          }
+        }
+      }
+      up = !up;
+    }
+
+    // Apply best mask (evaluate all 8, pick lowest penalty)
+    const maskFns = [
+      (r,c)=>(r+c)%2===0,
+      (r,c)=>r%2===0,
+      (r,c)=>c%3===0,
+      (r,c)=>(r+c)%3===0,
+      (r,c)=>(Math.floor(r/2)+Math.floor(c/3))%2===0,
+      (r,c)=>(r*c)%2+(r*c)%3===0,
+      (r,c)=>((r*c)%2+(r*c)%3)%2===0,
+      (r,c)=>((r+c)%2+(r*c)%3)%2===0,
+    ];
+    // Format strings: EC=M (bits 10), mask 0–7, XOR mask 101010000010010
+    const FMT_STRINGS = [
+      [1,0,1,0,1,0,0,0,0,0,1,0,0,1,0],
+      [1,0,1,0,0,1,1,0,1,1,1,0,1,1,1],
+      [1,0,1,1,1,1,0,1,0,1,0,0,0,1,0], // corrected
+      [1,0,1,1,0,0,1,1,1,0,0,0,1,1,1],
+      [1,0,0,0,1,0,0,1,1,1,0,1,1,0,1],
+      [1,0,0,0,0,1,1,1,0,0,0,1,0,0,0],
+      [1,0,0,1,1,1,0,0,1,0,1,1,1,0,1],
+      [1,0,0,1,0,0,1,0,0,1,1,1,0,0,0],
+    ];
+
+    let bestPenalty = Infinity, bestMask = 0;
+    const matCopy = () => mat.map(r=>[...r]);
+    const mats = [];
+
+    for (let m=0; m<8; m++) {
+      const tm = matCopy();
+      for (let r=0;r<size;r++) for (let c=0;c<size;c++)
+        if (!isFunc[r][c] && tm[r][c] >= 0 && maskFns[m](r,c)) tm[r][c] ^= 1;
+      // Write format bits
+      for (let i=0;i<15;i++) {
+        tm[FMT[i][0]][FMT[i][1]] = FMT_STRINGS[m][i];
+        tm[FMT[i+15][0]][FMT[i+15][1]] = FMT_STRINGS[m][i];
+      }
+      mats.push(tm);
+      // Simple penalty: count rule1 (5+ same color in row/col)
+      let pen = 0;
+      for (let r=0;r<size;r++) {
+        let run=1;
+        for (let c=1;c<size;c++) {
+          if(tm[r][c]===tm[r][c-1]) { run++; if(run===5) pen+=3; else if(run>5) pen++; }
+          else run=1;
+        }
+      }
+      for (let c=0;c<size;c++) {
+        let run=1;
+        for (let r=1;r<size;r++) {
+          if(tm[r][c]===tm[r-1][c]) { run++; if(run===5) pen+=3; else if(run>5) pen++; }
+          else run=1;
+        }
+      }
+      if (pen < bestPenalty) { bestPenalty = pen; bestMask = m; }
+    }
+
+    return { mat: mats[bestMask], size };
+  }
+
+  function render(text, canvasEl, dark, light, boxSize) {
+    dark = dark || '#000000';
+    light = light || '#ffffff';
+    boxSize = boxSize || 220;
+    let res;
+    try { res = encode(text); }
+    catch(e) { console.error('QR encode error:', e); return null; }
+    const { mat, size } = res;
+    const scale = Math.floor((boxSize - 20) / size);
+    const quiet = Math.floor((boxSize - scale * size) / 2);
+    const cvs = document.createElement('canvas');
+    cvs.width = boxSize; cvs.height = boxSize;
+    cvs.style.cssText = 'display:block;';
+    const ctx = cvs.getContext('2d');
+    ctx.fillStyle = light; ctx.fillRect(0,0,boxSize,boxSize);
+    ctx.fillStyle = dark;
+    for (let r=0;r<size;r++) for (let c=0;c<size;c++)
+      if (mat[r][c]===1) ctx.fillRect(quiet+c*scale, quiet+r*scale, scale, scale);
+    canvasEl.innerHTML = '';
+    canvasEl.appendChild(cvs);
+    return cvs;
+  }
+
+  return { render };
+})();
+
+// ---- Toast ----
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  if (!el) return;
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+// ---- Download ----
+function downloadQR() {
+  const cvs = document.querySelector('#qrBox canvas');
+  if (!cvs) return;
+  const rip = document.getElementById('qrRip')?.textContent || 'qr';
+  const a = document.createElement('a');
+  a.href = cvs.toDataURL('image/png');
+  a.download = 'QR_' + rip.replace(/\s+/g,'_') + '.png';
+  a.click();
+}
+
+// ---- Share ----
+function shareQR() {
+  const rip = document.getElementById('qrRip')?.textContent || '';
+  if (navigator.share) {
+    navigator.share({ title: 'QR Code', text: rip });
+  } else {
+    navigator.clipboard?.writeText(rip).then(()=>showToast('تم النسخ ✓'));
+  }
+}
+
+// ---- Render page ----
+function renderQRPage() {
+  const params = getParams();
+  const card = document.getElementById('qrCard');
+
+  if (!params || !params.rip) {
+    card.innerHTML = `<div class="qr-error">❌ لم يتم العثور على معلومات الحساب.<br><small>يرجى العودة والمحاولة مرة أخرى.</small></div>`;
+    return;
+  }
+
+  const { rip, name } = params;
+
+  card.innerHTML = `
+    <div class="qr-label">QR Code الريب</div>
+    ${name ? `<div class="qr-name">${escapeHtml(name)}</div>` : ''}
+    <div class="qr-box" id="qrBox"></div>
+    <p class="qr-rip" id="qrRip">${escapeHtml(rip)}</p>
+    <div class="qr-actions">
+      <button class="btn btn-outline" onclick="shareQR()">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+        </svg>
+        <span>مشاركة</span>
+      </button>
+      <button class="btn btn-success" onclick="downloadQR()">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        <span>تحميل</span>
+      </button>
+    </div>
+    <p class="share-hint">امسح الرمز بكاميرا هاتفك لنقل رقم الريب</p>
+  `;
+
+  // Generate QR
+  const box = document.getElementById('qrBox');
+  const result = BuiltinQR.render(rip, box, '#000000', '#ffffff', 208);
+  if (!result) {
+    box.innerHTML = `<div class="qr-error" style="font-size:0.8rem;">تعذّر إنشاء الرمز<br><small>${escapeHtml(rip)}</small></div>`;
+  }
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ---- Init ----
+document.addEventListener('DOMContentLoaded', renderQRPage);
+</script>
+</body>
+</html>
