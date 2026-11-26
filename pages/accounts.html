@@ -88,6 +88,10 @@
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
     <span data-i18n="copy">نسخ الريب</span>
   </button>
+  <button class="dropdown-item" id="ddQR" onclick="ddAction('qr',event)">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="5" y="5" width="3" height="3" fill="currentColor" stroke="none"/><rect x="16" y="5" width="3" height="3" fill="currentColor" stroke="none"/><rect x="5" y="16" width="3" height="3" fill="currentColor" stroke="none"/><rect x="14" y="14" width="3" height="3" fill="currentColor" stroke="none"/><rect x="18" y="14" width="3" height="3" fill="currentColor" stroke="none"/><rect x="14" y="18" width="3" height="3" fill="currentColor" stroke="none"/><rect x="18" y="18" width="3" height="3" fill="currentColor" stroke="none"/></svg>
+    <span data-i18n="generate_qr">إنشاء QR</span>
+  </button>
   <button class="dropdown-item" id="ddShare" onclick="ddAction('share',event)">
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
     <span data-i18n="share">مشاركة</span>
@@ -147,9 +151,24 @@
   </div>
 </div>
 
+
+<!-- QR CODE MODAL -->
+<div class="modal-overlay" id="qrModal">
+  <div class="modal" style="text-align:center;">
+    <div class="modal-handle"></div>
+    <div class="modal-title" data-i18n="qr_modal_title">QR Code الريب</div>
+    <div id="qrCanvas" style="margin:16px auto;display:flex;justify-content:center;align-items:center;"></div>
+    <p id="qrRipText" style="color:var(--text2);font-size:0.78rem;letter-spacing:1px;margin-bottom:12px;direction:ltr;"></p>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeQRModal()" style="flex:1;" data-i18n="cancel">إلغاء</button>
+      <button class="btn btn-success" onclick="downloadQR()" style="flex:1;" data-i18n="download_qr">تحميل</button>
+    </div>
+  </div>
+</div>
 </div><!-- end #app-wrapper -->
 <div id="toast" class="toast"></div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="../js/i18n.js"></script>
 <script src="../js/app.js"></script>
 <script>
@@ -195,7 +214,63 @@
     const newFav = !acc.favorite;
     updateAccount(id, { favorite: newFav });
     showToast(newFav ? t('add_to_fav') : t('remove_from_fav'));
-    renderAccounts();
+  
+  // ===== QR CODE =====
+  let _qrInstance = null;
+
+  function openQRModal(rip) {
+    document.getElementById('qrRipText').textContent = rip;
+    const canvas = document.getElementById('qrCanvas');
+    canvas.innerHTML = '';
+    _qrInstance = null;
+    // Use RIP as QR data so same RIP always = same QR
+    try {
+      _qrInstance = new QRCode(canvas, {
+        text: rip,
+        width: 220,
+        height: 220,
+        colorDark: getComputedStyle(document.documentElement).getPropertyValue('--text1').trim() || '#000000',
+        colorLight: getComputedStyle(document.documentElement).getPropertyValue('--card-bg').trim() || '#ffffff',
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    } catch(err) {
+      // Fallback: black on white
+      _qrInstance = new QRCode(canvas, { text: rip, width: 220, height: 220 });
+    }
+    document.getElementById('qrModal').classList.add('active');
+  }
+
+  function closeQRModal() {
+    document.getElementById('qrModal').classList.remove('active');
+  }
+
+  function downloadQR() {
+    const canvas = document.querySelector('#qrCanvas canvas');
+    const img = document.querySelector('#qrCanvas img');
+    let dataUrl;
+    if (canvas) {
+      dataUrl = canvas.toDataURL('image/png');
+    } else if (img) {
+      // QRCodeJS sometimes renders an <img>; redraw on a temp canvas
+      const tmp = document.createElement('canvas');
+      tmp.width = img.naturalWidth || 220;
+      tmp.height = img.naturalHeight || 220;
+      const ctx = tmp.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      dataUrl = tmp.toDataURL('image/png');
+    } else { return; }
+    const rip = document.getElementById('qrRipText').textContent || 'rip';
+    const a = document.createElement('a');
+    a.href = dataUrl;
+    a.download = 'QR_' + rip.replace(/\s/g,'') + '.png';
+    a.click();
+  }
+
+  document.getElementById('qrModal').addEventListener('click', function(e) {
+    if (e.target === this) closeQRModal();
+  });
+
+  renderAccounts();
   }
 
   // ===== RENDER =====
@@ -399,6 +474,7 @@
       showToast(newFav ? t('add_to_fav') : t('remove_from_fav'));
       renderAccounts();
     }
+    else if (action === 'qr') openQRModal(acc.rip);
     else if (action === 'select') {
       enterSelectionMode();
       toggleSelect(acc.id);
