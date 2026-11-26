@@ -83,18 +83,16 @@
     if (!account) return;
     account.favorite = !account.favorite;
     updateAccount(account);
-  
+    renderFavorites();
+  }
 
-    // ===== QR CODE — navigate to dedicated page =====
+  // ===== QR CODE — navigate to dedicated page =====
   function openQRModal(rip, accId) {
     if (accId) {
       window.location.href = 'qr.html?id=' + encodeURIComponent(accId);
     } else {
       window.location.href = 'qr.html?rip=' + encodeURIComponent(rip);
     }
-  }
-
-  renderFavorites();
   }
 
   function toggleSearch() {
