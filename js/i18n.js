@@ -348,6 +348,7 @@ const TRANSLATIONS = {
     theme_style: "نمط الألوان",
     custom_color: "لون مخصص",
     reset_color: "إعادة ضبط",
+    set_theme: "تعيين",
     // Fees page (extra)
     fees_other_atm_title: "رسوم السحب من الصراف الآلي",
     fees_other_atm_post_label: "السحب من موزع البريد",
@@ -733,6 +734,7 @@ const TRANSLATIONS = {
     theme_style: "Style de couleurs",
     custom_color: "Couleur personnalisée",
     reset_color: "Réinitialiser",
+    set_theme: "Appliquer",
     // Fees page (extra)
     fees_other_atm_title: "Frais de retrait DAB",
     fees_other_atm_post_label: "Retrait DAB Algérie Poste",
@@ -1118,6 +1120,7 @@ const TRANSLATIONS = {
     theme_style: "Color Theme",
     custom_color: "Custom Color",
     reset_color: "Reset",
+    set_theme: "Apply",
     // Fees page (extra)
     fees_other_atm_title: "ATM Withdrawal Fees",
     fees_other_atm_post_label: "Algérie Poste ATM",
