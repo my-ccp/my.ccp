@@ -102,56 +102,126 @@
       pointer-events: none;
     }
 
-    /* Floating swatches popup — anchored at button center, swatches use --tx/--ty */
-    .color-wheel-popup {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-      z-index: 100;
-      width: 0;
-      height: 0;
-    }
-    .color-wheel-popup.open { pointer-events: all; }
-
-    /* Each floating swatch */
-    .cw-swatch {
-      position: absolute;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      border: 3px solid transparent;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.25);
-      transition: transform 0.35s cubic-bezier(.34,1.56,.64,1), opacity 0.3s;
-      transform: translate(0, 0) scale(0);
-      opacity: 0;
-      font-size: 0.6rem;
-      font-weight: 700;
-      text-align: center;
-      line-height: 1.1;
-    }
-    .color-wheel-popup.open .cw-swatch {
-      transform: translate(var(--tx), var(--ty)) scale(1) !important;
-      opacity: 1 !important;
-    }
-    .cw-swatch.active-swatch {
-      border-color: #fff !important;
-      box-shadow: 0 0 0 3px var(--accent), 0 3px 12px rgba(0,0,0,0.3) !important;
-    }
-
-    /* Overlay to close on outside click */
-    .color-wheel-overlay {
+    /* ===== THEME MODAL ===== */
+    .theme-modal-overlay {
       display: none;
       position: fixed;
       inset: 0;
-      z-index: 90;
+      background: rgba(0,0,0,0.5);
+      z-index: 400;
+      align-items: flex-end;
+      justify-content: center;
     }
-    .color-wheel-overlay.open { display: block; }
+    .theme-modal-overlay.open { display: flex; }
+
+    .theme-modal {
+      background: var(--card);
+      border-radius: 20px 20px 0 0;
+      width: 100%;
+      max-width: 480px;
+      max-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      animation: slideUp 0.3s cubic-bezier(0.34,1.1,0.64,1);
+      overflow: hidden;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(100%); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+    .theme-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 20px 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .theme-modal-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .theme-modal-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--input-bg);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      font-size: 1.1rem;
+      line-height: 1;
+      transition: background 0.15s;
+    }
+    .theme-modal-close:hover { background: var(--border); }
+    .theme-modal-list {
+      overflow-y: auto;
+      flex: 1;
+      padding: 8px 0;
+    }
+    .theme-modal-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 20px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: inherit;
+      transition: background 0.15s;
+    }
+    .theme-modal-item:hover { background: var(--input-bg); }
+    .theme-modal-item.selected { background: var(--input-bg); }
+    .theme-swatch-dot {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      border: 2.5px solid transparent;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .theme-modal-item.selected .theme-swatch-dot {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--card), 0 0 0 5px var(--accent);
+    }
+    .theme-modal-item-name {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      flex: 1;
+    }
+    .theme-modal-check {
+      color: var(--accent);
+      opacity: 0;
+      font-size: 1.1rem;
+    }
+    .theme-modal-item.selected .theme-modal-check { opacity: 1; }
+    .theme-modal-footer {
+      padding: 12px 20px;
+      border-top: 1px solid var(--border);
+    }
+    .theme-modal-apply-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .theme-modal-apply-btn:hover { opacity: 0.88; }
+
+    /* Keep the overlay class for backward compat but unused */
+    .color-wheel-overlay { display: none !important; }
+    /* Popup hidden — replaced by modal */
+    .color-wheel-popup { display: none !important; }
 
     /* ===== HUE SLIDER ===== */
     .hue-slider-wrap {
@@ -267,7 +337,7 @@
 
     .font-dropdown {
       position: fixed;
-      background: var(--card-bg, #fff);
+      background: var(--card);
       border: 1.5px solid var(--border, rgba(0,0,0,0.12));
       border-radius: 14px;
       box-shadow: 0 8px 32px rgba(0,0,0,0.22);
@@ -297,8 +367,8 @@
       gap: 8px;
       transition: background 0.15s;
     }
-    .font-dropdown-item:hover { background: rgba(0,0,0,0.05); }
-    .font-dropdown-item.active { color: var(--accent); background: rgba(37,99,235,0.08); }
+    .font-dropdown-item:hover { background: var(--input-bg, rgba(0,0,0,0.05)); }
+    .font-dropdown-item.active { color: var(--accent); background: rgba(var(--accent-rgb, 37,99,235),0.12); }
     .font-dropdown-item .check { opacity: 0; }
     .font-dropdown-item.active .check { opacity: 1; }
 
@@ -329,7 +399,7 @@
     }
     .numeral-dropdown {
       position: fixed;
-      background: var(--card-bg, #fff);
+      background: var(--card);
       border: 1.5px solid var(--border, rgba(0,0,0,0.12));
       border-radius: 14px;
       box-shadow: 0 8px 32px rgba(0,0,0,0.22);
@@ -359,8 +429,8 @@
       gap: 8px;
       transition: background 0.15s;
     }
-    .numeral-dropdown-item:hover { background: rgba(0,0,0,0.05); }
-    .numeral-dropdown-item.active { color: var(--accent); background: rgba(37,99,235,0.08); }
+    .numeral-dropdown-item:hover { background: var(--input-bg, rgba(0,0,0,0.05)); }
+    .numeral-dropdown-item.active { color: var(--accent); background: rgba(var(--accent-rgb, 37,99,235),0.12); }
     .numeral-dropdown-item .check { opacity: 0; }
     .numeral-dropdown-item.active .check { opacity: 1; }
 
@@ -391,7 +461,7 @@
       position: absolute;
       inset-inline-end: 0;
       top: calc(100% + 6px);
-      background: var(--card-bg, #fff);
+      background: var(--card);
       border: 1.5px solid var(--border, rgba(0,0,0,0.12));
       border-radius: 14px;
       box-shadow: 0 8px 32px rgba(0,0,0,0.18);
@@ -417,7 +487,7 @@
       color: var(--text);
       transition: background 0.15s;
     }
-    .lang-dropdown-item:hover { background: rgba(0,0,0,0.05); }
+    .lang-dropdown-item:hover { background: var(--input-bg, rgba(0,0,0,0.05)); }
     .lang-dropdown-item.active { color: var(--accent); }
     .lang-dropdown-item .check { margin-inline-start: auto; opacity: 0; }
     .lang-dropdown-item.active .check { opacity: 1; }
@@ -562,17 +632,27 @@
           <span class="sf-row-label" data-i18n="theme_style">نمط الألوان</span>
         </div>
         <div class="color-wheel-container">
-          <!-- Overlay -->
-          <div class="color-wheel-overlay" id="cwOverlay" onclick="closeColorWheel()"></div>
-          <!-- Main wheel button -->
-          <button class="color-wheel-btn" id="colorWheelBtn" onclick="toggleColorWheel(event)" aria-label="اختر نمط الألوان">
+          <!-- Main wheel button — now opens modal -->
+          <button class="color-wheel-btn" id="colorWheelBtn" onclick="openThemeModal()" aria-label="اختر نمط الألوان">
             <div class="active-dot" id="activeThemeDot"></div>
           </button>
-          <!-- Floating swatches popup -->
-          <div class="color-wheel-popup" id="cwPopup">
-            <!-- Swatches injected by JS -->
+        </div>
+
+      <!-- Theme Modal -->
+      <div class="theme-modal-overlay" id="themeModalOverlay" onclick="onThemeModalOverlayClick(event)">
+        <div class="theme-modal" id="themeModalBox">
+          <div class="theme-modal-header">
+            <span class="theme-modal-title" id="themeModalTitle" data-i18n="theme_style">نمط الألوان</span>
+            <button class="theme-modal-close" onclick="closeThemeModal()" aria-label="إغلاق">✕</button>
+          </div>
+          <div class="theme-modal-list" id="themeModalList">
+            <!-- Items injected by JS -->
+          </div>
+          <div class="theme-modal-footer">
+            <button class="theme-modal-apply-btn" id="themeModalApplyBtn" onclick="applySelectedTheme()" data-i18n="set_theme">تعيين</button>
           </div>
         </div>
+      </div>
       </div>
 
       <!-- Custom Hue Slider (Edit 4 — works with all themes) -->
@@ -588,8 +668,8 @@
         </div>
         <div class="hue-track-wrap">
           <div class="hue-track"></div>
-          <input type="range" id="hueSlider" min="0" max="359" step="1" value="220"
-            oninput="onHueChange(this.value)"/>
+          <input type="range" id="hueSlider" min="0" max="359" step="3" value="220"
+            oninput="onHueChangeDebounced(this.value)"/>
           <div id="hueThumb" style="background:hsl(220,80%,55%);"></div>
         </div>
         <div style="display:flex;justify-content:center;">
@@ -807,56 +887,9 @@
     { id: 'slate',  label_key: 'theme_slate',  bg: 'linear-gradient(135deg,#0f172a,#334155)', color: '#60a5fa',   border: '#60a5fa' },
   ];
 
-  // Zigzag diagonal layout: swatches flow diagonally downward in a staggered zigzag
-  // Direction is flipped for RTL (Arabic) vs LTR languages
-  function getZigzagPositions(n) {
-    const isRTL = document.documentElement.getAttribute('dir') === 'rtl'
-               || document.body.getAttribute('dir') === 'rtl'
-               || (window.APP_LANG || 'ar') === 'ar';
-    const dir = isRTL ? 1 : -1;  // RTL: expand to the right (inward); LTR: expand to the left (inward)
-
-    const stepX = 58;   // horizontal step per column
-    const stepY = 52;   // vertical step per row
-    const zigX  = 18;   // zigzag horizontal wobble
-    const positions = [];
-
-    for (let i = 0; i < n; i++) {
-      const col = Math.floor(i / 2);       // column index (0,0,1,1,2,2,3)
-      const row = i % 2;                   // row: 0 = top lane, 1 = bottom lane
-      const tx = dir * (col * stepX + (row === 1 ? zigX : 0));
-      const ty = row * stepY + col * 8;    // slight downward drift per column
-      positions.push({ tx, ty });
-    }
-    return positions;
-  }
-
-  function buildColorWheelPopup() {
-    const popup = document.getElementById('cwPopup');
-    popup.innerHTML = '';
-    const positions = getZigzagPositions(THEME_CONFIGS.length);
-    THEME_CONFIGS.forEach((cfg, i) => {
-      const { tx, ty } = positions[i];
-      const delay = i * 40;
-
-      const btn = document.createElement('button');
-      btn.className = 'cw-swatch';
-      btn.id = 'cw-' + cfg.id;
-      btn.style.cssText = `background:${cfg.bg};color:${cfg.color};border-color:${cfg.border};--tx:${tx}px;--ty:${ty}px;transition-delay:${delay}ms;`;
-      btn.innerHTML = `<span style="font-size:0.58rem;font-weight:700;line-height:1.1;text-align:center;padding:2px;">${t(cfg.label_key)}</span>`;
-      btn.onclick = (e) => { e.stopPropagation(); selectTheme(cfg.id); closeColorWheel(); };
-      popup.appendChild(btn);
-    });
-    updateCwSwatchActive();
-    updateActiveThemeDot();
-  }
-
-  function updateCwSwatchActive() {
-    const current = window.APP_THEME || 'light';
-    document.querySelectorAll('.cw-swatch').forEach(el => {
-      const isActive = el.id === 'cw-' + current;
-      el.classList.toggle('active-swatch', isActive);
-    });
-  }
+  // =============================================
+  // THEME MODAL (replaces zigzag color wheel)
+  // =============================================
 
   function updateActiveThemeDot() {
     const current = window.APP_THEME || 'light';
@@ -865,20 +898,69 @@
     if (dot) dot.style.background = cfg.bg;
   }
 
-  let cwOpen = false;
-  function toggleColorWheel(e) {
-    e.stopPropagation();
-    cwOpen ? closeColorWheel() : openColorWheel();
+  // Legacy stub — no longer used but kept in case called elsewhere
+  function buildColorWheelPopup() { updateActiveThemeDot(); }
+  function updateCwSwatchActive() {}
+  function closeColorWheel() { closeThemeModal(); }
+
+  let _pendingTheme = null;
+
+  function buildThemeModalList() {
+    const list = document.getElementById('themeModalList');
+    if (!list) return;
+    list.innerHTML = '';
+    const current = window.APP_THEME || 'light';
+    _pendingTheme = current;
+    THEME_CONFIGS.forEach(cfg => {
+      const btn = document.createElement('button');
+      btn.className = 'theme-modal-item' + (cfg.id === current ? ' selected' : '');
+      btn.id = 'tmi-' + cfg.id;
+      btn.onclick = () => selectPendingTheme(cfg.id);
+      btn.innerHTML = `
+        <div class="theme-swatch-dot" style="background:${cfg.bg};"></div>
+        <span class="theme-modal-item-name">${t(cfg.label_key)}</span>
+        <span class="theme-modal-check">✓</span>
+      `;
+      list.appendChild(btn);
+    });
+    // Update title translation
+    const title = document.getElementById('themeModalTitle');
+    if (title) title.textContent = t('theme_style');
+    // Update apply button translation
+    const applyBtn = document.getElementById('themeModalApplyBtn');
+    if (applyBtn) applyBtn.textContent = t('set_theme');
   }
-  function openColorWheel() {
-    cwOpen = true;
-    document.getElementById('cwPopup').classList.add('open');
-    document.getElementById('cwOverlay').classList.add('open');
+
+  function selectPendingTheme(themeId) {
+    _pendingTheme = themeId;
+    document.querySelectorAll('.theme-modal-item').forEach(el => {
+      el.classList.toggle('selected', el.id === 'tmi-' + themeId);
+    });
   }
-  function closeColorWheel() {
-    cwOpen = false;
-    document.getElementById('cwPopup').classList.remove('open');
-    document.getElementById('cwOverlay').classList.remove('open');
+
+  function applySelectedTheme() {
+    if (_pendingTheme) {
+      selectTheme(_pendingTheme);
+    }
+    closeThemeModal();
+  }
+
+  function openThemeModal() {
+    buildThemeModalList();
+    document.getElementById('themeModalOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeThemeModal() {
+    document.getElementById('themeModalOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+    _pendingTheme = null;
+  }
+
+  function onThemeModalOverlayClick(e) {
+    if (e.target === document.getElementById('themeModalOverlay')) {
+      closeThemeModal();
+    }
   }
 
   // =============================================
@@ -924,6 +1006,16 @@
     localStorage.setItem(HUE_GLOBAL_KEY, hue);
     applyCustomHue(hue, theme);
     updateHueUI(hue);
+  }
+
+  // Debounced version to slow down live updates (120ms delay)
+  let _hueDebounceTimer = null;
+  function onHueChangeDebounced(val) {
+    // Update thumb/preview immediately for visual feedback
+    updateHueUI(parseInt(val));
+    // Debounce the actual color apply
+    clearTimeout(_hueDebounceTimer);
+    _hueDebounceTimer = setTimeout(() => onHueChange(val), 120);
   }
 
   function resetCustomHue() {
