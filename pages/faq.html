@@ -214,6 +214,7 @@
       <button class="faq-tab" data-cat="general" onclick="filterCategory('general',this)" data-i18n="faq_cat_general">عام</button>
       <button class="faq-tab" data-cat="ccp_rip" onclick="filterCategory('ccp_rip',this)" data-i18n="faq_cat_ccp_rip">CCP & RIP</button>
       <button class="faq-tab" data-cat="accounts" onclick="filterCategory('accounts',this)" data-i18n="faq_cat_accounts">الحسابات</button>
+      <button class="faq-tab" data-cat="fees" onclick="filterCategory('fees',this)">الرسوم</button>
       <button class="faq-tab" data-cat="privacy" onclick="filterCategory('privacy',this)" data-i18n="faq_cat_privacy">الخصوصية</button>
     </div>
 
@@ -234,7 +235,7 @@
           <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="faq-answer">
-          <p data-i18n="faq_a1">MY CCP هو تطبيق جزائري مجاني متخصص في إدارة حسابات بريد الجزائر (CCP). يتيح لك تحويل أرقام الحسابات البريدية CCP إلى أرقام RIP، حفظ حساباتك، تتبع العمليات، حساب الرسوم البنكية، وإنشاء وإدارة الحوالات البريدية.</p>
+          <p data-i18n="faq_a1">MY CCP هو تطبيق جزائري مجاني متخصص في إدارة حسابات بريد الجزائر (CCP). يتيح لك تحويل أرقام الحسابات البريدية CCP إلى أرقام RIP، حفظ حساباتك، تتبع العمليات، حساب الرسوم البنكية، وإدارة المفضلة. التطبيق يعمل بالكامل بدون إنترنت وبخصوصية تامة.</p>
         </div>
       </div>
 
@@ -244,7 +245,7 @@
           <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="faq-answer">
-          <p data-i18n="faq_a2">نعم، التطبيق مجاني بالكامل. لا توجد رسوم اشتراك، لا إعلانات، ولا مشتريات داخل التطبيق. جميع الخدمات المتاحة مجانية للجميع.</p>
+          <p data-i18n="faq_a2">نعم، التطبيق مجاني بالكامل. لا توجد رسوم اشتراك، لا إعلانات، ولا مشتريات داخل التطبيق. جميع الخدمات المتاحة مجانية للجميع إلى الأبد.</p>
         </div>
       </div>
 
@@ -254,7 +255,7 @@
           <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="faq-answer">
-          <p data-i18n="faq_a3">لا. التطبيق يعمل بالكامل بدون إنترنت. جميع العمليات الحسابية والبيانات تُعالج محلياً على جهازك. الاتصال بالإنترنت مطلوب فقط عند تحميل التطبيق لأول مرة.</p>
+          <p data-i18n="faq_a3">لا. التطبيق يعمل بالكامل بدون إنترنت بعد تحميله لأول مرة. جميع العمليات الحسابية والبيانات تُعالج محلياً على جهازك. الاتصال بالإنترنت مطلوب فقط عند تحميل التطبيق لأول مرة أو عند التحديث.</p>
         </div>
       </div>
 
@@ -274,7 +275,7 @@
           <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="faq-answer">
-          <p data-i18n="faq_a5">يدعم التطبيق ثلاث لغات: العربية 🇩🇿، الفرنسية 🇫🇷، والإنجليزية 🇺🇸. يمكن تغيير اللغة في أي وقت من إعدادات التطبيق.</p>
+          <p data-i18n="faq_a5">يدعم التطبيق ثلاث لغات: العربية 🇩🇿، الفرنسية 🇫🇷، والإنجليزية 🇺🇸. يمكن تغيير اللغة في أي وقت من إعدادات التطبيق. الواجهة العربية هي الافتراضية.</p>
         </div>
       </div>
 
@@ -284,7 +285,12 @@
           <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="faq-answer">
-          <p data-i18n="faq_a6">التطبيق هو تطبيق ويب تقدمي (PWA) ويمكن تثبيته مباشرة من المتصفح دون الحاجة لمتجر التطبيقات. على Android: افتح التطبيق في Chrome ثم اضغط على "إضافة إلى الشاشة الرئيسية". على iPhone/Safari: اضغط على زر المشاركة ثم "إضافة إلى الشاشة الرئيسية".</p>
+          <p data-i18n="faq_a6">التطبيق هو تطبيق ويب تقدمي (PWA) ويمكن تثبيته مباشرة من المتصفح دون الحاجة لمتجر التطبيقات:</p>
+          <ul>
+            <li><strong>Android (Chrome):</strong> افتح التطبيق ثم اضغط على القائمة (⋮) واختر "إضافة إلى الشاشة الرئيسية"</li>
+            <li><strong>iPhone (Safari):</strong> اضغط على زر المشاركة (□↑) ثم "إضافة إلى الشاشة الرئيسية"</li>
+            <li><strong>الحاسوب (Chrome/Edge):</strong> ستظهر أيقونة التثبيت في شريط العنوان</li>
+          </ul>
         </div>
       </div>
 
@@ -304,7 +310,17 @@
           <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="faq-answer">
-          <p data-i18n="faq_a23">نعم. في صفحة "الإعدادات" يوجد شريط ضبط حجم الخط. يمكنك تكبير أو تصغير النصوص في جميع أنحاء التطبيق حسب تفضيلك.</p>
+          <p data-i18n="faq_a23">نعم. في صفحة "الإعدادات" يوجد شريط ضبط حجم الخط. يمكنك تكبير أو تصغير النصوص في جميع أنحاء التطبيق حسب تفضيلك وراحة عينيك.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="general" data-q="هل التطبيق يعمل على الحاسوب">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text">هل يعمل التطبيق على الحاسوب والتابلت أيضاً؟</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer">
+          <p>نعم. التطبيق مُصمَّم بشكل متجاوب ويعمل بكفاءة على جميع الأجهزة: الهواتف الذكية، الأجهزة اللوحية (تابلت)، والحاسوب. يمكن تثبيته كتطبيق PWA على Chrome أو Edge على الحاسوب كذلك.</p>
         </div>
       </div>
 
@@ -322,9 +338,9 @@
           <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="faq-answer">
-          <p><strong>CCP (الحساب الجاري البريدي):</strong> <span data-i18n="faq_a7_ccp">هو رقم حسابك في بريد الجزائر، ويتكون من 10 أرقام + مفتاح من 2 رقم.</span></p>
-          <p><strong>RIP (كشف الهوية البريدية / Relevé d'Identité Postal):</strong> <span data-i18n="faq_a7_rip">هو التنسيق الدولي الموحد الذي يُستخدم في التحويلات البنكية، ويبدأ بـ 007 99999 ويتضمن رقم الحساب ومفتاح RIP من رقمين.</span></p>
-          <p data-i18n="faq_a7_use">يُستخدم RIP في العمليات المصرفية، التحويلات، واستلام الرواتب والمدفوعات.</p>
+          <p><strong>CCP (الحساب الجاري البريدي):</strong> <span data-i18n="faq_a7_ccp">هو رقم حسابك في بريد الجزائر، يتكون من 10 أرقام + مفتاح من رقمين (1 إلى 97).</span></p>
+          <p><strong>RIP (كشف الهوية البريدية):</strong> <span data-i18n="faq_a7_rip">هو التنسيق الدولي الموحد المكوّن من 20 رقماً، يبدأ بـ 007 99999 ويتضمن رقم الحساب ومفتاح RIP المحسوب تلقائياً.</span></p>
+          <p data-i18n="faq_a7_use">يُستخدم RIP في العمليات المصرفية، التحويلات البنكية، واستلام الرواتب والمدفوعات الحكومية.</p>
         </div>
       </div>
 
@@ -334,11 +350,12 @@
           <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="faq-answer">
-          <p data-i18n="faq_a8_steps">من الصفحة الرئيسية:</p>
+          <p data-i18n="faq_a8_steps">من الصفحة الرئيسية، اتبع هذه الخطوات:</p>
           <ul>
-            <li data-i18n="faq_a8_s1">أدخل رقم حسابك الجاري (10 أرقام)</li>
+            <li data-i18n="faq_a8_s1">أدخل رقم حسابك الجاري (10 أرقام بالضبط)</li>
             <li data-i18n="faq_a8_s2">أدخل مفتاح CCP (رقم من 1 إلى 97)</li>
-            <li data-i18n="faq_a8_s3">سيظهر رقم RIP فوراً مع إمكانية النسخ والمشاركة</li>
+            <li data-i18n="faq_a8_s3">سيظهر رقم RIP فوراً مكوناً من 20 رقماً مع إمكانية النسخ والمشاركة</li>
+            <li>يمكنك حفظ الحساب باسم لاستخدامه لاحقاً</li>
           </ul>
         </div>
       </div>
@@ -349,7 +366,14 @@
           <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="faq-answer">
-          <p data-i18n="faq_a9">مفتاح CCP هو رقم من 1 إلى 97 ويمكن إيجاده في: دفتر الشيكات البريدي (الغلاف أو أسفل الشيكات)، البطاقة البنكية، كشف الحساب الورقي، أو تطبيق Baridimob الرسمي.</p>
+          <p data-i18n="faq_a9">مفتاح CCP هو رقم من 1 إلى 97 ويمكن إيجاده في عدة أماكن:</p>
+          <ul>
+            <li>دفتر الشيكات البريدي (على الغلاف أو أسفل الشيكات)</li>
+            <li>البطاقة البنكية (بريدية / CIB)</li>
+            <li>كشف الحساب الورقي الصادر من المكتب البريدي</li>
+            <li>تطبيق Baridimob الرسمي</li>
+            <li>مباشرة في أي مكتب بريدي بتقديم بطاقة الهوية</li>
+          </ul>
         </div>
       </div>
 
@@ -359,7 +383,7 @@
           <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="faq-answer">
-          <p data-i18n="faq_a10">نعم. بعد حساب RIP، تظهر أزرار النسخ والمشاركة مباشرة. كما يمكنك حفظ الحساب لاستخدامه لاحقاً أو مشاركته عبر تطبيقات المراسلة.</p>
+          <p data-i18n="faq_a10">نعم. بعد حساب RIP، تظهر أزرار النسخ والمشاركة مباشرة. يمكنك نسخ الرقم بنقرة واحدة أو مشاركته عبر واتساب أو أي تطبيق مراسلة. كما يمكنك حفظ الحساب لاستخدامه لاحقاً.</p>
         </div>
       </div>
 
@@ -371,10 +395,10 @@
         <div class="faq-answer">
           <p data-i18n="faq_a24">رقم RIP الكامل يتكون من 20 رقماً بالتنسيق: <strong>007 99999 XXXXXXXXXX YY</strong></p>
           <ul>
-            <li><strong>007</strong> — رمز بريد الجزائر</li>
-            <li><strong>99999</strong> — رمز الوكالة البريدية</li>
+            <li><strong>007</strong> — رمز بريد الجزائر (ثابت)</li>
+            <li><strong>99999</strong> — رمز الوكالة البريدية (ثابت)</li>
             <li><strong>XXXXXXXXXX</strong> — رقم حسابك الجاري (10 أرقام)</li>
-            <li><strong>YY</strong> — مفتاح RIP (رقمان يُحسبان تلقائياً)</li>
+            <li><strong>YY</strong> — مفتاح RIP (رقمان يُحسبان تلقائياً من التطبيق)</li>
           </ul>
         </div>
       </div>
@@ -385,7 +409,17 @@
           <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="faq-answer">
-          <p data-i18n="faq_a25">مفتاح RIP يُحسب تلقائياً من قِبل التطبيق باستخدام خوارزمية حسابية معتمدة استناداً إلى رقم حسابك الجاري. لا تحتاج لإدخاله يدوياً، فقط أدخل رقم CCP ومفتاح CCP.</p>
+          <p data-i18n="faq_a25">مفتاح RIP يُحسب تلقائياً بالتطبيق باستخدام خوارزمية حسابية معتمدة (Modulo 97) استناداً إلى الأرقام الكاملة للـ RIP. لا تحتاج لإدخاله يدوياً، فقط أدخل رقم CCP ومفتاح CCP وسيتولى التطبيق الباقي.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="ccp_rip" data-q="هل الحساب دقيق">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text">هل نتيجة التحويل من CCP إلى RIP دقيقة؟</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer">
+          <p>نعم، يستخدم التطبيق الخوارزمية الرياضية الرسمية لحساب RIP. لكن للتأكيد، يُنصح دائماً بمقارنة النتيجة مع كشف الحساب الرسمي أو تطبيق Baridimob، خاصةً قبل إجراء أي معاملة مالية مهمة.</p>
         </div>
       </div>
 
@@ -403,7 +437,7 @@
           <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="faq-answer">
-          <p data-i18n="faq_a11">بعد إدخال رقم الحساب ومفتاح CCP في الصفحة الرئيسية، أدخل الاسم ثم اضغط "حفظ الحساب". سيُحفظ الحساب في صفحة "الحسابات" ويمكن الوصول إليه في أي وقت.</p>
+          <p data-i18n="faq_a11">بعد إدخال رقم الحساب ومفتاح CCP في الصفحة الرئيسية وظهور رقم RIP، أدخل اسماً للحساب (مثل: "حسابي الشخصي") ثم اضغط "حفظ الحساب". سيُحفظ فوراً في صفحة "الحسابات" ويمكن الوصول إليه في أي وقت.</p>
         </div>
       </div>
 
@@ -413,7 +447,7 @@
           <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="faq-answer">
-          <p data-i18n="faq_a12">نعم، يمكنك حفظ عدد غير محدود من الحسابات. يمكنك إدارة حسابات عائلتك أو عملائك بكل سهولة من صفحة "الحسابات".</p>
+          <p data-i18n="faq_a12">نعم، يمكنك حفظ عدد غير محدود من الحسابات. يمكنك إدارة حسابك الشخصي وحسابات أفراد عائلتك أو حتى حسابات عملائك كلها من مكان واحد.</p>
         </div>
       </div>
 
@@ -423,7 +457,12 @@
           <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="faq-answer">
-          <p data-i18n="faq_a13">من صفحة "الحسابات"، اضغط على أيقونة القائمة في أعلى الصفحة. ستجد خيارات "تصدير الحسابات" (لحفظ نسخة احتياطية بصيغة JSON) و"استيراد الحسابات" (لاستعادة حسابات محفوظة مسبقاً أو نقلها من جهاز لآخر).</p>
+          <p data-i18n="faq_a13">من صفحة "الحسابات"، اضغط على أيقونة القائمة في الأعلى:</p>
+          <ul>
+            <li><strong>تصدير الحسابات:</strong> يحفظ نسخة احتياطية بصيغة JSON على جهازك</li>
+            <li><strong>استيراد الحسابات:</strong> يستعيد حسابات محفوظة مسبقاً أو ينقلها من جهاز لآخر</li>
+          </ul>
+          <p>يُنصح بالتصدير الدوري كنسخة احتياطية قبل تغيير الجهاز أو مسح بيانات المتصفح.</p>
         </div>
       </div>
 
@@ -433,10 +472,48 @@
           <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="faq-answer">
-          <p data-i18n="faq_a14">المفضلة تتيح لك تثبيت الحسابات الأكثر استخداماً للوصول السريع إليها. اضغط على أيقونة النجمة بجانب أي حساب لإضافته للمفضلة، ثم ستجده في صفحة "المفضلة" من الشريط الجانبي.</p>
+          <p data-i18n="faq_a14">المفضلة تتيح لك تثبيت الحسابات الأكثر استخداماً للوصول السريع إليها. اضغط على أيقونة النجمة ⭐ بجانب أي حساب لإضافته للمفضلة، ثم ستجده في صفحة "المفضلة" من الشريط الجانبي.</p>
         </div>
       </div>
 
+      <div class="faq-item" data-cat="accounts" data-q="هل يمكنني تعديل حساب محفوظ">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text">هل يمكنني تعديل اسم أو بيانات حساب محفوظ؟</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer">
+          <p>نعم، يمكنك تعديل أي حساب محفوظ. من صفحة "الحسابات"، اضغط على الحساب ثم اختر "تعديل" لتغيير الاسم أو بيانات الحساب. يمكنك أيضاً حذف أي حساب في أي وقت.</p>
+        </div>
+      </div>
+
+      <!-- === FEES === -->
+      <div class="faq-category-label" data-cat="fees">
+        <div class="faq-category-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          الرسوم البريدية
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="fees" data-q="كيف تعمل حاسبة الرسوم">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text">كيف تعمل حاسبة رسوم التحويل؟</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer">
+          <p>حاسبة الرسوم في التطبيق تعتمد على الجدول الرسمي لرسوم التحويل البريدي. أدخل المبلغ المراد تحويله، وسيظهر لك تلقائياً مقدار الرسوم ومجموع المبلغ الذي ستدفعه.</p>
+          <p>الرسوم تُحسب محلياً على جهازك دون الحاجة لاتصال بالإنترنت.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="fees" data-q="هل الرسوم محدثة">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text">هل جدول الرسوم محدّث ودقيق؟</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer">
+          <p>يسعى التطبيق للحفاظ على جدول رسوم محدّث وفق آخر التعرفات الرسمية. لكن يُنصح دائماً بالتحقق من الرسوم الفعلية في المكتب البريدي أو على الموقع الرسمي <a href="https://www.poste.dz" target="_blank">www.poste.dz</a> قبل إجراء أي عملية، إذ قد تتغير التعرفات من وقت لآخر.</p>
+        </div>
+      </div>
 
       <!-- === PRIVACY === -->
       <div class="faq-category-label" data-cat="privacy">
@@ -452,7 +529,7 @@
           <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="faq-answer">
-          <p data-i18n="faq_a19">نعم. جميع بياناتك تُخزّن محلياً في متصفحك فقط ولا تُرسل لأي خادم. التطبيق لا يستخدم أي أدوات تتبع أو تحليل، ولا يجمع أي معلومات شخصية.</p>
+          <p data-i18n="faq_a19">نعم بالكامل. جميع بياناتك تُخزّن محلياً في متصفحك فقط ولا تُرسل لأي خادم خارجي. التطبيق لا يستخدم أي أدوات تتبع أو تحليل، ولا يجمع أي معلومات شخصية. أنت الوحيد الذي يرى بياناتك.</p>
         </div>
       </div>
 
@@ -465,8 +542,8 @@
           <p data-i18n="faq_a20">يمكنك حذف جميع البيانات بعدة طرق:</p>
           <ul>
             <li data-i18n="faq_a20_opt1">من صفحة "الحسابات": حذف حسابات مفردة أو جميعها</li>
-            <li data-i18n="faq_a20_opt2">من صفحة "السجل": مسح سجل العمليات</li>
-            <li data-i18n="faq_a20_opt3">من إعدادات المتصفح: مسح بيانات الموقع بالكامل</li>
+            <li data-i18n="faq_a20_opt2">من صفحة "السجل": مسح سجل العمليات بالكامل</li>
+            <li data-i18n="faq_a20_opt3">من إعدادات المتصفح: مسح بيانات الموقع بالكامل (يحذف كل شيء)</li>
           </ul>
         </div>
       </div>
@@ -477,7 +554,17 @@
           <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="faq-answer">
-          <p data-i18n="faq_a21">ستُحذف جميع البيانات المحفوظة بشكل دائم لأنها تُخزّن فقط في ذاكرة المتصفح. لهذا ننصحك بتصدير حساباتك من صفحة "الحسابات" قبل مسح بيانات المتصفح للاحتفاظ بنسخة احتياطية.</p>
+          <p data-i18n="faq_a21">ستُحذف جميع البيانات المحفوظة بشكل دائم لأنها تُخزّن فقط في ذاكرة المتصفح المحلية. لهذا ننصح بشدة بتصدير حساباتك من صفحة "الحسابات" قبل مسح بيانات المتصفح للاحتفاظ بنسخة احتياطية.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" data-cat="privacy" data-q="هل يجمع التطبيق بيانات شخصية">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text">هل يجمع التطبيق أي بيانات شخصية؟</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer">
+          <p>لا، التطبيق لا يجمع أي بيانات شخصية على الإطلاق: لا عنوان IP، لا نوع الجهاز، لا الموقع الجغرافي، لا سجل الاستخدام. التطبيق لا يرسل أي معلومات لأي خادم أو جهة. كل ما تدخله يبقى على جهازك فقط.</p>
         </div>
       </div>
 
@@ -495,7 +582,7 @@
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
       </div>
       <div class="cta-title" data-i18n="faq_contact_title">لم تجد إجابة لسؤالك؟</div>
-      <div class="cta-sub" data-i18n="faq_contact_sub">تواصل معنا وسنرد في أقرب وقت</div>
+      <div class="cta-sub" data-i18n="faq_contact_sub">تواصل معنا وسنرد في أقرب وقت ممكن</div>
       <button class="primary-btn" style="margin-top:4px;padding:10px 24px;" onclick="contactUs()" data-i18n="contact_us">اتصل بنا</button>
     </div>
 
@@ -510,9 +597,7 @@
   function toggleFaq(questionEl) {
     const item = questionEl.closest('.faq-item');
     const isOpen = item.classList.contains('open');
-    // Close all open items
     document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
-    // Open clicked if it was closed
     if (!isOpen) item.classList.add('open');
   }
 
@@ -522,7 +607,6 @@
     const labels = document.querySelectorAll('.faq-category-label');
     let visible = 0;
 
-    // Reset category tabs to "all" when searching
     if (q) {
       document.querySelectorAll('.faq-tab').forEach(t => t.classList.remove('active'));
       document.querySelector('[data-cat="all"]').classList.add('active');
@@ -542,10 +626,7 @@
   }
 
   function filterCategory(cat, btn) {
-    // Clear search
     document.getElementById('faqSearchInput').value = '';
-
-    // Update active tab
     document.querySelectorAll('.faq-tab').forEach(t => t.classList.remove('active'));
     btn.classList.add('active');
 
