@@ -214,7 +214,7 @@
       <button class="faq-tab" data-cat="general" onclick="filterCategory('general',this)" data-i18n="faq_cat_general">عام</button>
       <button class="faq-tab" data-cat="ccp_rip" onclick="filterCategory('ccp_rip',this)" data-i18n="faq_cat_ccp_rip">CCP & RIP</button>
       <button class="faq-tab" data-cat="accounts" onclick="filterCategory('accounts',this)" data-i18n="faq_cat_accounts">الحسابات</button>
-      <button class="faq-tab" data-cat="fees" onclick="filterCategory('fees',this)">الرسوم</button>
+      <button class="faq-tab" data-cat="fees" onclick="filterCategory('fees',this)" data-i18n="faq_tab_fees">الرسوم</button>
       <button class="faq-tab" data-cat="privacy" onclick="filterCategory('privacy',this)" data-i18n="faq_cat_privacy">الخصوصية</button>
     </div>
 
@@ -316,11 +316,11 @@
 
       <div class="faq-item" data-cat="general" data-q="هل التطبيق يعمل على الحاسوب">
         <div class="faq-question" onclick="toggleFaq(this)">
-          <span class="faq-q-text">هل يعمل التطبيق على الحاسوب والتابلت أيضاً؟</span>
+          <span class="faq-q-text" data-i18n="faq_q_desktop">هل يعمل التطبيق على الحاسوب والتابلت أيضاً؟</span>
           <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="faq-answer">
-          <p>نعم. التطبيق مُصمَّم بشكل متجاوب ويعمل بكفاءة على جميع الأجهزة: الهواتف الذكية، الأجهزة اللوحية (تابلت)، والحاسوب. يمكن تثبيته كتطبيق PWA على Chrome أو Edge على الحاسوب كذلك.</p>
+          <p data-i18n="faq_a_desktop">نعم. التطبيق مُصمَّم بشكل متجاوب ويعمل بكفاءة على جميع الأجهزة: الهواتف الذكية، الأجهزة اللوحية (تابلت)، والحاسوب. يمكن تثبيته كتطبيق PWA على Chrome أو Edge على الحاسوب كذلك.</p>
         </div>
       </div>
 
@@ -415,11 +415,11 @@
 
       <div class="faq-item" data-cat="ccp_rip" data-q="هل الحساب دقيق">
         <div class="faq-question" onclick="toggleFaq(this)">
-          <span class="faq-q-text">هل نتيجة التحويل من CCP إلى RIP دقيقة؟</span>
+          <span class="faq-q-text" data-i18n="faq_q_accurate">هل نتيجة التحويل من CCP إلى RIP دقيقة؟</span>
           <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="faq-answer">
-          <p>نعم، يستخدم التطبيق الخوارزمية الرياضية الرسمية لحساب RIP. لكن للتأكيد، يُنصح دائماً بمقارنة النتيجة مع كشف الحساب الرسمي أو تطبيق Baridimob، خاصةً قبل إجراء أي معاملة مالية مهمة.</p>
+          <p data-i18n="faq_a_accurate">نعم، يستخدم التطبيق الخوارزمية الرياضية الرسمية لحساب RIP. لكن للتأكيد، يُنصح دائماً بمقارنة النتيجة مع كشف الحساب الرسمي أو تطبيق Baridimob، خاصةً قبل إجراء أي معاملة مالية مهمة.</p>
         </div>
       </div>
 
@@ -478,11 +478,11 @@
 
       <div class="faq-item" data-cat="accounts" data-q="هل يمكنني تعديل حساب محفوظ">
         <div class="faq-question" onclick="toggleFaq(this)">
-          <span class="faq-q-text">هل يمكنني تعديل اسم أو بيانات حساب محفوظ؟</span>
+          <span class="faq-q-text" data-i18n="faq_q_edit_account">هل يمكنني تعديل اسم أو بيانات حساب محفوظ؟</span>
           <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="faq-answer">
-          <p>نعم، يمكنك تعديل أي حساب محفوظ. من صفحة "الحسابات"، اضغط على الحساب ثم اختر "تعديل" لتغيير الاسم أو بيانات الحساب. يمكنك أيضاً حذف أي حساب في أي وقت.</p>
+          <p data-i18n="faq_a_edit_account">نعم، يمكنك تعديل أي حساب محفوظ. من صفحة "الحسابات"، اضغط على الحساب ثم اختر "تعديل" لتغيير الاسم أو بيانات الحساب. يمكنك أيضاً حذف أي حساب في أي وقت.</p>
         </div>
       </div>
 
@@ -490,28 +490,27 @@
       <div class="faq-category-label" data-cat="fees">
         <div class="faq-category-title">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-          الرسوم البريدية
+          <span data-i18n="faq_cat_fees_header">الرسوم البريدية</span>
         </div>
       </div>
 
       <div class="faq-item" data-cat="fees" data-q="كيف تعمل حاسبة الرسوم">
         <div class="faq-question" onclick="toggleFaq(this)">
-          <span class="faq-q-text">كيف تعمل حاسبة رسوم التحويل؟</span>
+          <span class="faq-q-text" data-i18n="faq_q_fees_how">كيف تعمل حاسبة رسوم التحويل؟</span>
           <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="faq-answer">
-          <p>حاسبة الرسوم في التطبيق تعتمد على الجدول الرسمي لرسوم التحويل البريدي. أدخل المبلغ المراد تحويله، وسيظهر لك تلقائياً مقدار الرسوم ومجموع المبلغ الذي ستدفعه.</p>
-          <p>الرسوم تُحسب محلياً على جهازك دون الحاجة لاتصال بالإنترنت.</p>
+          <p data-i18n="faq_a_fees_how">حاسبة الرسوم في التطبيق تعتمد على الجدول الرسمي لرسوم التحويل البريدي. أدخل المبلغ المراد تحويله، وسيظهر لك تلقائياً مقدار الرسوم ومجموع المبلغ الذي ستدفعه. الرسوم تُحسب محلياً على جهازك دون الحاجة لاتصال بالإنترنت.</p>
         </div>
       </div>
 
       <div class="faq-item" data-cat="fees" data-q="هل الرسوم محدثة">
         <div class="faq-question" onclick="toggleFaq(this)">
-          <span class="faq-q-text">هل جدول الرسوم محدّث ودقيق؟</span>
+          <span class="faq-q-text" data-i18n="faq_q_fees_updated">هل جدول الرسوم محدّث ودقيق؟</span>
           <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="faq-answer">
-          <p>يسعى التطبيق للحفاظ على جدول رسوم محدّث وفق آخر التعرفات الرسمية. لكن يُنصح دائماً بالتحقق من الرسوم الفعلية في المكتب البريدي أو على الموقع الرسمي <a href="https://www.poste.dz" target="_blank">www.poste.dz</a> قبل إجراء أي عملية، إذ قد تتغير التعرفات من وقت لآخر.</p>
+          <p data-i18n="faq_a_fees_updated">يسعى التطبيق للحفاظ على جدول رسوم محدّث وفق آخر التعرفات الرسمية. لكن يُنصح دائماً بالتحقق من الرسوم الفعلية في المكتب البريدي أو على الموقع الرسمي <a href="https://www.poste.dz" target="_blank">www.poste.dz</a> قبل إجراء أي عملية، إذ قد تتغير التعرفات من وقت لآخر.</p>
         </div>
       </div>
 
@@ -560,11 +559,11 @@
 
       <div class="faq-item" data-cat="privacy" data-q="هل يجمع التطبيق بيانات شخصية">
         <div class="faq-question" onclick="toggleFaq(this)">
-          <span class="faq-q-text">هل يجمع التطبيق أي بيانات شخصية؟</span>
+          <span class="faq-q-text" data-i18n="faq_q_collect_data">هل يجمع التطبيق أي بيانات شخصية؟</span>
           <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="faq-answer">
-          <p>لا، التطبيق لا يجمع أي بيانات شخصية على الإطلاق: لا عنوان IP، لا نوع الجهاز، لا الموقع الجغرافي، لا سجل الاستخدام. التطبيق لا يرسل أي معلومات لأي خادم أو جهة. كل ما تدخله يبقى على جهازك فقط.</p>
+          <p data-i18n="faq_a_collect_data">لا، التطبيق لا يجمع أي بيانات شخصية على الإطلاق: لا عنوان IP، لا نوع الجهاز، لا الموقع الجغرافي، لا سجل الاستخدام. التطبيق لا يرسل أي معلومات لأي خادم أو جهة. كل ما تدخله يبقى على جهازك فقط.</p>
         </div>
       </div>
 
