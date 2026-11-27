@@ -214,6 +214,19 @@
     }
     .dev-name { font-size: 1rem; font-weight: 800; color: var(--text); }
     .dev-role { font-size: 0.85rem; color: var(--text2); }
+    .update-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(16,185,129,0.1);
+      color: #10b981;
+      border: 1px solid rgba(16,185,129,0.25);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-top: 4px;
+    }
   </style>
 </head>
 <body>
@@ -239,11 +252,17 @@
       <img src="../icons/icon-192.png" alt="MY CCP" class="about-logo"/>
       <div class="about-app-name">MY <span>CCP</span></div>
       <div class="about-version-badge" data-i18n="version_label">الإصدار 1.1.0</div>
+      <div class="update-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        محدّث — نوفمبر 2026
+      </div>
     </div>
 
     <!-- Description -->
     <div class="about-desc-block" data-i18n="about_desc">
-      تطبيق MY CCP هو تطبيق ويب جزائري مجاني ومفتوح المصدر، مخصص لإدارة حسابات بريد الجزائر (CCP). يتيح لك تحويل أرقام CCP إلى أرقام RIP فورياً، حفظ حساباتك، تتبع العمليات، حساب الرسوم البنكية، وإدارة المفضلة — كل ذلك دون إنترنت وبخصوصية تامة، بدون أي تسجيل أو حساب مستخدم.
+      تطبيق <strong>MY CCP</strong> هو تطبيق ويب جزائري مجاني ومفتوح المصدر، مخصص لإدارة حسابات بريد الجزائر (CCP). يتيح لك تحويل أرقام CCP إلى أرقام RIP فورياً، حفظ حساباتك، تتبع العمليات، حساب الرسوم البنكية، وإدارة المفضلة — كل ذلك بدون إنترنت وبخصوصية تامة، بدون أي تسجيل أو حساب مستخدم.
+      <br/><br/>
+      صُمِّم التطبيق خصيصاً للمواطن الجزائري الذي يتعامل يومياً مع خدمات بريد الجزائر، ليوفر له أداة سهلة وسريعة وآمنة في متناول يده في أي وقت.
     </div>
 
     <!-- Tools / Services -->
@@ -258,35 +277,42 @@
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
           </div>
           <div class="tool-card-title" data-i18n="tool_ccp_rip">CCP → RIP</div>
-          <div class="tool-card-desc" data-i18n="tool_ccp_rip_desc">تحويل فوري لرقم الحساب البريدي إلى رقم RIP</div>
+          <div class="tool-card-desc" data-i18n="tool_ccp_rip_desc">تحويل فوري لرقم الحساب البريدي إلى رقم RIP المكوّن من 20 خانة</div>
         </div>
         <div class="tool-card">
           <div class="tool-card-icon">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="6" height="6" rx="1"/><rect x="3" y="13" width="6" height="6" rx="1"/><line x1="13" y1="7" x2="21" y2="7"/><line x1="13" y1="11" x2="21" y2="11"/><line x1="13" y1="15" x2="21" y2="15"/><line x1="13" y1="19" x2="21" y2="19"/></svg>
           </div>
           <div class="tool-card-title" data-i18n="accounts">الحسابات</div>
-          <div class="tool-card-desc" data-i18n="tool_accounts_desc">حفظ وإدارة حسابات CCP محليًا</div>
+          <div class="tool-card-desc" data-i18n="tool_accounts_desc">حفظ وإدارة عدد غير محدود من حسابات CCP محليًا</div>
         </div>
         <div class="tool-card">
           <div class="tool-card-icon">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           </div>
           <div class="tool-card-title" data-i18n="sidebar_favorites">المفضلة</div>
-          <div class="tool-card-desc" data-i18n="tool_favorites_desc">وصول سريع للحسابات المستخدمة أكثر</div>
+          <div class="tool-card-desc" data-i18n="tool_favorites_desc">وصول سريع للحسابات الأكثر استخداماً بنقرة واحدة</div>
         </div>
         <div class="tool-card">
           <div class="tool-card-icon">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
           </div>
           <div class="tool-card-title" data-i18n="tool_history">السجل</div>
-          <div class="tool-card-desc" data-i18n="tool_history_desc">تتبع عمليات التحويل السابقة</div>
+          <div class="tool-card-desc" data-i18n="tool_history_desc">تتبع جميع عمليات التحويل السابقة مع إمكانية مسحها</div>
+        </div>
+        <div class="tool-card">
+          <div class="tool-card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div class="tool-card-title">الرسوم</div>
+          <div class="tool-card-desc">حساب رسوم التحويل البريدي بدقة حسب المبلغ</div>
         </div>
         <div class="tool-card">
           <div class="tool-card-icon">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
           </div>
           <div class="tool-card-title" data-i18n="tool_themes">الأنماط</div>
-          <div class="tool-card-desc" data-i18n="tool_themes_desc">7 أنماط ألوان مع لون مخصص</div>
+          <div class="tool-card-desc" data-i18n="tool_themes_desc">7 أنماط ألوان مع إمكانية ضبط لون مخصص</div>
         </div>
       </div>
     </div>
@@ -300,43 +326,47 @@
       <ul>
         <li>
           <div class="feat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-          <span data-i18n="feat1">تحويل فوري من CCP إلى RIP</span>
+          <span data-i18n="feat1">تحويل فوري من CCP إلى RIP بخوارزمية محلية معتمدة</span>
         </li>
         <li>
           <div class="feat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-          <span data-i18n="feat2">حفظ الحسابات محليًا دون إنترنت</span>
+          <span data-i18n="feat2">حفظ الحسابات محليًا بشكل دائم دون الحاجة لإنترنت</span>
         </li>
         <li>
           <div class="feat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
-          <span data-i18n="feat3">واجهة سهلة وبسيطة</span>
+          <span data-i18n="feat3">واجهة عربية سهلة وبسيطة مُصممة للمستخدم الجزائري</span>
         </li>
         <li>
           <div class="feat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
-          <span data-i18n="feat4">متعدد اللغات (عربي، فرنسي، إنجليزي)</span>
+          <span data-i18n="feat4">متعدد اللغات: عربي 🇩🇿، فرنسي 🇫🇷، إنجليزي 🇺🇸</span>
         </li>
         <li>
           <div class="feat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></div>
-          <span data-i18n="feat5">الوضع الليلي والنهاري</span>
+          <span data-i18n="feat5">الوضع الليلي والنهاري مع 7 أنماط ألوان متنوعة</span>
         </li>
         <li>
           <div class="feat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-          <span data-i18n="feat6">خصوصية كاملة — لا إنترنت للبيانات</span>
+          <span data-i18n="feat6">خصوصية كاملة — لا إنترنت للبيانات، لا تتبع، لا إعلانات</span>
         </li>
         <li>
           <div class="feat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg></div>
-          <span data-i18n="feat7">استيراد وتصدير الحسابات</span>
+          <span data-i18n="feat7">استيراد وتصدير الحسابات بصيغة JSON للنسخ الاحتياطي</span>
         </li>
         <li>
           <div class="feat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
-          <span data-i18n="feat8">قابل للتثبيت كتطبيق (PWA)</span>
-        </li>
-        <li>
-          <div class="feat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10"/><circle cx="12" cy="12" r="5" stroke-dasharray="2 3"/></svg></div>
-          <span data-i18n="feat9">7 أنماط ألوان + لون مخصص قابل للضبط</span>
+          <span data-i18n="feat8">قابل للتثبيت كتطبيق PWA — بدون متجر تطبيقات</span>
         </li>
         <li>
           <div class="feat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg></div>
-          <span data-i18n="feat10">سجل العمليات مع إمكانية التحكم</span>
+          <span data-i18n="feat10">سجل العمليات مع إمكانية التعطيل والمسح الكامل</span>
+        </li>
+        <li>
+          <div class="feat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+          <span>حساب رسوم التحويل البريدي بدقة (جدول الرسوم الرسمي)</span>
+        </li>
+        <li>
+          <div class="feat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></div>
+          <span>ضبط حجم الخط لتسهيل القراءة على جميع الأجهزة</span>
         </li>
       </ul>
     </div>
@@ -350,17 +380,22 @@
       <div class="abbrev-row">
         <span class="abbrev-code">CCP</span>
         <span class="abbrev-sep">:</span>
-        <span class="abbrev-label" data-i18n="abbrev_ccp">الحساب الجاري البريدي</span>
+        <span class="abbrev-label" data-i18n="abbrev_ccp">الحساب الجاري البريدي (Compte Courant Postal)</span>
       </div>
       <div class="abbrev-row">
         <span class="abbrev-code">RIP</span>
         <span class="abbrev-sep">:</span>
-        <span class="abbrev-label" data-i18n="abbrev_rip">كشف الهوية البريدية</span>
+        <span class="abbrev-label" data-i18n="abbrev_rip">كشف الهوية البريدية (Relevé d'Identité Postal) — 20 رقماً</span>
       </div>
       <div class="abbrev-row">
         <span class="abbrev-code">DZ</span>
         <span class="abbrev-sep">:</span>
-        <span class="abbrev-label" data-i18n="abbrev_dz">الجزائر (رمز البلد في RIP)</span>
+        <span class="abbrev-label" data-i18n="abbrev_dz">الجزائر — رمز الدولة المُدمج في رقم RIP</span>
+      </div>
+      <div class="abbrev-row">
+        <span class="abbrev-code">PWA</span>
+        <span class="abbrev-sep">:</span>
+        <span class="abbrev-label">تطبيق ويب تقدمي (Progressive Web App) — يُثبَّت مباشرة من المتصفح</span>
       </div>
     </div>
 
@@ -371,7 +406,7 @@
         <span data-i18n="important_notice_title">ملاحظة مهمة</span>
       </h3>
       <p data-i18n="important_notice_text">
-        هذا التطبيق غير تابع لبريد الجزائر أو أي كيان حكومي رسمي. الحسابات والخدمات المقدمة هي لأغراض إرشادية فقط. يرجى التحقق من أي معلومات من المصادر الرسمية قبل استخدامها.
+        هذا التطبيق <strong>غير تابع لبريد الجزائر</strong> أو أي كيان حكومي رسمي. الخدمات المقدمة هي أدوات مساعدة لأغراض إرشادية فقط. يرجى التحقق دائماً من صحة المعلومات من المصادر الرسمية قبل إجراء أي معاملة مالية.
       </p>
       <div class="official-link-row">
         <span class="official-link-label" data-i18n="official_sources">المصادر الرسمية الموصى بها:</span>
@@ -404,17 +439,22 @@
       <div class="abbrev-row">
         <span class="abbrev-code" style="font-size:0.85rem;min-width:auto;">🎨</span>
         <span class="abbrev-sep">—</span>
-        <span class="abbrev-label" data-i18n="stat_themes">7 أنماط ألوان + لون مخصص</span>
+        <span class="abbrev-label" data-i18n="stat_themes">7 أنماط ألوان + لون مخصص قابل للضبط</span>
       </div>
       <div class="abbrev-row">
         <span class="abbrev-code" style="font-size:0.85rem;min-width:auto;">🔒</span>
         <span class="abbrev-sep">—</span>
-        <span class="abbrev-label" data-i18n="stat_privacy">100% محلي — لا بيانات تُرسل للإنترنت</span>
+        <span class="abbrev-label" data-i18n="stat_privacy">100% محلي — لا بيانات تُرسل للإنترنت مطلقاً</span>
       </div>
       <div class="abbrev-row">
         <span class="abbrev-code" style="font-size:0.85rem;min-width:auto;">📱</span>
         <span class="abbrev-sep">—</span>
-        <span class="abbrev-label" data-i18n="stat_pwa">متاح كتطبيق PWA قابل للتثبيت بدون متجر</span>
+        <span class="abbrev-label" data-i18n="stat_pwa">متاح كتطبيق PWA — قابل للتثبيت بدون متجر</span>
+      </div>
+      <div class="abbrev-row">
+        <span class="abbrev-code" style="font-size:0.85rem;min-width:auto;">🖥️</span>
+        <span class="abbrev-sep">—</span>
+        <span class="abbrev-label">يعمل على جميع الأجهزة: هاتف، تابلت، حاسوب</span>
       </div>
       <div class="abbrev-row">
         <span class="abbrev-code" style="font-size:0.85rem;min-width:auto;">💰</span>
@@ -427,7 +467,10 @@
     <div class="dev-card">
       <div class="dev-avatar">A</div>
       <div class="dev-name">Ahmedcrypto</div>
-      <div class="dev-role" data-i18n="developer_role">مطور التطبيق</div>
+      <div class="dev-role" data-i18n="developer_role">مطوّر التطبيق</div>
+      <div style="font-size:0.8rem;color:var(--text2);margin-top:4px;">
+        📧 myccp.app@gmail.com
+      </div>
     </div>
 
   </main>
